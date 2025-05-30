@@ -1,8 +1,8 @@
 // Testbench for Barrel Distortion Correction
 module tb_barrel_distortion_correction;
 
-  parameter WIDTH = 1280;
-  parameter HEIGHT = 720;
+  parameter WIDTH = 32;
+  parameter HEIGHT = 16;
   parameter DATA_WIDTH = 24;
   parameter CLK_PERIOD = 10;
 
