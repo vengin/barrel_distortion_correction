@@ -57,7 +57,6 @@ module barrel_distortion_correction #(
 
   // Coordinate tracking
   reg [COORD_WIDTH-1:0] out_x, out_y;
-  reg frame_start;
 
   // Distortion calculation registers
   reg signed [COORD_WIDTH:0] dx, dy;           // Offset from center
@@ -79,6 +78,8 @@ module barrel_distortion_correction #(
   reg input_valid_reg;
   reg input_last_reg;
   reg input_user_reg;
+  reg tuser_pipe1, tuser_pipe2;
+  reg tlast_pipe1, tlast_pipe2;
 
   // Output control
   reg output_ready;
@@ -87,6 +88,13 @@ module barrel_distortion_correction #(
   // Multiplication pipeline for distortion calculation
   reg [31:0] mult_stage1, mult_stage2;
   reg [15:0] k1_mult, k2_mult;
+
+  // Debug signals for interpolation condition
+  reg signed [COORD_WIDTH-1:0] debug_src_y;
+  reg signed [COORD_WIDTH-1:0] debug_lower_bound;
+  reg signed [COORD_WIDTH-1:0] debug_upper_bound;
+  reg debug_cond_part1;
+  reg debug_cond_part2;
 
   // State machine logic
   always @(posedge clk) begin
@@ -133,11 +141,22 @@ module barrel_distortion_correction #(
       input_valid_reg <= 0;
       input_last_reg <= 0;
       input_user_reg <= 0;
-    end else if (s_axis_tvalid && s_axis_tready) begin
-      input_pixel_reg <= s_axis_tdata;
-      input_valid_reg <= s_axis_tvalid;
-      input_last_reg <= s_axis_tlast;
-      input_user_reg <= s_axis_tuser;
+      tuser_pipe1 <= 0;
+      tuser_pipe2 <= 0;
+      tlast_pipe1 <= 0;
+      tlast_pipe2 <= 0;
+    end else begin
+      if (s_axis_tvalid && s_axis_tready) begin
+        input_pixel_reg <= s_axis_tdata;
+        input_valid_reg <= s_axis_tvalid;
+        input_last_reg <= s_axis_tlast;
+        input_user_reg <= s_axis_tuser;
+      end
+      // Pipeline tuser and tlast
+      tuser_pipe1 <= input_user_reg;
+      tuser_pipe2 <= tuser_pipe1;
+      tlast_pipe1 <= input_last_reg;
+      tlast_pipe2 <= tlast_pipe1;
     end
   end
 
@@ -169,20 +188,16 @@ module barrel_distortion_correction #(
     if (!rst_n) begin
       out_x <= 0;
       out_y <= 0;
-      frame_start <= 1;
     end else if (state == OUTPUT_PIXEL && m_axis_tready) begin
       if (out_x == WIDTH - 1) begin
         out_x <= 0;
         if (out_y == HEIGHT - 1) begin
           out_y <= 0;
-          frame_start <= 1;
         end else begin
           out_y <= out_y + 1;
-          frame_start <= 0;
         end
       end else begin
         out_x <= out_x + 1;
-        frame_start <= 0;
       end
     end
   end
@@ -224,13 +239,31 @@ module barrel_distortion_correction #(
       // Check bounds
       if (src_x >= 0 && src_x < WIDTH && src_y >= 0 && src_y < HEIGHT) begin : interpolation_block
         // Calculate which line buffer to read from
-        reg [$clog2(BUFFER_LINES)-1:0] src_line_idx;
-        src_line_idx = (current_input_line - (HEIGHT - 1 - src_y[COORD_WIDTH-1:0])) % BUFFER_LINES;
-        
-        // Use nearest neighbor sampling for simplicity
-        current_pixel <= line_buffer[src_line_idx][src_x[COORD_WIDTH-1:0]];
-        skip_pixel <= 0;
+        reg [$clog2(BUFFER_LINES)-1:0] src_line_idx_calc;
+        reg signed [COORD_WIDTH:0] line_diff;
+
+        // Check if src_y is within the currently buffered lines
+        // Buffered lines range from (current_input_line - BUFFER_LINES + 1) to current_input_line
+        // Check if src_y is within the currently buffered lines
+        // Buffered lines range from (current_input_line - BUFFER_LINES + 1) to current_input_line
+        debug_lower_bound = current_input_line - BUFFER_LINES + 1;
+        debug_upper_bound = current_input_line;
+        debug_cond_part1 = (src_y >= debug_lower_bound);
+        debug_cond_part2 = (src_y <= debug_upper_bound);
+
+        if (debug_cond_part1 && debug_cond_part2) begin
+          src_line_idx_calc = src_y[COORD_WIDTH-1:0] % BUFFER_LINES;
+          
+          // Use nearest neighbor sampling for simplicity
+          current_pixel <= line_buffer[src_line_idx_calc][src_x[COORD_WIDTH-1:0]];
+          skip_pixel <= 0;
+        end else begin
+          // src_y is out of buffered range (either too early or too late)
+          current_pixel <= 24'h000000; // Black for out-of-bounds or not-yet-buffered
+          skip_pixel <= 1;
+        end
       end else begin
+        // src_x or src_y are out of image bounds or contain X/Z values
         current_pixel <= 24'h000000; // Black for out-of-bounds
         skip_pixel <= 1;
       end
@@ -254,8 +287,10 @@ module barrel_distortion_correction #(
 
       if (state == OUTPUT_PIXEL) begin
         m_axis_tdata <= current_pixel;
-        m_axis_tlast <= (out_x == WIDTH - 1 && out_y == HEIGHT - 1);
-        m_axis_tuser <= frame_start;
+        // m_axis_tlast <= (out_x == WIDTH - 1 && out_y == HEIGHT - 1);
+        // m_axis_tuser <= frame_start;
+        m_axis_tlast <= tlast_pipe2;
+        m_axis_tuser <= tuser_pipe2;
       end
     end
   end

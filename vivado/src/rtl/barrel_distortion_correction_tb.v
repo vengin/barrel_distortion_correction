@@ -35,7 +35,8 @@ module tb_barrel_distortion_correction;
     .HEIGHT(HEIGHT),
     .DATA_WIDTH(DATA_WIDTH),
     .DISTORTION_K1(16'h0100), // Moderate barrel distortion
-    .DISTORTION_K2(16'h0020)
+    .DISTORTION_K2(16'h0020),
+    .BUFFER_LINES(HEIGHT) // Set buffer lines to full height for small test image
   ) dut (
     .clk(clk),
     .rst_n(rst_n),
