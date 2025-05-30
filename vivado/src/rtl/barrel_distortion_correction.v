@@ -45,59 +45,46 @@ module barrel_distortion_correction #(
   localparam CENTER_X = WIDTH / 2;
   localparam CENTER_Y = HEIGHT / 2;
 
-  // State machine
-  // State machine parameters (equivalent to enum)
+  // State machine parameters
   localparam [2:0] IDLE         = 3'd0;
-  localparam [2:0] READ_PIXEL   = 3'd1;
-  localparam [2:0] CALC_COORDS  = 3'd2;
-  localparam [2:0] INTERPOLATE  = 3'd3;
-  localparam [2:0] OUTPUT_PIXEL = 3'd4;
+  localparam [2:0] FILL_BUFFER  = 3'd1;
+  localparam [2:0] PROCESS      = 3'd2;
+  localparam [2:0] OUTPUT_PIXEL = 3'd3;
+  localparam [2:0] WAIT_READY   = 3'd4;
 
   reg [2:0] state, next_state;
 
   // Coordinate tracking
-  reg [COORD_WIDTH-1:0] out_x, out_y;
+  reg [COORD_WIDTH-1:0] input_x, input_y;   // Input pixel coordinates
+  reg [COORD_WIDTH-1:0] output_x, output_y; // Output pixel coordinates
+  reg [$clog2(BUFFER_LINES)-1:0] read_line_idx; // Moved declaration
+  reg frame_active;
+  reg buffer_ready;
+
+  // Line buffer for pixel storage
+  reg [DATA_WIDTH-1:0] line_buffer [0:BUFFER_LINES-1][0:WIDTH-1];
+  reg [$clog2(BUFFER_LINES)-1:0] write_line_idx;
+  reg [COORD_WIDTH-1:0] lines_stored;
 
   // Distortion calculation registers
   reg signed [COORD_WIDTH:0] dx, dy;           // Offset from center
   reg [31:0] r_squared;                        // Distance squared
-  reg [31:0] distortion_factor;                // Distortion multiplication factor
-  reg signed [COORD_WIDTH:0] src_x, src_y;    // Source coordinates
+  reg signed [COORD_WIDTH:0] src_x, src_y;    // Source coordinates after distortion
 
-  // Line buffer for bilinear interpolation (configurable lines)
-  // Memory usage: BUFFER_LINES × WIDTH × DATA_WIDTH bits
-  // For 320×240×24bit with 4 lines: 4 × 320 × 24 = 30,720 bits = 3.84KB
-  reg [DATA_WIDTH-1:0] line_buffer [0:BUFFER_LINES-1][0:WIDTH-1];
-  reg [DATA_WIDTH-1:0] current_pixel;
-  reg [$clog2(BUFFER_LINES)-1:0] buffer_write_line;
-  reg [COORD_WIDTH-1:0] buffer_write_addr;
-  reg [COORD_WIDTH-1:0] current_input_line;
+  // Output pixel and control
+  reg [DATA_WIDTH-1:0] corrected_pixel;
+  reg pixel_valid;
+  reg [31:0] distortion_factor; // Moved declaration
+  reg [31:0] k1_term;           // Moved declaration
 
-  // Pipeline registers
-  reg [DATA_WIDTH-1:0] input_pixel_reg;
-  reg input_valid_reg;
-  reg input_last_reg;
-  reg input_user_reg;
-  reg tuser_pipe1, tuser_pipe2;
-  reg tlast_pipe1, tlast_pipe2;
+  // Frame control signals
+  reg input_frame_start;
+  reg output_frame_start;
+  reg input_frame_end;
+  reg output_frame_end;
 
-  // Output control
-  reg output_ready;
-  reg skip_pixel;  // For out-of-bounds pixels
-
-  // Multiplication pipeline for distortion calculation
-  reg [31:0] mult_stage1, mult_stage2;
-  reg [15:0] k1_mult, k2_mult;
-
-  // Debug signals for interpolation condition
-  reg signed [COORD_WIDTH-1:0] debug_src_y;
-  reg signed [COORD_WIDTH-1:0] debug_lower_bound;
-  reg signed [COORD_WIDTH-1:0] debug_upper_bound;
-  reg debug_cond_part1;
-  reg debug_cond_part2;
-
-  // State machine logic
-  always @(posedge clk) begin
+  // State machine
+  always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
       state <= IDLE;
     end else begin
@@ -105,173 +92,183 @@ module barrel_distortion_correction #(
     end
   end
 
-  always @* begin
+  always @(*) begin
     next_state = state;
     case (state)
       IDLE: begin
-        if (s_axis_tvalid && s_axis_tready)
-          next_state = READ_PIXEL;
+        if (s_axis_tvalid && s_axis_tuser) // Start of frame
+          next_state = FILL_BUFFER;
       end
-      READ_PIXEL: begin
-        next_state = CALC_COORDS;
+      FILL_BUFFER: begin
+        if (lines_stored >= BUFFER_LINES || (s_axis_tlast && s_axis_tvalid))
+          next_state = PROCESS;
       end
-      CALC_COORDS: begin
-        next_state = INTERPOLATE;
-      end
-      INTERPOLATE: begin
+      PROCESS: begin
         next_state = OUTPUT_PIXEL;
       end
       OUTPUT_PIXEL: begin
         if (m_axis_tready) begin
-          if (out_y == HEIGHT - 1 && out_x == WIDTH - 1)
+          if (output_frame_end)
             next_state = IDLE;
-          else if (s_axis_tvalid)
-            next_state = READ_PIXEL;
           else
+            next_state = PROCESS;
+        end else begin
+          next_state = WAIT_READY;
+        end
+      end
+      WAIT_READY: begin
+        if (m_axis_tready) begin
+          if (output_frame_end)
             next_state = IDLE;
+          else
+            next_state = PROCESS;
         end
       end
     endcase
   end
 
-  // Input data pipeline
-  always @(posedge clk) begin
+  // Input coordinate tracking and buffering
+  always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-      input_pixel_reg <= 0;
-      input_valid_reg <= 0;
-      input_last_reg <= 0;
-      input_user_reg <= 0;
-      tuser_pipe1 <= 0;
-      tuser_pipe2 <= 0;
-      tlast_pipe1 <= 0;
-      tlast_pipe2 <= 0;
+      input_x <= 0;
+      input_y <= 0;
+      write_line_idx <= 0;
+      lines_stored <= 0;
+      frame_active <= 0;
+      input_frame_start <= 0;
+      input_frame_end <= 0;
     end else begin
+      input_frame_start <= s_axis_tuser;
+      input_frame_end <= s_axis_tlast;
+
       if (s_axis_tvalid && s_axis_tready) begin
-        input_pixel_reg <= s_axis_tdata;
-        input_valid_reg <= s_axis_tvalid;
-        input_last_reg <= s_axis_tlast;
-        input_user_reg <= s_axis_tuser;
-      end
-      // Pipeline tuser and tlast
-      tuser_pipe1 <= input_user_reg;
-      tuser_pipe2 <= tuser_pipe1;
-      tlast_pipe1 <= input_last_reg;
-      tlast_pipe2 <= tlast_pipe1;
-    end
-  end
+        // Store pixel in line buffer
+        line_buffer[write_line_idx][input_x] <= s_axis_tdata;
 
-  // Line buffer management
-  always @(posedge clk) begin
-    if (!rst_n) begin
-      buffer_write_addr <= 0;
-      buffer_write_line <= 0;
-      current_input_line <= 0;
-    end else if (state == READ_PIXEL) begin
-      line_buffer[buffer_write_line][buffer_write_addr] <= input_pixel_reg;
+        if (s_axis_tuser) begin
+          // Start of frame
+          frame_active <= 1;
+          input_x <= 0;
+          input_y <= 0;
+          write_line_idx <= 0;
+          lines_stored <= 0;
+        end else if (frame_active) begin
+          if (input_x == WIDTH - 1) begin
+            // End of line
+            input_x <= 0;
+            input_y <= input_y + 1;
 
-      if (buffer_write_addr == WIDTH - 1) begin
-        buffer_write_addr <= 0;
-        current_input_line <= current_input_line + 1;
-        if (buffer_write_line == BUFFER_LINES - 1) begin
-          buffer_write_line <= 0;
-        end else begin
-          buffer_write_line <= buffer_write_line + 1;
+            // Update line buffer pointer
+            if (write_line_idx == BUFFER_LINES - 1) begin
+              write_line_idx <= 0;
+            end else begin
+              write_line_idx <= write_line_idx + 1;
+            end
+
+            // Track number of lines stored
+            if (lines_stored < BUFFER_LINES) begin
+              lines_stored <= lines_stored + 1;
+            end
+          end else begin
+            input_x <= input_x + 1;
+          end
         end
-      end else begin
-        buffer_write_addr <= buffer_write_addr + 1;
+
+        if (s_axis_tlast) begin
+          frame_active <= 0;
+        end
       end
     end
   end
 
   // Output coordinate tracking
-  always @(posedge clk) begin
+  always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-      out_x <= 0;
-      out_y <= 0;
-    end else if (state == OUTPUT_PIXEL && m_axis_tready) begin
-      if (out_x == WIDTH - 1) begin
-        out_x <= 0;
-        if (out_y == HEIGHT - 1) begin
-          out_y <= 0;
-        end else begin
-          out_y <= out_y + 1;
-        end
+      output_x <= 0;
+      output_y <= 0;
+      output_frame_start <= 0;
+      output_frame_end <= 0;
+    end else if (state == PROCESS) begin
+      if (output_x == 0 && output_y == 0) begin
+        output_frame_start <= 1;
       end else begin
-        out_x <= out_x + 1;
+        output_frame_start <= 0;
+      end
+
+      if (output_x == WIDTH - 1 && output_y == HEIGHT - 1) begin
+        output_frame_end <= 1;
+      end else begin
+        output_frame_end <= 0;
+      end
+    end else if ((state == OUTPUT_PIXEL || state == WAIT_READY) && m_axis_tready) begin
+      output_frame_start <= 0;
+
+      if (!output_frame_end) begin
+        if (output_x == WIDTH - 1) begin
+          output_x <= 0;
+          output_y <= output_y + 1;
+        end else begin
+          output_x <= output_x + 1;
+        end
       end
     end
   end
 
-  // Barrel distortion calculation
-  always @(posedge clk) begin
+  // Barrel distortion calculation and pixel correction
+  always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
       dx <= 0;
       dy <= 0;
       r_squared <= 0;
-      distortion_factor <= 32'h1000; // 1.0 in 4.12 fixed point
       src_x <= 0;
       src_y <= 0;
-    end else if (state == CALC_COORDS) begin
+      corrected_pixel <= 0;
+      pixel_valid <= 0;
+    end else if (state == PROCESS) begin
       // Calculate offset from center
-      dx <= out_x - CENTER_X;
-      dy <= out_y - CENTER_Y;
+      dx <= $signed(output_x) - $signed(CENTER_X);
+      dy <= $signed(output_y) - $signed(CENTER_Y);
 
       // Calculate r^2 (distance squared from center)
       r_squared <= (dx * dx) + (dy * dy);
 
-      // Calculate distortion factor: 1 + k1*r^2 + k2*r^4
-      // Simplified to: 1 + k1*r^2 for performance
-      k1_mult <= (r_squared[15:0] * DISTORTION_K1) >> 12;
-      distortion_factor <= 32'h1000 + k1_mult; // 1.0 + k1*r^2
+      // Apply barrel distortion correction
+      // For barrel distortion: src = dst * (1 + k1*r^2)
+      // Simplified calculation using fixed-point arithmetic
+      if (r_squared < 32'h10000) begin // Avoid overflow
+        // Calculate distortion factor in 16.16 fixed point
+        k1_term = (r_squared * DISTORTION_K1) >> 8; // Scale for fixed point
+        distortion_factor = 32'h10000 + k1_term;   // 1.0 + k1*r^2
 
-      // Apply distortion to get source coordinates
-      src_x <= CENTER_X + ((dx * distortion_factor) >> 12);
-      src_y <= CENTER_Y + ((dy * distortion_factor) >> 12);
-    end
-  end
-
-  // Bilinear interpolation with multiple line buffers
-  always @(posedge clk) begin
-    if (!rst_n) begin
-      current_pixel <= 0;
-      skip_pixel <= 0;
-    end else if (state == INTERPOLATE) begin
-      // Check bounds
-      if (src_x >= 0 && src_x < WIDTH && src_y >= 0 && src_y < HEIGHT) begin : interpolation_block
-        // Calculate which line buffer to read from
-        reg [$clog2(BUFFER_LINES)-1:0] src_line_idx_calc;
-        reg signed [COORD_WIDTH:0] line_diff;
-
-        // Check if src_y is within the currently buffered lines
-        // Buffered lines range from (current_input_line - BUFFER_LINES + 1) to current_input_line
-        // Check if src_y is within the currently buffered lines
-        // Buffered lines range from (current_input_line - BUFFER_LINES + 1) to current_input_line
-        debug_lower_bound = current_input_line - BUFFER_LINES + 1;
-        debug_upper_bound = current_input_line;
-        debug_cond_part1 = (src_y >= debug_lower_bound);
-        debug_cond_part2 = (src_y <= debug_upper_bound);
-
-        if (debug_cond_part1 && debug_cond_part2) begin
-          src_line_idx_calc = src_y[COORD_WIDTH-1:0] % BUFFER_LINES;
-          
-          // Use nearest neighbor sampling for simplicity
-          current_pixel <= line_buffer[src_line_idx_calc][src_x[COORD_WIDTH-1:0]];
-          skip_pixel <= 0;
-        end else begin
-          // src_y is out of buffered range (either too early or too late)
-          current_pixel <= 24'h000000; // Black for out-of-bounds or not-yet-buffered
-          skip_pixel <= 1;
-        end
+        // Apply distortion
+        src_x <= $signed(CENTER_X) + (($signed(dx) * $signed(distortion_factor)) >>> 16);
+        src_y <= $signed(CENTER_Y) + (($signed(dy) * $signed(distortion_factor)) >>> 16);
       end else begin
-        // src_x or src_y are out of image bounds or contain X/Z values
-        current_pixel <= 24'h000000; // Black for out-of-bounds
-        skip_pixel <= 1;
+        // For very large distances, use identity mapping
+        src_x <= output_x;
+        src_y <= output_y;
       end
+
+      // Sample pixel from line buffer
+      if (src_x >= 0 && src_x < WIDTH && src_y >= 0 &&
+        src_y < input_y && src_y >= (input_y - BUFFER_LINES + 1)) begin
+        // Calculate which line buffer to read from
+        read_line_idx = (write_line_idx - (input_y - src_y)) % BUFFER_LINES;
+
+        corrected_pixel <= line_buffer[read_line_idx][src_x[COORD_WIDTH-1:0]];
+        pixel_valid <= 1;
+      end else begin
+        // Out of bounds or not available - use black
+        corrected_pixel <= 0;
+        pixel_valid <= 1;
+      end
+    end else begin
+      pixel_valid <= 0;
     end
   end
 
-  // AXI Stream control signals
-  always @(posedge clk) begin
+  // AXI Stream control
+  always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
       s_axis_tready <= 0;
       m_axis_tvalid <= 0;
@@ -279,18 +276,20 @@ module barrel_distortion_correction #(
       m_axis_tlast <= 0;
       m_axis_tuser <= 0;
     end else begin
-      // Input ready when we can accept data
-      s_axis_tready <= (state == IDLE) || (state == OUTPUT_PIXEL && m_axis_tready);
+      // Input ready when in IDLE, FILL_BUFFER, or when we need more data
+      s_axis_tready <= (state == IDLE) || (state == FILL_BUFFER);
 
-      // Output valid when we have processed pixel
-      m_axis_tvalid <= (state == OUTPUT_PIXEL);
+      // Output valid when we have a processed pixel
+      m_axis_tvalid <= (state == OUTPUT_PIXEL) || (state == WAIT_READY);
 
-      if (state == OUTPUT_PIXEL) begin
-        m_axis_tdata <= current_pixel;
-        // m_axis_tlast <= (out_x == WIDTH - 1 && out_y == HEIGHT - 1);
-        // m_axis_tuser <= frame_start;
-        m_axis_tlast <= tlast_pipe2;
-        m_axis_tuser <= tuser_pipe2;
+      if (state == OUTPUT_PIXEL || state == WAIT_READY) begin
+        m_axis_tdata <= corrected_pixel;
+        m_axis_tlast <= output_frame_end;
+        m_axis_tuser <= output_frame_start;
+      end else begin
+        m_axis_tdata <= 0;
+        m_axis_tlast <= 0;
+        m_axis_tuser <= 0;
       end
     end
   end
