@@ -1,0 +1,20 @@
+# Vivado
+vivado/*/project_name.cache/
+vivado/*/project_name.hw/
+vivado/*/project_name.ip_user_files/
+vivado/*/project_name.sim/
+vivado/*/*.jou
+vivado/*/*.log
+vivado/*/*.str
+build/
+logs/
+
+# Vitis
+vitis/.metadata/
+vitis/*.log
+vitis/*/Debug/
+vitis/*/Release/
+
+# HLS
+hls/*/solution*/syn/
+hls/*/solution*/impl/
