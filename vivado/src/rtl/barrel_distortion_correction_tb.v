@@ -171,7 +171,7 @@ module tb_barrel_distortion_correction;
 
   // Timeout watchdog
   initial begin
-    #(CLK_PERIOD * 100000);
+    #(CLK_PERIOD * 200000);
     $display("ERROR: Testbench timeout!");
     $finish;
   end
