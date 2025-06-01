@@ -4,10 +4,8 @@ module tb_barrel_distortion_correction #(
   parameter HEIGHT = 100,          // Default height for image
   parameter DATA_WIDTH = 24,       // Pixel data width (RGB888)
   parameter CLK_PERIOD = 10,       // Clock period in ns
-  parameter string INPUT_RAW_FILE = "D:/work/vivado/pynq/barrel_distortion_correction/vivado/src/tb/sim_out/img_128x100_in.txt",
-  parameter string OUTPUT_RAW_FILE = "D:/work/vivado/pynq/barrel_distortion_correction/vivado/src/tb/sim_out/img_128x100_out.txt"
-//  parameter string INPUT_RAW_FILE = "input_pixels.txt",
-//  parameter string OUTPUT_RAW_FILE = "output_pixels.txt"
+  parameter string INPUT_RAW_FILE  = "../../../../src/tb/sim_out/img_128x100_in.txt",
+  parameter string OUTPUT_RAW_FILE = "../../../../src/tb/sim_out/img_128x100_out.txt"
 );
 
   // Clock and reset
