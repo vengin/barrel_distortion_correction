@@ -1,10 +1,14 @@
 // Testbench for Barrel Distortion Correction
-module tb_barrel_distortion_correction;
-
-  parameter WIDTH = 32;
-  parameter HEIGHT = 16;
-  parameter DATA_WIDTH = 24;
-  parameter CLK_PERIOD = 10;
+module tb_barrel_distortion_correction #(
+  parameter WIDTH = 250,           // Default width for image
+  parameter HEIGHT = 167,          // Default height for image
+  parameter DATA_WIDTH = 24,       // Pixel data width (RGB888)
+  parameter CLK_PERIOD = 10,       // Clock period in ns
+  parameter string INPUT_RAW_FILE = "D:/work/vivado/pynq/barrel_distortion_correction/vivado/src/tb/sim_out/img4_250x167_in.txt",
+  parameter string OUTPUT_RAW_FILE = "D:/work/vivado/pynq/barrel_distortion_correction/vivado/src/tb/sim_out/img4_250x167_out.txt"
+//  parameter string INPUT_RAW_FILE = "input_pixels.txt",
+//  parameter string OUTPUT_RAW_FILE = "output_pixels.txt"
+);
 
   // Clock and reset
   reg clk;
@@ -23,11 +27,14 @@ module tb_barrel_distortion_correction;
   wire m_axis_tuser;
   reg m_axis_tready;
 
-  // Test image data
-  reg [DATA_WIDTH-1:0] test_image [0:WIDTH*HEIGHT-1];
-  reg [DATA_WIDTH-1:0] output_image [0:WIDTH*HEIGHT-1];
+  // File handles
+  integer input_file_handle;
+  integer output_file_handle;
+  
+  // Temporary storage for input pixels (for $readmemh)
+  reg [DATA_WIDTH-1:0] input_pixels_mem [0:WIDTH*HEIGHT-1];
 
-  integer i, j, pixel_count, output_count, non_zero_pixels;
+  integer i, pixel_count, output_count;
 
   // Instantiate DUT
   barrel_distortion_correction #(
@@ -36,7 +43,8 @@ module tb_barrel_distortion_correction;
     .DATA_WIDTH(DATA_WIDTH),
     .DISTORTION_K1(16'h0100), // Moderate barrel distortion
     .DISTORTION_K2(16'h0020),
-    .BUFFER_LINES(HEIGHT) // Set buffer lines to full height for small test image
+    //.BUFFER_LINES(4) // Use a reasonable number of buffer lines, not full height
+    .BUFFER_LINES(HEIGHT) // Use a reasonable number of buffer lines, not full height
   ) dut (
     .clk(clk),
     .rst_n(rst_n),
@@ -70,16 +78,18 @@ module tb_barrel_distortion_correction;
     pixel_count = 0;
     output_count = 0;
 
-    // Generate test pattern (gradient + checkerboard)
-    for (i = 0; i < HEIGHT; i++) begin
-      for (j = 0; j < WIDTH; j++) begin
-        if ((i/8 + j/8) % 2 == 0) begin
-          // Checkerboard pattern
-          test_image[i*WIDTH + j] = 24'hFFFFFF; // White
-        end else begin
-          test_image[i*WIDTH + j] = 24'h000000; // Black
-        end
-      end
+    // Open input and output files
+    input_file_handle = $fopen(INPUT_RAW_FILE, "r");
+    if (input_file_handle == 0) begin
+      $display("ERROR: Could not open input file %s", INPUT_RAW_FILE);
+      $finish;
+    end
+    $readmemh(INPUT_RAW_FILE, input_pixels_mem); // Read all pixels into memory
+
+    output_file_handle = $fopen(OUTPUT_RAW_FILE, "w");
+    if (output_file_handle == 0) begin
+      $display("ERROR: Could not open output file %s", OUTPUT_RAW_FILE);
+      $finish;
     end
 
     // Reset sequence
@@ -87,17 +97,19 @@ module tb_barrel_distortion_correction;
     rst_n = 1;
     #(CLK_PERIOD*2);
 
-    $display("Starting barrel distortion correction test...");
+    $display("Starting barrel distortion correction test with image input...");
     $display("Input resolution: %dx%d", WIDTH, HEIGHT);
+    $display("Reading from: %s", INPUT_RAW_FILE);
+    $display("Writing to: %s", OUTPUT_RAW_FILE);
 
-    // Send test frame
+    // Send test frame and receive output
     fork
       // Input thread
       begin
         for (i = 0; i < WIDTH * HEIGHT; i++) begin
           wait(s_axis_tready);
           @(posedge clk);
-          s_axis_tdata = test_image[i];
+          s_axis_tdata = input_pixels_mem[i]; // Read from loaded memory
           s_axis_tvalid = 1;
           s_axis_tuser = (i == 0) ? 1 : 0; // Start of frame
           s_axis_tlast = (i == WIDTH * HEIGHT - 1) ? 1 : 0; // End of frame
@@ -114,7 +126,7 @@ module tb_barrel_distortion_correction;
         while (output_count < WIDTH * HEIGHT) begin
           wait(m_axis_tvalid);
           if (m_axis_tready) begin
-            output_image[output_count] = m_axis_tdata;
+            $fdisplay(output_file_handle, "%h", m_axis_tdata); // Write to file
             if (m_axis_tuser) begin
               $display("Start of output frame detected");
             end
@@ -129,31 +141,11 @@ module tb_barrel_distortion_correction;
       end
     join
 
-    // Verify output
-    $display("Verifying output...");
+    $display("Simulation complete. Raw output saved to %s", OUTPUT_RAW_FILE);
 
-    // Check for basic sanity - non-zero pixels should exist
-    non_zero_pixels = 0;
-    for (i = 0; i < WIDTH * HEIGHT; i++) begin
-      if (output_image[i] != 0) begin
-        non_zero_pixels++;
-      end
-    end
-
-    $display("Non-zero output pixels: %d/%d", non_zero_pixels, WIDTH * HEIGHT);
-
-    if (non_zero_pixels > WIDTH * HEIGHT / 4) begin
-      $display("TEST PASSED: Barrel distortion correction appears functional");
-    end else begin
-      $display("TEST FAILED: Too few non-zero pixels in output");
-    end
-
-    // Display some sample outputs for manual verification
-    $display("\nSample output pixels:");
-    for (i = 0; i < 10; i++) begin
-      $display("Pixel[%d]: Input=0x%06h, Output=0x%06h",
-          i, test_image[i], output_image[i]);
-    end
+    // Close files
+    $fclose(input_file_handle);
+    $fclose(output_file_handle);
 
     #(CLK_PERIOD*10);
     $finish;

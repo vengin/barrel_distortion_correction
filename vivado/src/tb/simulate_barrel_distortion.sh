@@ -1,0 +1,80 @@
+#!/bin/bash
+# Script to simulate barrel_distortion_correction_tb.v using Vivado XSim in Git Bash
+
+# Source the Vivado setup script for Git Bash
+# Use absolute path for sourcing to ensure it works regardless of current directory
+# Setup script for Vivado environment in Git Bash
+
+export XILINX_VIVADO='/c/Xilinx/Vivado/2017.4'
+
+# Construct the new path components
+VIVADO_BIN_PATH="/c/Xilinx/Vivado/2017.4/bin"
+VIVADO_LIB_PATH="/c/Xilinx/Vivado/2017.4/lib/win64.o"
+PYTHON_PATH="/c/PF/Python"
+
+# Prepend Vivado paths to the existing PATH
+if [ -n "${PATH}" ]; then
+  export PATH="${VIVADO_BIN_PATH}:${VIVADO_LIB_PATH}:${PYTHON_PATH}:${PATH}"
+else
+  export PATH="${VIVADO_BIN_PATH}:${VIVADO_LIB_PATH}:${PYTHON_PATH}"
+fi
+
+
+# --- Configuration ---
+# Paths to source files
+DUT_DIR="../rtl"
+TB_DIR="$(pwd)"
+PYTHON_SCRIPTS_DIR="${TB_DIR}" # Python scripts are now in the testbench directory
+
+DUT_FILE="${DUT_DIR}/barrel_distortion_correction.v"
+TB_FILE="${TB_DIR}/barrel_distortion_correction_tb.v"
+XSIM_PRJ_FILE="../../hdmi_barrel_distortion_correction.sim/sim_1/behav/xsim/tb_barrel_distortion_correction_vlog.prj"
+
+# Image paths and dimensions (UPDATE THESE FOR YOUR IMAGE)
+IMG_WIDTH=250 # Width of your input image
+IMG_HEIGHT=167 # Height of your input image
+IMG_NAME="img4_250x167"
+INPUT_IMAGE="img_in/${IMG_NAME}.bmp" # Your input image file (e.g., input.png, input.jpg)
+OUTPUT_IMAGE="img_out/${IMG_NAME}.bmp" # Desired output image file
+
+# Raw pixel data files (intermediate files for simulation)
+SIM_DIR="sim_out"
+INPUT_RAW_FILE="${IMG_NAME}_in.txt"
+OUTPUT_RAW_FILE="${IMG_NAME}_out.txt"
+
+# --- Setup Simulation Directory ---
+mkdir -p "${SIM_DIR}"
+# Change to simulation output directory for Vivado tools
+cd "${SIM_DIR}"
+
+# # --- Step 1: Convert Input Image to Raw Pixel Data ---
+# printf "\nStep 1: Converting input image '${INPUT_IMAGE}' to raw pixel data..."
+# # Ensure python is in PATH or use full path to python executable
+# python "${PYTHON_SCRIPTS_DIR}/image_to_raw.py" "../${INPUT_IMAGE}" "${INPUT_RAW_FILE}"
+
+relaunch_sim
+
+# # --- Step 2: Compile Verilog files with xvlog ---
+# printf "\nStep 2: Compiling Verilog files with xvlog..."
+# # Using --sv for SystemVerilog features, and specifying both DUT and Testbench files
+# #xvlog --sv "${DUT_FILE}" "${TB_FILE}"
+# xvlog --incr --relax -L xil_defaultlib -prj $XSIM_PRJ_FILE
+
+# # --- Step 3: Elaborate the top-level testbench module with parameters ---
+# printf "\nStep 3: Elaborating design with xelab..."
+# # Pass image dimensions and raw file names as generic parameters to the testbench
+# xelab tb_barrel_distortion_correction -s barrel_distortion_sim \
+#   -generic_top {WIDTH=${IMG_WIDTH},HEIGHT=${IMG_HEIGHT},INPUT_RAW_FILE=\"${INPUT_RAW_FILE}\",OUTPUT_RAW_FILE=\"${OUTPUT_RAW_FILE}\"}
+
+# # --- Step 4: Run the simulation with xsim ---
+# printf "\nStep 4: Running simulation with xsim..."
+# xsim barrel_distortion_sim -R
+
+# # --- Step 5: Convert Raw Output Pixel Data to Image ---
+# printf "\nStep 5: Converting raw output pixel data to image '${OUTPUT_IMAGE}'..."
+# python "${PYTHON_SCRIPTS_DIR}/raw_to_image.py" "${OUTPUT_RAW_FILE}" "../${OUTPUT_IMAGE}" "${IMG_WIDTH}" "${IMG_HEIGHT}"
+
+# echo "Simulation and image processing complete."
+# echo "Input image: ${INPUT_IMAGE}"
+# echo "Output image: ${OUTPUT_IMAGE}"
+# echo "Waveforms: ${SIM_DIR}/barrel_distortion_tb.vcd"
