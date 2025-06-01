@@ -1,11 +1,11 @@
 // Testbench for Barrel Distortion Correction
 module tb_barrel_distortion_correction #(
-  parameter WIDTH = 250,           // Default width for image
-  parameter HEIGHT = 167,          // Default height for image
+  parameter WIDTH = 128,           // Default width for image
+  parameter HEIGHT = 100,          // Default height for image
   parameter DATA_WIDTH = 24,       // Pixel data width (RGB888)
   parameter CLK_PERIOD = 10,       // Clock period in ns
-  parameter string INPUT_RAW_FILE = "D:/work/vivado/pynq/barrel_distortion_correction/vivado/src/tb/sim_out/img4_250x167_in.txt",
-  parameter string OUTPUT_RAW_FILE = "D:/work/vivado/pynq/barrel_distortion_correction/vivado/src/tb/sim_out/img4_250x167_out.txt"
+  parameter string INPUT_RAW_FILE = "D:/work/vivado/pynq/barrel_distortion_correction/vivado/src/tb/sim_out/img_128x100_in.txt",
+  parameter string OUTPUT_RAW_FILE = "D:/work/vivado/pynq/barrel_distortion_correction/vivado/src/tb/sim_out/img_128x100_out.txt"
 //  parameter string INPUT_RAW_FILE = "input_pixels.txt",
 //  parameter string OUTPUT_RAW_FILE = "output_pixels.txt"
 );
@@ -30,7 +30,7 @@ module tb_barrel_distortion_correction #(
   // File handles
   integer input_file_handle;
   integer output_file_handle;
-  
+
   // Temporary storage for input pixels (for $readmemh)
   reg [DATA_WIDTH-1:0] input_pixels_mem [0:WIDTH*HEIGHT-1];
 
@@ -97,7 +97,7 @@ module tb_barrel_distortion_correction #(
     rst_n = 1;
     #(CLK_PERIOD*2);
 
-    $display("Starting barrel distortion correction test with image input...");
+    $display("Starting passthrough test with image input...");
     $display("Input resolution: %dx%d", WIDTH, HEIGHT);
     $display("Reading from: %s", INPUT_RAW_FILE);
     $display("Writing to: %s", OUTPUT_RAW_FILE);
@@ -124,8 +124,8 @@ module tb_barrel_distortion_correction #(
       // Output thread
       begin
         while (output_count < WIDTH * HEIGHT) begin
-          wait(m_axis_tvalid);
-          if (m_axis_tready) begin
+          @(posedge clk); // Wait for clock edge
+          if (m_axis_tvalid && m_axis_tready) begin // Only process if both valid and ready
             $fdisplay(output_file_handle, "%h", m_axis_tdata); // Write to file
             if (m_axis_tuser) begin
               $display("Start of output frame detected");
@@ -135,7 +135,6 @@ module tb_barrel_distortion_correction #(
             end
             output_count++;
           end
-          @(posedge clk);
         end
         $display("Output frame received successfully");
       end

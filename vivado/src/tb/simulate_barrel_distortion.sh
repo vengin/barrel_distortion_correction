@@ -31,11 +31,11 @@ TB_FILE="${TB_DIR}/barrel_distortion_correction_tb.v"
 XSIM_PRJ_FILE="../../hdmi_barrel_distortion_correction.sim/sim_1/behav/xsim/tb_barrel_distortion_correction_vlog.prj"
 
 # Image paths and dimensions (UPDATE THESE FOR YOUR IMAGE)
-IMG_WIDTH=250 # Width of your input image
-IMG_HEIGHT=167 # Height of your input image
-IMG_NAME="img4_250x167"
-INPUT_IMAGE="img_in/${IMG_NAME}.bmp" # Your input image file (e.g., input.png, input.jpg)
-OUTPUT_IMAGE="img_out/${IMG_NAME}.bmp" # Desired output image file
+IMG_WIDTH=128 # Width of your input image
+IMG_HEIGHT=100 # Height of your input image
+IMG_NAME="img_128x100"
+INPUT_IMAGE="img_in/${IMG_NAME}.png" # Your input image file (e.g., input.png, input.jpg)
+OUTPUT_IMAGE="img_out/${IMG_NAME}.png" # Desired output image file
 
 # Raw pixel data files (intermediate files for simulation)
 SIM_DIR="sim_out"
@@ -51,8 +51,6 @@ cd "${SIM_DIR}"
 # printf "\nStep 1: Converting input image '${INPUT_IMAGE}' to raw pixel data..."
 # # Ensure python is in PATH or use full path to python executable
 # python "${PYTHON_SCRIPTS_DIR}/image_to_raw.py" "../${INPUT_IMAGE}" "${INPUT_RAW_FILE}"
-
-relaunch_sim
 
 # # --- Step 2: Compile Verilog files with xvlog ---
 # printf "\nStep 2: Compiling Verilog files with xvlog..."
@@ -70,9 +68,9 @@ relaunch_sim
 # printf "\nStep 4: Running simulation with xsim..."
 # xsim barrel_distortion_sim -R
 
-# # --- Step 5: Convert Raw Output Pixel Data to Image ---
-# printf "\nStep 5: Converting raw output pixel data to image '${OUTPUT_IMAGE}'..."
-# python "${PYTHON_SCRIPTS_DIR}/raw_to_image.py" "${OUTPUT_RAW_FILE}" "../${OUTPUT_IMAGE}" "${IMG_WIDTH}" "${IMG_HEIGHT}"
+# --- Step 5: Convert Raw Output Pixel Data to Image ---
+printf "\nStep 5: Converting raw output pixel data to image '${OUTPUT_IMAGE}'..."
+python "${PYTHON_SCRIPTS_DIR}/raw_to_image.py" "${OUTPUT_RAW_FILE}" "../${OUTPUT_IMAGE}" "${IMG_WIDTH}" "${IMG_HEIGHT}"
 
 # echo "Simulation and image processing complete."
 # echo "Input image: ${INPUT_IMAGE}"
