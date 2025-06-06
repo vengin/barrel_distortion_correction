@@ -20,7 +20,7 @@ module barrel_distortion_correction #(
   parameter DATA_WIDTH = 24,       // Pixel data width (RGB888)
   parameter COORD_WIDTH = 16,      // Coordinate width
   parameter DISTORTION_K1 = 16'h0200, // Distortion coefficient K1 (signed 4.12 fixed point)
-  parameter DISTORTION_K2 = 16'h0040, // Distortion coefficient K2 (signed 4.12 fixed point)
+//  parameter DISTORTION_K2 = 16'h0040, // Distortion coefficient K2 (signed 4.12 fixed point)
   parameter BUFFER_LINES = 4       // Usually 4 is enough for most barrel distortion
 )(
   input wire clk,
@@ -74,8 +74,8 @@ module barrel_distortion_correction #(
   // Output pixel and control
   reg [DATA_WIDTH-1:0] corrected_pixel;
   reg pixel_valid;
-  reg [31:0] distortion_factor; // Moved declaration
-  reg [31:0] k1_term;           // Moved declaration
+  reg signed [31:0] distortion_factor;
+  reg signed [31:0] k1_term;
 
   // Frame control signals
   reg input_frame_start;
@@ -235,19 +235,20 @@ module barrel_distortion_correction #(
       // Apply barrel distortion correction
       // For barrel distortion: src = dst * (1 + k1*r^2)
       // Simplified calculation using fixed-point arithmetic
-      if (r_squared < 32'h10000) begin // Avoid overflow
+//      if (r_squared < 32'h100000) begin // Avoid overflow
         // Calculate distortion factor in 16.16 fixed point
-        k1_term = (r_squared * DISTORTION_K1) >> 8; // Scale for fixed point
+        //k1_term = (r_squared * DISTORTION_K1) >>> 12; // Scale for fixed point
+        k1_term = ($signed(r_squared) * $signed(DISTORTION_K1)) >>> 12; // Scale for fixed point
         distortion_factor = 32'h10000 + k1_term;   // 1.0 + k1*r^2
 
         // Apply distortion
         src_x <= $signed(CENTER_X) + (($signed(dx) * $signed(distortion_factor)) >>> 16);
         src_y <= $signed(CENTER_Y) + (($signed(dy) * $signed(distortion_factor)) >>> 16);
-      end else begin
-        // For very large distances, use identity mapping
-        src_x <= output_x;
-        src_y <= output_y;
-      end
+//      end else begin
+//        // For very large distances, use identity mapping
+//        src_x <= output_x;
+//        src_y <= output_y;
+//      end
 
       // Sample pixel from line buffer
       if (src_x >= 0 && src_x < WIDTH && src_y >= 0 &&
