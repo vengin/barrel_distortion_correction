@@ -147,7 +147,7 @@ module barrel_distortion_correction #(
         if (s_axis_tuser) begin
           // Start of frame
           frame_active <= 1;
-          input_x <= 0;
+          input_x <= 1;
           input_y <= 0;
           write_line_idx <= 0;
           lines_stored <= 0;
@@ -223,6 +223,9 @@ module barrel_distortion_correction #(
       src_y <= 0;
       corrected_pixel <= 0;
       pixel_valid <= 0;
+      k1_term <= 0;
+      distortion_factor <= 0;
+      read_line_idx <= 0;
     end else if (state == PROCESS) begin
       // Calculate offset from center
       dx <= $signed(output_x) - $signed(CENTER_X);
@@ -238,6 +241,7 @@ module barrel_distortion_correction #(
         // Calculate distortion factor in 16.16 fixed point
 //        k1_term = ($signed(r_squared) * $signed(DISTORTION_K1)) >>> 12; // Scale (32+4.12) for fixed point
         k1_term = ($signed(r_squared) * $signed(DISTORTION_K1)) >>> 4; // Scale (32+4.4) for fixed point
+//        distortion_factor = 32'h10000 + k1_term;   // 1.0 + k1*r^2
         distortion_factor = 32'h10000 + k1_term;   // 1.0 + k1*r^2
 
         // Apply distortion
@@ -250,10 +254,11 @@ module barrel_distortion_correction #(
 //      end
 
       // Sample pixel from line buffer
-      if (src_x >= 0 && src_x < WIDTH && src_y >= 0 &&
-        src_y < input_y && src_y >= (input_y - BUFFER_LINES + 1)) begin
+//      if (src_x >= 0  &&  src_x < WIDTH  &&  src_y >= 0  &&  src_y < input_y  &&  src_y >= (input_y - BUFFER_LINES + 1)) begin
+      if (src_x >= 0  &&  src_x < WIDTH  &&  src_y >= 0  &&  src_y < input_y) begin
         // Calculate which line buffer to read from
         read_line_idx = (write_line_idx - (input_y - src_y)) % BUFFER_LINES;
+//        read_line_idx <= (src_y < BUFFER_LINES) ? src_y : BUFFER_LINES-1;
 
         corrected_pixel <= line_buffer[read_line_idx][src_x[COORD_WIDTH-1:0]];
         pixel_valid <= 1;

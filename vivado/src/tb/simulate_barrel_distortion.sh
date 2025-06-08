@@ -96,8 +96,3 @@ printf "\nStep 6: Comparing input and output images...\n"
 echo "BCompare.exe "${INPUT_IMAGE}" "${OUTPUT_IMAGE}""
 # python "${PYTHON_SCRIPTS_DIR}/raw_to_image.py" "${OUTPUT_RAW_FILE}" "${OUTPUT_IMAGE}" "${IMG_WIDTH}" "${IMG_HEIGHT}"
 /D/\!portable/Beyond_Compare/BCompare.exe "${INPUT_IMAGE}" "${OUTPUT_IMAGE}"
-
-# echo "Simulation and image processing complete."
-# echo "Input image: ${INPUT_IMAGE}"
-# echo "Output image: ${OUTPUT_IMAGE}"
-# echo "Waveforms: ${SIM_DIR}/barrel_distortion_tb.vcd"
