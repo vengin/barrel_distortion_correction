@@ -4,7 +4,7 @@ module tb_barrel_distortion_correction #(
   parameter HEIGHT = 100,          // Default height for image
   parameter DATA_WIDTH = 24,       // Pixel data width (RGB888)
   parameter CLK_PERIOD = 10,       // Clock period in ns
-  parameter DISTORTION_K1 = 16'hE000, // Distortion coefficient K1 (signed 4.12 fixed point)
+  parameter DISTORTION_K1 = 8'hE0, // Distortion coefficient K1 (signed 4.4 fixed point)
   parameter string INPUT_RAW_FILE  = "../../../../src/tb/sim_out/img_128x100_in.txt",
   parameter string OUTPUT_RAW_FILE = "../../../../src/tb/sim_out/img_128x100_out.txt"
 );
@@ -96,7 +96,7 @@ module tb_barrel_distortion_correction #(
     rst_n = 1;
     #(CLK_PERIOD*2);
 
-    $display("DISTORTION_K1 value: %04h", dut.DISTORTION_K1);
+    $display("DISTORTION_K1 value: %02h", dut.DISTORTION_K1);
     $display("Starting passthrough test with image input...");
     $display("Input resolution: %dx%d", WIDTH, HEIGHT);
     $display("Reading from: %s", INPUT_RAW_FILE);

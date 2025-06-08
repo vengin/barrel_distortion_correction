@@ -19,8 +19,7 @@ module barrel_distortion_correction #(
   parameter HEIGHT = 1080,         // Can be virtually unlimited!
   parameter DATA_WIDTH = 24,       // Pixel data width (RGB888)
   parameter COORD_WIDTH = 16,      // Coordinate width
-  parameter DISTORTION_K1 = 16'h0200, // Distortion coefficient K1 (signed 4.12 fixed point)
-//  parameter DISTORTION_K2 = 16'h0040, // Distortion coefficient K2 (signed 4.12 fixed point)
+  parameter DISTORTION_K1 = 8'h40, // Distortion coefficient K1 (signed 4.4 fixed point)
   parameter BUFFER_LINES = 4       // Usually 4 is enough for most barrel distortion
 )(
   input wire clk,
@@ -237,8 +236,8 @@ module barrel_distortion_correction #(
       // Simplified calculation using fixed-point arithmetic
 //      if (r_squared < 32'h100000) begin // Avoid overflow
         // Calculate distortion factor in 16.16 fixed point
-        //k1_term = (r_squared * DISTORTION_K1) >>> 12; // Scale for fixed point
-        k1_term = ($signed(r_squared) * $signed(DISTORTION_K1)) >>> 12; // Scale for fixed point
+//        k1_term = ($signed(r_squared) * $signed(DISTORTION_K1)) >>> 12; // Scale (32+4.12) for fixed point
+        k1_term = ($signed(r_squared) * $signed(DISTORTION_K1)) >>> 4; // Scale (32+4.4) for fixed point
         distortion_factor = 32'h10000 + k1_term;   // 1.0 + k1*r^2
 
         // Apply distortion
