@@ -1,4 +1,5 @@
 #include "brl_corr_hls.h" // Include the new header file
+#include <iomanip> // Required for std::setw and std::setfill
 
 // Function to parse filename and extract dimensions
 bool parse_filename(const char* filename, int &width, int &height) {
@@ -88,7 +89,10 @@ bool write_image_to_file(const char* filename, pixel_t image[IMG_HEIGHT][IMG_WID
     for (int x = 0; x < IMG_WIDTH; x++) {
       // Convert grayscale back to RGB (all channels same value)
       int gray = (int)image[y][x];
-      file << gray << " " << gray << " " << gray << std::endl;
+      // Format as RRGGBB hexadecimal
+      file << std::hex << std::setw(2) << std::setfill('0') << gray
+           << std::setw(2) << std::setfill('0') << gray
+           << std::setw(2) << std::setfill('0') << gray << std::endl;
     }
   }
 
@@ -128,8 +132,10 @@ void generate_test_image(const char* filename) {
       if (value > 255) value = 255;
       if (value < 0) value = 0;
 
-      // Write as RGB (same value for all channels)
-      file << value << " " << value << " " << value << std::endl;
+      // Write as RRGGBB hexadecimal (same value for all channels)
+      file << std::hex << std::setw(2) << std::setfill('0') << value
+           << std::setw(2) << std::setfill('0') << value
+           << std::setw(2) << std::setfill('0') << value << std::endl;
     }
   }
 
@@ -147,8 +153,8 @@ int main() {
   char output_filename[256];
 
   // Create filename based on current dimensions
-  sprintf(input_filename, "img_in/img_%dx%d_in.txt", IMG_WIDTH, IMG_HEIGHT);
-  sprintf(output_filename, "img_out/img_%dx%d_out.txt", IMG_WIDTH, IMG_HEIGHT);
+  sprintf(input_filename,  "../../../src/img_in/img_%dx%d_in.txt", IMG_WIDTH, IMG_HEIGHT);
+  sprintf(output_filename, "../../../src/img_out/img_%dx%d_out.txt", IMG_WIDTH, IMG_HEIGHT);
 
   std::cout << "=== Barrel Distortion Correction Test ===" << std::endl;
   std::cout << "Image dimensions: " << IMG_WIDTH << "x" << IMG_HEIGHT << std::endl;
