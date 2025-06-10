@@ -1,58 +1,4 @@
-#include "ap_int.h"
-#include <iostream>
-
-// Simple types to avoid GMP conflicts in HLS 2017.4
-typedef ap_uint<8> pixel_t;
-typedef short coord_t;  // Use simple integer coordinates
-typedef int calc_t;     // For intermediate calculations
-
-// Image dimensions
-const int IMG_WIDTH  = 640;
-const int IMG_HEIGHT = 480;
-const int LINE_BUFFER_SIZE = 3;
-
-// Barrel correction coefficients (scaled integers to avoid floating point)
-const coord_t K1_SCALED = -128;  // -0.5 * 256
-const coord_t K2_SCALED = 51;    // 0.2 * 256
-const coord_t K3_SCALED = -13;   // -0.05 * 256
-const coord_t SCALE_FACTOR = 256;
-
-// Image center coordinates
-const coord_t CENTER_X = IMG_WIDTH / 2;
-const coord_t CENTER_Y = IMG_HEIGHT / 2;
-
-// Line buffer structure
-class LineBuffer {
-private:
-  pixel_t buffer[LINE_BUFFER_SIZE][IMG_WIDTH];
-  int write_idx;
-
-public:
-  LineBuffer() : write_idx(0) {
-    #pragma HLS ARRAY_PARTITION variable=buffer dim=1 complete
-  }
-
-  void shift_lines() {
-    #pragma HLS INLINE
-    write_idx = (write_idx + 1) % LINE_BUFFER_SIZE;
-  }
-
-  void write_pixel(int x, pixel_t pixel) {
-    #pragma HLS INLINE
-    if (x >= 0 && x < IMG_WIDTH) {
-      buffer[write_idx][x] = pixel;
-    }
-  }
-
-  pixel_t read_pixel(int line_offset, int x) {
-    #pragma HLS INLINE
-    if (x < 0 || x >= IMG_WIDTH || line_offset < 0 || line_offset >= LINE_BUFFER_SIZE) {
-      return 0;
-    }
-    int read_idx = (write_idx + line_offset) % LINE_BUFFER_SIZE;
-    return buffer[read_idx][x];
-  }
-};
+#include "brl_corr_hls.h"
 
 // Integer square root using binary search
 coord_t int_sqrt(calc_t x) {
@@ -116,7 +62,7 @@ pixel_t bilinear_interpolate(LineBuffer &line_buf, coord_t x_scaled, coord_t y_s
 
   // Integer bilinear interpolation
   int interp_x0 = (p00 * (256 - fx) + p01 * fx) >> 8;
-  int interp_x1 = (p10 * (256 - fx) + p11 * fx) >> 8;
+  int interp_x1 = (p10 * (256 - fx) + p11 * fy) >> 8; // ERROR: Should be p11 * fx
   int result = (interp_x0 * (256 - fy) + interp_x1 * fy) >> 8;
 
   return (pixel_t)result;
@@ -223,28 +169,4 @@ void barrel_correction_simple(
       }
     }
   }
-}
-
-// Test function
-int main() {
-  static pixel_t input_img[IMG_HEIGHT][IMG_WIDTH];
-  static pixel_t output_img[IMG_HEIGHT][IMG_WIDTH];
-
-  // Create simple test pattern
-  for (int y = 0; y < IMG_HEIGHT; y++) {
-    for (int x = 0; x < IMG_WIDTH; x++) {
-      input_img[y][x] = (pixel_t)((x + y) & 0xFF);
-    }
-  }
-
-  std::cout << "Starting barrel correction..." << std::endl;
-
-  // Run barrel correction
-  barrel_correction_simple(input_img, output_img);
-
-  std::cout << "Barrel correction completed!" << std::endl;
-  std::cout << "Input center pixel: " << (int)input_img[240][320] << std::endl;
-  std::cout << "Output center pixel: " << (int)output_img[240][320] << std::endl;
-
-  return 0;
 }
