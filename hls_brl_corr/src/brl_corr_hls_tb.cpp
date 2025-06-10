@@ -37,11 +37,18 @@ bool read_image_from_file(const char* filename, pixel_t image[IMG_HEIGHT][IMG_WI
   std::cout << "Reading image from: " << filename << std::endl;
 
   int pixel_count = 0;
-  int r, g, b;
+  char hex_color[7]; // RRGGBB + null terminator
 
   for (int y = 0; y < IMG_HEIGHT && !file.eof(); y++) {
     for (int x = 0; x < IMG_WIDTH && !file.eof(); x++) {
-      if (file >> r >> g >> b) {
+      if (file >> hex_color) {
+        unsigned int rgb_val;
+        sscanf(hex_color, "%x", &rgb_val);
+
+        int r = (rgb_val >> 16) & 0xFF;
+        int g = (rgb_val >> 8) & 0xFF;
+        int b = rgb_val & 0xFF;
+
         // Convert RGB to grayscale using standard weights
         // Y = 0.299*R + 0.587*G + 0.114*B
         //int gray = (299 * r + 587 * g + 114 * b) / 1000;
@@ -140,8 +147,8 @@ int main() {
   char output_filename[256];
 
   // Create filename based on current dimensions
-  sprintf(input_filename, "img_in/img_%dx%d.txt", IMG_WIDTH, IMG_HEIGHT);
-  sprintf(output_filename, "img_out/img_%dx%d_corrected.txt", IMG_WIDTH, IMG_HEIGHT);
+  sprintf(input_filename, "img_in/img_%dx%d_in.txt", IMG_WIDTH, IMG_HEIGHT);
+  sprintf(output_filename, "img_out/img_%dx%d_out.txt", IMG_WIDTH, IMG_HEIGHT);
 
   std::cout << "=== Barrel Distortion Correction Test ===" << std::endl;
   std::cout << "Image dimensions: " << IMG_WIDTH << "x" << IMG_HEIGHT << std::endl;
