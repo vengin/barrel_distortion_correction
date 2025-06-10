@@ -1,116 +1,129 @@
-#include <hls_stream.h>
-#include <ap_int.h>
-#include <ap_fixed.h>
-#include <hls_math.h>
+#include "ap_int.h"
+#include <iostream>
 
-// Type definitions optimized for Zynq-7020
+// Simple types to avoid GMP conflicts in HLS 2017.4
 typedef ap_uint<8> pixel_t;
-typedef ap_fixed<16,8> coord_t;  // 16-bit fixed point, 8 integer bits
-typedef ap_fixed<32,16> calc_t;  // For intermediate calculations
-typedef hls::stream<pixel_t> pixel_stream_t;
+typedef short coord_t;  // Use simple integer coordinates
+typedef int calc_t;     // For intermediate calculations
 
-// Image dimensions - adjustable for your application
-#define IMG_WIDTH  640
-#define IMG_HEIGHT 480
-#define LINE_BUFFER_SIZE 3  // For bilinear interpolation
+// Image dimensions
+const int IMG_WIDTH  = 640;
+const int IMG_HEIGHT = 480;
+const int LINE_BUFFER_SIZE = 3;
 
-#define K1_ONLY
-
-// Barrel correction coefficients (fixed-point)
-const coord_t K1 = -0.5;
-#ifndef K1_ONLY
-const coord_t K2 = 0.2;
-const coord_t K3 = -0.05;
-#endif
+// Barrel correction coefficients (scaled integers to avoid floating point)
+const coord_t K1_SCALED = -128;  // -0.5 * 256
+const coord_t K2_SCALED = 51;    // 0.2 * 256
+const coord_t K3_SCALED = -13;   // -0.05 * 256
+const coord_t SCALE_FACTOR = 256;
 
 // Image center coordinates
-const coord_t CENTER_X = IMG_WIDTH / 2.0;
-const coord_t CENTER_Y = IMG_HEIGHT / 2.0;
+const coord_t CENTER_X = IMG_WIDTH / 2;
+const coord_t CENTER_Y = IMG_HEIGHT / 2;
 
-// Line buffer structure for efficient memory access
-struct LineBuffer {
+// Line buffer structure
+class LineBuffer {
+private:
   pixel_t buffer[LINE_BUFFER_SIZE][IMG_WIDTH];
-  ap_uint<2> write_idx;
+  int write_idx;
+
+public:
+  LineBuffer() : write_idx(0) {
+    #pragma HLS ARRAY_PARTITION variable=buffer dim=1 complete
+  }
 
   void shift_lines() {
-    #pragma HLS PIPELINE II=1
+    #pragma HLS INLINE
     write_idx = (write_idx + 1) % LINE_BUFFER_SIZE;
   }
 
-  void write_pixel(ap_uint<10> x, pixel_t pixel) {
-    #pragma HLS PIPELINE II=1
-    buffer[write_idx][x] = pixel;
+  void write_pixel(int x, pixel_t pixel) {
+    #pragma HLS INLINE
+    if (x >= 0 && x < IMG_WIDTH) {
+      buffer[write_idx][x] = pixel;
+    }
   }
 
-  pixel_t read_pixel(ap_uint<2> line_offset, ap_uint<10> x) {
-    #pragma HLS PIPELINE II=1
-    ap_uint<2> read_idx = (write_idx + line_offset) % LINE_BUFFER_SIZE;
+  pixel_t read_pixel(int line_offset, int x) {
+    #pragma HLS INLINE
+    if (x < 0 || x >= IMG_WIDTH || line_offset < 0 || line_offset >= LINE_BUFFER_SIZE) {
+      return 0;
+    }
+    int read_idx = (write_idx + line_offset) % LINE_BUFFER_SIZE;
     return buffer[read_idx][x];
   }
 };
 
-// Bilinear interpolation function
-pixel_t bilinear_interpolate(LineBuffer &line_buf, coord_t x, coord_t y, ap_uint<9> current_line) {
-  #pragma HLS PIPELINE II=1
+// Integer square root using binary search
+coord_t int_sqrt(calc_t x) {
   #pragma HLS INLINE
 
-  // Get integer and fractional parts
-  ap_uint<10> x0 = (ap_uint<10>)x;
-  ap_uint<9> y0 = (ap_uint<9>)y;
-  coord_t fx = x - x0;
-  coord_t fy = y - y0;
+  if (x <= 0) return 0;
+  if (x == 1) return 1;
+
+  coord_t result = 0;
+  coord_t bit = 1 << 14; // Adjust for coordinate range
+
+  while (bit > x) {
+    bit >>= 2;
+  }
+
+  while (bit != 0) {
+    if (x >= result + bit) {
+      x -= result + bit;
+      result = (result >> 1) + bit;
+    } else {
+      result >>= 1;
+    }
+    bit >>= 2;
+  }
+
+  return result;
+}
+
+// Bilinear interpolation
+pixel_t bilinear_interpolate(LineBuffer &line_buf, coord_t x_scaled, coord_t y_scaled, int current_line) {
+  #pragma HLS INLINE
+
+  // Convert from scaled coordinates to pixel coordinates
+  int x = x_scaled >> 8;  // Divide by 256
+  int y = y_scaled >> 8;
+
+  // Get fractional parts (0-255 range)
+  int fx = x_scaled & 0xFF;  // x_scaled % 256
+  int fy = y_scaled & 0xFF;  // y_scaled % 256
 
   // Boundary checks
-  if (x0 >= IMG_WIDTH-1 || y0 >= IMG_HEIGHT-1 || x0 < 0 || y0 < 0) {
-    return 0; // Black pixel for out-of-bounds
+  if (x >= IMG_WIDTH-1 || y >= IMG_HEIGHT-1 || x < 0 || y < 0) {
+    return 0;
   }
 
   // Calculate line buffer offsets
-  ap_int<3> line_offset_0 = y0 - current_line + 1;
-  ap_int<3> line_offset_1 = line_offset_0 + 1;
+  int line_offset_0 = y - current_line + 1;
+  int line_offset_1 = line_offset_0 + 1;
 
-  // Check if required lines are available in buffer
+  // Check buffer bounds
   if (line_offset_0 < 0 || line_offset_0 >= LINE_BUFFER_SIZE ||
-    line_offset_1 < 0 || line_offset_1 >= LINE_BUFFER_SIZE) {
+      line_offset_1 < 0 || line_offset_1 >= LINE_BUFFER_SIZE) {
     return 0;
   }
 
   // Get four neighboring pixels
-  pixel_t p00 = line_buf.read_pixel(line_offset_0, x0);
-  pixel_t p01 = line_buf.read_pixel(line_offset_0, x0+1);
-  pixel_t p10 = line_buf.read_pixel(line_offset_1, x0);
-  pixel_t p11 = line_buf.read_pixel(line_offset_1, x0+1);
+  pixel_t p00 = line_buf.read_pixel(line_offset_0, x);
+  pixel_t p01 = line_buf.read_pixel(line_offset_0, x+1);
+  pixel_t p10 = line_buf.read_pixel(line_offset_1, x);
+  pixel_t p11 = line_buf.read_pixel(line_offset_1, x+1);
 
-  // Bilinear interpolation
-  calc_t interp_x0 = p00 * (1 - fx) + p01 * fx;
-  calc_t interp_x1 = p10 * (1 - fx) + p11 * fx;
-  calc_t result = interp_x0 * (1 - fy) + interp_x1 * fy;
+  // Integer bilinear interpolation
+  int interp_x0 = (p00 * (256 - fx) + p01 * fx) >> 8;
+  int interp_x1 = (p10 * (256 - fx) + p11 * fx) >> 8;
+  int result = (interp_x0 * (256 - fy) + interp_x1 * fy) >> 8;
 
   return (pixel_t)result;
 }
 
-// Fast square root approximation using Newton-Raphson
-coord_t fast_sqrt(calc_t x) {
-  #pragma HLS PIPELINE II=1
-  #pragma HLS INLINE
-
-  if (x <= 0) return 0;
-
-  // Initial guess using bit manipulation
-  coord_t guess = x >> 1;
-
-  // Two Newton-Raphson iterations (sufficient for our precision)
-  for (int i = 0; i < 2; i++) {
-    #pragma HLS UNROLL
-    guess = (guess + x / guess) >> 1;
-  }
-
-  return guess;
-}
-
-// Barrel distortion correction calculation
-void calculate_distortion(coord_t x_d, coord_t y_d, coord_t &x_u, coord_t &y_u) {
-  #pragma HLS PIPELINE II=1
+// Barrel distortion correction using integer arithmetic
+void calculate_distortion(coord_t x_d, coord_t y_d, coord_t &x_u_scaled, coord_t &y_u_scaled) {
   #pragma HLS INLINE
 
   // Translate to center
@@ -119,92 +132,32 @@ void calculate_distortion(coord_t x_d, coord_t y_d, coord_t &x_u, coord_t &y_u) 
 
   // Calculate radius squared
   calc_t r_squared = dx * dx + dy * dy;
-  coord_t r = fast_sqrt(r_squared);
+  coord_t r = int_sqrt(r_squared);
 
-#ifdef K1_ONLY
-  // For K1 only, we can skip higher order terms
-  coord_t distortion_factor = 1 + K1 * r_squared;
-#else
-  // For full barrel distortion correction, calculate all terms
-  // Barrel distortion formula: r_u = r_d * (1 + k1*r^2 + k2*r^4 + k3*r^6)
-  calc_t r2 = r_squared; //r * r;
-  calc_t r4 = r2 * r2;
-  calc_t r6 = r4 * r2;
+  // Barrel distortion using integer arithmetic
+  // distortion = 1 + k1*r^2 + k2*r^4 + k3*r^6
+  calc_t r2 = r * r;
+  calc_t r4 = (r2 >> 8) * (r2 >> 8);  // Prevent overflow
+  calc_t r6 = (r4 >> 8) * (r2 >> 8);
 
-  coord_t distortion_factor = 1 + K1 * r2 + K2 * r4 + K3 * r6;
-#endif
+  // Calculate distortion factor (scaled by 256)
+  calc_t distortion_scaled = SCALE_FACTOR +
+                            (K1_SCALED * (r2 >> 8)) +
+                            (K2_SCALED * (r4 >> 16)) +
+                            (K3_SCALED * (r6 >> 24));
 
-  // Calculate undistorted coordinates
-  if (r > 0) {
-    coord_t scale = distortion_factor;
-    x_u = CENTER_X + dx * scale;
-    y_u = CENTER_Y + dy * scale;
+  // Apply distortion
+  if (r > 1) {
+    x_u_scaled = (CENTER_X << 8) + (dx * distortion_scaled);
+    y_u_scaled = (CENTER_Y << 8) + (dy * distortion_scaled);
   } else {
-    x_u = x_d;
-    y_u = y_d;
+    x_u_scaled = x_d << 8;
+    y_u_scaled = y_d << 8;
   }
 }
 
-// Main barrel correction function
-void barrel_correction(pixel_stream_t &input_stream, pixel_stream_t &output_stream) {
-  #pragma HLS INTERFACE axis port=input_stream
-  #pragma HLS INTERFACE axis port=output_stream
-  #pragma HLS INTERFACE s_axilite port=return
-
-  // Line buffer for input pixels
-  static LineBuffer line_buf;
-  #pragma HLS ARRAY_PARTITION variable=line_buf.buffer dim=1 complete
-
-  // Process each output pixel
-  PROCESS_LINES: for (ap_uint<9> y = 0; y < IMG_HEIGHT; y++) {
-    #pragma HLS LOOP_TRIPCOUNT min=480 max=480
-
-    // Fill line buffer for current line
-    if (y < LINE_BUFFER_SIZE) {
-      FILL_BUFFER: for (ap_uint<10> x = 0; x < IMG_WIDTH; x++) {
-        #pragma HLS PIPELINE II=1
-        #pragma HLS LOOP_TRIPCOUNT min=640 max=640
-
-        pixel_t input_pixel = input_stream.read();
-        line_buf.write_pixel(x, input_pixel);
-      }
-      line_buf.shift_lines();
-
-      if (y < LINE_BUFFER_SIZE - 1) {
-        continue; // Need more lines before processing
-      }
-    } else {
-      // Read new line into buffer
-      READ_LINE: for (ap_uint<10> x = 0; x < IMG_WIDTH; x++) {
-        #pragma HLS PIPELINE II=1
-        #pragma HLS LOOP_TRIPCOUNT min=640 max=640
-
-        pixel_t input_pixel = input_stream.read();
-        line_buf.write_pixel(x, input_pixel);
-      }
-      line_buf.shift_lines();
-    }
-
-    // Process pixels in current output line
-    PROCESS_PIXELS: for (ap_uint<10> x = 0; x < IMG_WIDTH; x++) {
-      #pragma HLS PIPELINE II=1
-      #pragma HLS LOOP_TRIPCOUNT min=640 max=640
-
-      // Calculate source coordinates for current output pixel
-      coord_t x_src, y_src;
-      calculate_distortion(x, y - (LINE_BUFFER_SIZE/2), x_src, y_src);
-
-      // Perform bilinear interpolation
-      pixel_t corrected_pixel = bilinear_interpolate(line_buf, x_src, y_src, y - (LINE_BUFFER_SIZE/2));
-
-      // Write to output stream
-      output_stream.write(corrected_pixel);
-    }
-  }
-}
-
-// Wrapper function for easier integration
-void barrel_correction_top(
+// Simplified barrel correction function without streams
+void barrel_correction_simple(
   pixel_t input_image[IMG_HEIGHT][IMG_WIDTH],
   pixel_t output_image[IMG_HEIGHT][IMG_WIDTH]
 ) {
@@ -212,54 +165,86 @@ void barrel_correction_top(
   #pragma HLS INTERFACE m_axi port=output_image offset=slave bundle=gmem1
   #pragma HLS INTERFACE s_axilite port=return
 
-  pixel_stream_t input_stream;
-  pixel_stream_t output_stream;
+  LineBuffer line_buf;
 
-  #pragma HLS DATAFLOW
+  // Process image line by line
+  for (int y = 0; y < IMG_HEIGHT; y++) {
+    #pragma HLS LOOP_TRIPCOUNT min=480 max=480
 
-  // Convert input array to stream
-  ARRAY_TO_STREAM: for (int y = 0; y < IMG_HEIGHT; y++) {
-    for (int x = 0; x < IMG_WIDTH; x++) {
-      #pragma HLS PIPELINE II=1
-      input_stream.write(input_image[y][x]);
+    // Fill line buffer
+    if (y < LINE_BUFFER_SIZE) {
+      for (int x = 0; x < IMG_WIDTH; x++) {
+        #pragma HLS PIPELINE II=1
+        line_buf.write_pixel(x, input_image[y][x]);
+      }
+      line_buf.shift_lines();
+
+      if (y < LINE_BUFFER_SIZE - 1) {
+        continue;
+      }
+    } else {
+      for (int x = 0; x < IMG_WIDTH; x++) {
+        #pragma HLS PIPELINE II=1
+        line_buf.write_pixel(x, input_image[y][x]);
+      }
+      line_buf.shift_lines();
+    }
+
+    // Process output pixels
+    int output_y = y - (LINE_BUFFER_SIZE / 2);
+    if (output_y >= 0 && output_y < IMG_HEIGHT) {
+      for (int x = 0; x < IMG_WIDTH; x++) {
+        #pragma HLS PIPELINE II=1
+
+        // Calculate source coordinates
+        coord_t x_src_scaled, y_src_scaled;
+        calculate_distortion(x, output_y, x_src_scaled, y_src_scaled);
+
+        // Interpolate pixel value
+        pixel_t corrected_pixel = bilinear_interpolate(line_buf, x_src_scaled, y_src_scaled, output_y);
+
+        output_image[output_y][x] = corrected_pixel;
+      }
     }
   }
 
-  // Apply barrel correction
-  barrel_correction(input_stream, output_stream);
+  // Handle remaining lines
+  for (int remaining = 0; remaining < LINE_BUFFER_SIZE / 2; remaining++) {
+    int output_y = IMG_HEIGHT - (LINE_BUFFER_SIZE / 2) + remaining;
+    if (output_y >= 0 && output_y < IMG_HEIGHT) {
+      for (int x = 0; x < IMG_WIDTH; x++) {
+        #pragma HLS PIPELINE II=1
 
-  // Convert output stream to array
-  STREAM_TO_ARRAY: for (int y = 0; y < IMG_HEIGHT; y++) {
-    for (int x = 0; x < IMG_WIDTH; x++) {
-      #pragma HLS PIPELINE II=1
-      output_image[y][x] = output_stream.read();
+        coord_t x_src_scaled, y_src_scaled;
+        calculate_distortion(x, output_y, x_src_scaled, y_src_scaled);
+
+        pixel_t corrected_pixel = bilinear_interpolate(line_buf, x_src_scaled, y_src_scaled, output_y);
+        output_image[output_y][x] = corrected_pixel;
+      }
     }
   }
 }
 
-// Test bench function
-#define TESTBENCH
-#ifdef TESTBENCH
-#include <iostream>
-#include <opencv2/opencv.hpp>
-
+// Test function
 int main() {
-  // Create test image
   static pixel_t input_img[IMG_HEIGHT][IMG_WIDTH];
   static pixel_t output_img[IMG_HEIGHT][IMG_WIDTH];
 
-  // Initialize with test pattern
+  // Create simple test pattern
   for (int y = 0; y < IMG_HEIGHT; y++) {
     for (int x = 0; x < IMG_WIDTH; x++) {
-      input_img[y][x] = (x + y) % 256;
+      input_img[y][x] = (pixel_t)((x + y) & 0xFF);
     }
   }
 
-  // Run barrel correction
-  barrel_correction_top(input_img, output_img);
+  std::cout << "Starting barrel correction..." << std::endl;
 
-  std::cout << "Barrel correction completed successfully!" << std::endl;
+  // Run barrel correction
+  barrel_correction_simple(input_img, output_img);
+
+  std::cout << "Barrel correction completed!" << std::endl;
+  std::cout << "Input center pixel: " << (int)input_img[240][320] << std::endl;
+  std::cout << "Output center pixel: " << (int)output_img[240][320] << std::endl;
 
   return 0;
 }
-#endif
