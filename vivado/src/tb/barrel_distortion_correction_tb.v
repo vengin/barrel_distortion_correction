@@ -5,7 +5,7 @@ module tb_barrel_distortion_correction #(
   parameter DATA_WIDTH    = 24,     // Pixel data width (RGB888)
   parameter CLK_PERIOD    = 10,     // Clock period in ns
   parameter DISTORTION_K1 = 8'hE0,  // Distortion coefficient K1 (signed 4.4 fixed point)
-  parameter BUFFER_LINES  = HEIGHT, //HEIGHT
+  parameter BUFFER_LINES  = 4, //HEIGHT
   parameter string INPUT_RAW_FILE  = "../../../../src/tb/sim_out/img_128x100_in.txt",
   parameter string OUTPUT_RAW_FILE = "../../../../src/tb/sim_out/img_128x100_out.txt"
 );

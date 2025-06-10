@@ -20,7 +20,7 @@ module barrel_distortion_correction #(
   parameter DATA_WIDTH = 24,       // Pixel data width (RGB888)
   parameter COORD_WIDTH = 16,      // Coordinate width
   parameter DISTORTION_K1 = 8'h40, // Distortion coefficient K1 (signed 4.4 fixed point)
-  parameter BUFFER_LINES = 4       // Usually 4 is enough for most barrel distortion
+  parameter BUFFER_LINES = 4       // Number of line buffers (minimum 4 recommended)
 )(
   input wire clk,
   input wire rst_n,
@@ -56,7 +56,7 @@ module barrel_distortion_correction #(
   // Coordinate tracking
   reg [COORD_WIDTH-1:0] input_x, input_y;   // Input pixel coordinates
   reg [COORD_WIDTH-1:0] output_x, output_y; // Output pixel coordinates
-  reg [$clog2(BUFFER_LINES)-1:0] read_line_idx; // Moved declaration
+  reg [$clog2(BUFFER_LINES)-1:0] read_line_idx;
   reg frame_active;
   reg buffer_ready;
 
@@ -235,35 +235,45 @@ module barrel_distortion_correction #(
       r_squared <= (dx * dx) + (dy * dy);
 
       // Apply barrel distortion correction
-      // For barrel distortion: src = dst * (1 + k1*r^2)
-      // Simplified calculation using fixed-point arithmetic
-//      if (r_squared < 32'h100000) begin // Avoid overflow
-        // Calculate distortion factor in 16.16 fixed point
-//        k1_term = ($signed(r_squared) * $signed(DISTORTION_K1)) >>> 12; // Scale (32+4.12) for fixed point
-        k1_term = ($signed(r_squared) * $signed(DISTORTION_K1)) >>> 4; // Scale (32+4.4) for fixed point
-//        distortion_factor = 32'h10000 + k1_term;   // 1.0 + k1*r^2
-        distortion_factor = 32'h10000 + k1_term;   // 1.0 + k1*r^2
+      k1_term = ($signed(r_squared) * $signed(DISTORTION_K1)) >>> 4;
+      distortion_factor = 32'h10000 + k1_term;   // 1.0 + k1*r^2
 
-        // Apply distortion
-        src_x <= $signed(CENTER_X) + (($signed(dx) * $signed(distortion_factor)) >>> 16);
-        src_y <= $signed(CENTER_Y) + (($signed(dy) * $signed(distortion_factor)) >>> 16);
-//      end else begin
-//        // For very large distances, use identity mapping
-//        src_x <= output_x;
-//        src_y <= output_y;
-//      end
+      // Apply distortion
+      src_x <= $signed(CENTER_X) + (($signed(dx) * $signed(distortion_factor)) >>> 16);
+      src_y <= $signed(CENTER_Y) + (($signed(dy) * $signed(distortion_factor)) >>> 16);
 
-      // Sample pixel from line buffer
-//      if (src_x >= 0  &&  src_x < WIDTH  &&  src_y >= 0  &&  src_y < input_y  &&  src_y >= (input_y - BUFFER_LINES + 1)) begin
-      if (src_x >= 0  &&  src_x < WIDTH  &&  src_y >= 0  &&  src_y < input_y) begin
-        // Calculate which line buffer to read from
-        read_line_idx = (write_line_idx - (input_y - src_y)) % BUFFER_LINES;
-//        read_line_idx <= (src_y < BUFFER_LINES) ? src_y : BUFFER_LINES-1;
-
-        corrected_pixel <= line_buffer[read_line_idx][src_x[COORD_WIDTH-1:0]];
-        pixel_valid <= 1;
+      // Sample pixel from line buffer - FIXED BOUNDS CHECKING
+      if (src_x >= 0 && src_x < WIDTH && src_y >= 0 && src_y < HEIGHT) begin
+        // Check if the required line is available in our circular buffer
+        // For limited buffer: check if src_y is within the buffered range
+        if (lines_stored >= BUFFER_LINES) begin
+          // Buffer is full - check if line is in current window
+          // Current window: [input_y - BUFFER_LINES + 1, input_y]
+          if (src_y >= (input_y - BUFFER_LINES + 1) && src_y <= input_y) begin
+            // Calculate buffer index using proper modulo arithmetic
+            // The line at input_y is at write_line_idx-1 (or BUFFER_LINES-1 if write_line_idx==0)
+            // The line at input_y-1 is at write_line_idx-2, etc.
+            read_line_idx <= (write_line_idx - (input_y - src_y) + BUFFER_LINES) % BUFFER_LINES;
+            corrected_pixel <= line_buffer[(write_line_idx - (input_y - src_y) + BUFFER_LINES) % BUFFER_LINES][src_x[COORD_WIDTH-1:0]];
+            pixel_valid <= 1;
+          end else begin
+            // Line not available in buffer
+            corrected_pixel <= 0;
+            pixel_valid <= 1;
+          end
+        end else begin
+          // Buffer not full yet - simpler check
+          if (src_y < lines_stored) begin
+            read_line_idx <= src_y % BUFFER_LINES;
+            corrected_pixel <= line_buffer[src_y % BUFFER_LINES][src_x[COORD_WIDTH-1:0]];
+            pixel_valid <= 1;
+          end else begin
+            corrected_pixel <= 0;
+            pixel_valid <= 1;
+          end
+        end
       end else begin
-        // Out of bounds or not available - use black
+        // Out of image bounds
         corrected_pixel <= 0;
         pixel_valid <= 1;
       end
