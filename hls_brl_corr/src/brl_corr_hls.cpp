@@ -39,33 +39,33 @@ pixel_t bilinear_interpolate(LineBuffer &line_buf, coord_t x_scaled, coord_t y_s
   int fx = x_scaled & 0xFF;  // x_scaled % 256
   int fy = y_scaled & 0xFF;  // y_scaled % 256
 
-  // Boundary checks
-  if (x >= IMG_WIDTH-1 || y >= IMG_HEIGHT-1 || x < 0 || y < 0) {
-    return 0;
-  }
+  // Clamp x and y to valid range for pixel access
+  // This ensures that even if x_scaled or y_scaled map outside, we take the edge pixel
+  int x0 = (x < 0) ? 0 : (x >= IMG_WIDTH - 1 ? IMG_WIDTH - 1 : x);
+  int y0 = (y < 0) ? 0 : (y >= IMG_HEIGHT - 1 ? IMG_HEIGHT - 1 : y);
+
+  int x1 = x0 + 1;
+  int y1 = y0 + 1;
+
+  // Ensure x1 and y1 do not exceed image bounds
+  x1 = (x1 >= IMG_WIDTH) ? IMG_WIDTH - 1 : x1;
+  y1 = (y1 >= IMG_HEIGHT) ? IMG_HEIGHT - 1 : y1;
 
   // Calculate line buffer offsets
-  int line_offset_0 = y - current_line + 1;
-  int line_offset_1 = line_offset_0 + 1;
-
-  // Check buffer bounds
-  if (line_offset_0 < 0 || line_offset_0 >= LINE_BUFFER_SIZE ||
-      line_offset_1 < 0 || line_offset_1 >= LINE_BUFFER_SIZE) {
-    return 0;
-  }
-
+  int line_offset_0 = y0 - current_line + 1;
+  int line_offset_1 = y1 - current_line + 1;
 
   // Get four neighboring pixels
-  pixel_t p00 = line_buf.read_pixel(line_offset_0, x);
-  pixel_t p01 = line_buf.read_pixel(line_offset_0, x+1);
-  pixel_t p10 = line_buf.read_pixel(line_offset_1, x);
-  pixel_t p11 = line_buf.read_pixel(line_offset_1, x+1);
+  pixel_t p00 = line_buf.read_pixel(line_offset_0, x0);
+  pixel_t p01 = line_buf.read_pixel(line_offset_0, x1);
+  pixel_t p10 = line_buf.read_pixel(line_offset_1, x0);
+  pixel_t p11 = line_buf.read_pixel(line_offset_1, x1);
 
-//#define ENABLE_INTERPOLATION
+#define ENABLE_INTERPOLATION
 #ifdef ENABLE_INTERPOLATION
   // Integer bilinear interpolation
   int interp_x0 = (p00 * (256 - fx) + p01 * fx) >> 8;
-  int interp_x1 = (p10 * (256 - fx) + p11 * fy) >> 8; // ERROR: Should be p11 * fx
+  int interp_x1 = (p10 * (256 - fx) + p11 * fx) >> 8;
   int result = (interp_x0 * (256 - fy) + interp_x1 * fy) >> 8;
 
   return (pixel_t)result;

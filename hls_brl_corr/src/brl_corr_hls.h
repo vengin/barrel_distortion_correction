@@ -20,7 +20,7 @@ const int LINE_BUFFER_SIZE = 3;
 
 // Barrel correction coefficients (scaled integers to avoid floating point)
 // const coord_t K1_SCALED = -128;  // -0.5 * 256
-const coord_t K1_SCALED = 0; // +0.5 * 256
+const coord_t K1_SCALED = 0; // No distortion (reset to neutral for completion)
 const coord_t K2_SCALED = 0; // 0.2 * 256
 const coord_t K3_SCALED = 0; // -0.05 * 256
 const coord_t SCALE_FACTOR = 256;
