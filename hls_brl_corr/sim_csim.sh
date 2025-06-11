@@ -55,4 +55,4 @@ python "${PYTHON_SCRIPTS_DIR}/raw_to_image.py" "${OUTPUT_RAW_FILE}" "${OUTPUT_IM
 # --- Step 4: Compare intput and output images ---
 printf "\nStep 6: Comparing input and output images...\n"
 echo "BCompare.exe "${INPUT_IMAGE}" "${OUTPUT_IMAGE}""
-/D/\!portable/Beyond_Compare/BCompare.exe "${INPUT_IMAGE}" "${OUTPUT_IMAGE}"
+start "" "/D/\!portable/Beyond_Compare/BCompare.exe" "${INPUT_IMAGE}" "${OUTPUT_IMAGE}"
