@@ -82,10 +82,11 @@ void calculate_distortion(coord_t x_d, coord_t y_d, coord_t &x_u_scaled, coord_t
 
   // Barrel distortion using integer arithmetic
   calc_t r2 = r * r;
+#define K1_ONLY
 #ifdef K1_ONLY
   // For K1 only, we can skip higher order terms, use only r^2, i.e. istortion = 1 + k1*r^2
   // Calculate distortion factor (scaled by 256)
-  calc_t distortion_scaled = SCALE_FACTOR + (K1_SCALED * (r2 >> 8))
+  calc_t distortion_scaled = SCALE_FACTOR + (K1_SCALED * (r2 >> 8));
 
 #else
   // distortion = 1 + k1*r^2 + k2*r^4 + k3*r^6
