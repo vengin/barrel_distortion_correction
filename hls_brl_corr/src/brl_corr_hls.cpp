@@ -93,7 +93,7 @@ void calculate_distortion(coord_t x_d, coord_t y_d, coord_t &x_u_scaled, coord_t
 #ifdef K1_ONLY
   // For K1 only, we can skip higher order terms, use only r^2, i.e. istortion = 1 + k1*r^2
   // Calculate distortion factor (scaled by 256)
-  calc_t distortion_scaled = SCALE_FACTOR + (K1_SCALED * (r2 >> 8));
+  calc_t distortion_scaled = SCALE_FACTOR + (K1_SCALED * (r2 >> DISTORTION_SCALE_SHIFT));
 
 #else
   // distortion = 1 + k1*r^2 + k2*r^4 + k3*r^6
@@ -102,9 +102,9 @@ void calculate_distortion(coord_t x_d, coord_t y_d, coord_t &x_u_scaled, coord_t
 
   // Calculate distortion factor (scaled by 256)
   calc_t distortion_scaled = SCALE_FACTOR +
-                            (K1_SCALED * (r2 >> 8)) +
-                            (K2_SCALED * (r4 >> 16)) +
-                            (K3_SCALED * (r6 >> 24));
+                            (K1_SCALED * (r2 >> DISTORTION_SCALE_SHIFT)) +
+                            (K2_SCALED * (r4 >> (2 * DISTORTION_SCALE_SHIFT))) +
+                            (K3_SCALED * (r6 >> (3 * DISTORTION_SCALE_SHIFT)));
 #endif
 
   // Apply distortion
@@ -128,60 +128,38 @@ void barrel_correction_simple(
 
   LineBuffer line_buf;
 
-  // Process image line by line
-  for (int y = 0; y < IMG_HEIGHT; y++) {
-    #pragma HLS LOOP_TRIPCOUNT min=480 max=480
-
-    // Fill line buffer
-    if (y < LINE_BUFFER_SIZE) {
-      for (int x = 0; x < IMG_WIDTH; x++) {
-        #pragma HLS PIPELINE II=1
-        line_buf.write_pixel(x, input_image[y][x]);
-      }
-      line_buf.shift_lines();
-
-      if (y < LINE_BUFFER_SIZE - 1) {
-        continue;
-      }
-    } else {
-      for (int x = 0; x < IMG_WIDTH; x++) {
-        #pragma HLS PIPELINE II=1
-        line_buf.write_pixel(x, input_image[y][x]);
-      }
-      line_buf.shift_lines();
+  // Pre-fill the line buffer with the first LINE_BUFFER_SIZE lines
+  for (int y = 0; y < LINE_BUFFER_SIZE; y++) {
+    #pragma HLS PIPELINE II=1
+    for (int x = 0; x < IMG_WIDTH; x++) {
+      line_buf.write_pixel(x, input_image[y][x]);
     }
-
-    // Process output pixels
-    int output_y = y - (LINE_BUFFER_SIZE / 2);
-    if (output_y >= 0 && output_y < IMG_HEIGHT) {
-      for (int x = 0; x < IMG_WIDTH; x++) {
-        #pragma HLS PIPELINE II=1
-
-        // Calculate source coordinates
-        coord_t x_src_scaled, y_src_scaled;
-        calculate_distortion(x, output_y, x_src_scaled, y_src_scaled);
-
-        // Interpolate pixel value
-        pixel_t corrected_pixel = bilinear_interpolate(line_buf, x_src_scaled, y_src_scaled, output_y);
-
-        output_image[output_y][x] = corrected_pixel;
-      }
-    }
+    line_buf.shift_lines();
   }
 
-  // Handle remaining lines
-  for (int remaining = 0; remaining < LINE_BUFFER_SIZE / 2; remaining++) {
-    int output_y = IMG_HEIGHT - (LINE_BUFFER_SIZE / 2) + remaining;
-    if (output_y >= 0 && output_y < IMG_HEIGHT) {
+  // Process output pixels for each line
+  for (int output_y = 0; output_y < IMG_HEIGHT; output_y++) {
+    #pragma HLS PIPELINE II=1
+
+    for (int x = 0; x < IMG_WIDTH; x++) {
+      // Calculate source coordinates
+      coord_t x_src_scaled, y_src_scaled;
+      calculate_distortion(x, output_y, x_src_scaled, y_src_scaled);
+
+      // Interpolate pixel value
+      pixel_t corrected_pixel = bilinear_interpolate(line_buf, x_src_scaled, y_src_scaled, output_y);
+
+      output_image[output_y][x] = corrected_pixel;
+    }
+
+    // After processing output_y, shift the line buffer and load the next input line
+    // This is for the next iteration of output_y
+    if (output_y + LINE_BUFFER_SIZE < IMG_HEIGHT) {
       for (int x = 0; x < IMG_WIDTH; x++) {
         #pragma HLS PIPELINE II=1
-
-        coord_t x_src_scaled, y_src_scaled;
-        calculate_distortion(x, output_y, x_src_scaled, y_src_scaled);
-
-        pixel_t corrected_pixel = bilinear_interpolate(line_buf, x_src_scaled, y_src_scaled, output_y);
-        output_image[output_y][x] = corrected_pixel;
+        line_buf.write_pixel(x, input_image[output_y + LINE_BUFFER_SIZE][x]);
       }
     }
+    line_buf.shift_lines(); // Shift for the next iteration
   }
 }
