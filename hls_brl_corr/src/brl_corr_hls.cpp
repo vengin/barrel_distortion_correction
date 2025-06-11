@@ -54,18 +54,25 @@ pixel_t bilinear_interpolate(LineBuffer &line_buf, coord_t x_scaled, coord_t y_s
     return 0;
   }
 
+
   // Get four neighboring pixels
   pixel_t p00 = line_buf.read_pixel(line_offset_0, x);
   pixel_t p01 = line_buf.read_pixel(line_offset_0, x+1);
   pixel_t p10 = line_buf.read_pixel(line_offset_1, x);
   pixel_t p11 = line_buf.read_pixel(line_offset_1, x+1);
 
+//#define ENABLE_INTERPOLATION
+#ifdef ENABLE_INTERPOLATION
   // Integer bilinear interpolation
   int interp_x0 = (p00 * (256 - fx) + p01 * fx) >> 8;
   int interp_x1 = (p10 * (256 - fx) + p11 * fy) >> 8; // ERROR: Should be p11 * fx
   int result = (interp_x0 * (256 - fy) + interp_x1 * fy) >> 8;
 
   return (pixel_t)result;
+ // Return top-left pixel to disable interpolation
+#else
+  return p00; // Return top-left pixel to disable interpolation
+#endif
 }
 
 // Barrel distortion correction using integer arithmetic
