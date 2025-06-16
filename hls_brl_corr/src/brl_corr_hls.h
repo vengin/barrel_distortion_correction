@@ -9,7 +9,7 @@
 // --- CONFIGURATION CONSTANTS ---
 #define IMG_WIDTH  128
 #define IMG_HEIGHT 100
-#define NUM_BUFFER_LINES 32
+#define NUM_BUFFER_LINES 8
 
 // --- TYPE DEFINITIONS ---
 typedef ap_uint<8> pixel_t;
