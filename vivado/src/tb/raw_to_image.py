@@ -37,7 +37,7 @@ if __name__ == "__main__":
   if len(sys.argv) != 5:
     print("Usage: python raw_to_image.py <input_raw_path> <output_image_path> <width> <height>")
     sys.exit(1)
-  
+
   input_path = sys.argv[1]
   output_path = sys.argv[2]
   width = int(sys.argv[3])

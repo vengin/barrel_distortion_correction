@@ -15,10 +15,11 @@ fi
 
 # --- Configuration ---
 # Paths
-PRJ_DIR="$(pwd)"
-HLS_DIR="${PRJ_DIR}/hls_brl_corr"
-cd "${HLS_DIR}/.."
-PYTHON_SCRIPTS_DIR="$(pwd)/vivado/src/tb" # Python scripts are now in the testbench directory
+HLS_DIR="$(pwd)" # This script's directory (e.g., hls_brl_corr1)
+cd ..
+PRJ_DIR="$(pwd)" # Parent directory (e.g., barrel_distortion_correction)
+#cd ${HLS_DIR}
+PYTHON_SCRIPTS_DIR="${PRJ_DIR}/vivado/src/tb" # Python scripts are now in the testbench directory
 
 # Image paths and dimensions (UPDATE THESE FOR YOUR IMAGE)
 IMG_WIDTH=128 # Width of your input image
@@ -44,7 +45,7 @@ python "${PYTHON_SCRIPTS_DIR}/image_to_raw.py" "${INPUT_IMAGE}" "${INPUT_RAW_FIL
 # --- Step 2: Run C Simulation ---
 cd ${PRJ_DIR}
 printf "\nStep 2: Running C Simulation...\n"
-/C/Xilinx/Vivado/2017.4/bin/vivado_hls.bat hls_brl_corr/run_csim.tcl
+/C/Xilinx/Vivado/2017.4/bin/vivado_hls.bat "${HLS_DIR}/run_csim.tcl"
 
 # --- Step 3: Convert Raw Output Pixel Data to Image ---
 cd ${HLS_DIR}

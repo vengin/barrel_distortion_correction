@@ -14,7 +14,7 @@ def image_to_raw(input_image_path, output_raw_path):
           r, g, b = img.getpixel((x, y))
           # Format as 24-bit hexadecimal (RRGGBB)
           f.write(f"{r:02x}{g:02x}{b:02x}\n")
-    
+
     print(f"Successfully converted '{input_image_path}' to raw pixel data at '{output_raw_path}'")
     print(f"Image dimensions: {width}x{height}")
     return width, height
@@ -30,7 +30,7 @@ if __name__ == "__main__":
   if len(sys.argv) != 3:
     print("Usage: python image_to_raw.py <input_image_path> <output_raw_path>")
     sys.exit(1)
-  
+
   input_path = sys.argv[1]
   output_path = sys.argv[2]
   image_to_raw(input_path, output_path)

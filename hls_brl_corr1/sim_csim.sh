@@ -37,23 +37,23 @@ OUTPUT_RAW_FILE="src/img_out/${IMG_NAME}_out.txt"
 cd ${HLS_DIR}
 echo "HLS_DIR=${HLS_DIR}"
 
-# # --- Step 1: Convert Input Image to Raw Pixel Data ---
-# printf "\nStep 1: Converting input image '${INPUT_IMAGE}' to raw pixel data...\n"
-# echo "python \"${PYTHON_SCRIPTS_DIR}/image_to_raw.py\" \"${INPUT_IMAGE}\" \"${INPUT_RAW_FILE}\""
-# python "${PYTHON_SCRIPTS_DIR}/image_to_raw.py" "${INPUT_IMAGE}" "${INPUT_RAW_FILE}"
+# --- Step 1: Convert Input Image to Raw Pixel Data ---
+printf "\nStep 1: Converting input image '${INPUT_IMAGE}' to raw pixel data...\n"
+echo "python \"${PYTHON_SCRIPTS_DIR}/image_to_raw.py\" \"${INPUT_IMAGE}\" \"${INPUT_RAW_FILE}\""
+python "${PYTHON_SCRIPTS_DIR}/image_to_raw.py" "${INPUT_IMAGE}" "${INPUT_RAW_FILE}"
 
 # --- Step 2: Run C Simulation ---
 cd ${PRJ_DIR}
 printf "\nStep 2: Running C Simulation...\n"
 /C/Xilinx/Vivado/2017.4/bin/vivado_hls.bat "${HLS_DIR}/run_csim.tcl"
 
-# # --- Step 3: Convert Raw Output Pixel Data to Image ---
-# cd ${HLS_DIR}
-# printf "\nStep 5: Converting raw output pixel data to image '${OUTPUT_IMAGE}'...\n"
-# echo "python \"${PYTHON_SCRIPTS_DIR}/raw_to_image.py\" \"${OUTPUT_RAW_FILE}\" \"${OUTPUT_IMAGE}\" ${IMG_WIDTH} ${IMG_HEIGHT}"
-# python "${PYTHON_SCRIPTS_DIR}/raw_to_image.py" "${OUTPUT_RAW_FILE}" "${OUTPUT_IMAGE}" "${IMG_WIDTH}" "${IMG_HEIGHT}"
+# --- Step 3: Convert Raw Output Pixel Data to Image ---
+cd ${HLS_DIR}
+printf "\nStep 5: Converting raw output pixel data to image '${OUTPUT_IMAGE}'...\n"
+echo "python \"${PYTHON_SCRIPTS_DIR}/raw_to_image.py\" \"${OUTPUT_RAW_FILE}\" \"${OUTPUT_IMAGE}\" ${IMG_WIDTH} ${IMG_HEIGHT}"
+python "${PYTHON_SCRIPTS_DIR}/raw_to_image.py" "${OUTPUT_RAW_FILE}" "${OUTPUT_IMAGE}" "${IMG_WIDTH}" "${IMG_HEIGHT}"
 
-# # --- Step 4: Compare intput and output images ---
-# printf "\nStep 6: Comparing input and output images...\n"
-# echo "BCompare.exe "${INPUT_IMAGE}" "${OUTPUT_IMAGE}""
-# start "" "/D/\!portable/Beyond_Compare/BCompare.exe" "${INPUT_IMAGE}" "${OUTPUT_IMAGE}"
+# --- Step 4: Compare intput and output images ---
+printf "\nStep 6: Comparing input and output images...\n"
+echo "BCompare.exe "${INPUT_IMAGE}" "${OUTPUT_IMAGE}""
+start "" "/D/\!portable/Beyond_Compare/BCompare.exe" "${INPUT_IMAGE}" "${OUTPUT_IMAGE}"
