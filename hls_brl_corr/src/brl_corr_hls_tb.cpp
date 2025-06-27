@@ -1,5 +1,11 @@
 #include "brl_corr_hls.h" // Include the new header file
-#include <iomanip> // Required for std::setw and std::setfill
+#include <iomanip>
+#include <fstream>
+#include <iostream>
+#include <cmath>
+#include <cstdio>
+#include <cstring>
+
 
 // Function to parse filename and extract dimensions
 bool parse_filename(const char* filename, int &width, int &height) {
