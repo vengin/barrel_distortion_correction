@@ -30,12 +30,12 @@ def generate_file_tree(startpath='.', depth=4, ignore_dirs=None):
             is_last = (i == len(dirs) + len(files) - 1)
 
             if os.path.isdir(path):
-                connector = "└──" if is_last else "├──"
+                connector = "+--" if is_last else "|--"
                 tree_str.append(f"{prefix}{connector}{item}") # Removed trailing slash and space
-                new_prefix = prefix + ("    " if is_last else "│   ")
+                new_prefix = prefix + ("    " if is_last else "|   ")
                 _build_tree(path, current_depth + 1, new_prefix)
             else:
-                connector = "└──" if is_last else "├──"
+                connector = "+--" if is_last else "|--"
                 tree_str.append(f"{prefix}{connector}{item}") # Removed space
 
     _build_tree(startpath, 0)
