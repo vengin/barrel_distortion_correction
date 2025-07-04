@@ -82,410 +82,587 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 ----
 
 # Curent File Structure
-    hdmi_io1.xpr.zip
-    hdmi_io_bak.xpr.zip
-    vivado_hls.log
-    barrel_distortion_correction/
-        .clinerules
-        .gitignore
-        README.md
-        compile_rtl_xvlog.sh
-        hls_brl_corr1.zip
-        hls_brl_corr_src_brl_corr_hls.cpp
-        image_to_raw.py
-        raw_to_image.py
-        run.tx
-        run_vivado_xsim.sh
-        setup_vivado_git_bash.sh
-        vivado_hls.log
-        -/
-            run_xsim_in_new_msys.sh
-            setup_vivado_git_bash.sh
-            setup_vivado_msys_fixed.sh
-            temp_setup.sh
-        hdmi_io/
-        hls/
-            vivado_hls.log
-        hls_brl_corr/
-            .cproject
-            .project
-            .vivado_hls_log_all.xml
-            run_csim.tcl
-            sim_csim.sh
-            vivado_hls.app
-        hls_brl_corr0/
-            .cproject
-            .project
-            .vivado_hls_log_all.xml
-            run_csim.tcl
-            sim_csim.sh
-            vivado_hls.app
-            vivado_hls.log
-        hls_brl_corr1/
-            .cproject
-            .project
-            .vivado_hls_log_all.xml
-            run_csim.tcl
-            sim_csim-.sh
-            sim_csim.sh
-            vivado_hls.app
-        hls_brl_corr2/
-            .cproject
-            .project
-            .vivado_hls_log_all.xml
-        hls_brl_corr2023/
-            .cproject
-            .project
-            .vitis_hls_log_all.xml
-            hls.app
-        hls_brl_corr3/
-            .cproject
-            .gitignore
-            .project
-            .vivado_hls_log_all.xml
-            vivado_hls.app
-        scripts/
-            update_clinerules_file_tree.py
-        vivado/
-            hdmi_barrel_distortion_correction.bd.pdf
-            hdmi_barrel_distortion_correction.xpr
-        vivado1/
-            hdmi_barrel_distortion_correction.bd.pdf
-            hdmi_barrel_distortion_correction.xpr
-    barrel_distortion_correction1/
-        hls_brl_corr/
-            .cproject
-            .project
-            .vivado_hls_log_all.xml
-        hls_brl_corr0/
-            .cproject
-            .project
-            vivado_hls.app
-    barrel_distortion_correction2/
-        vivado_hls.log
-        hls_brl_corr/
-            .cproject
-            .gitignore
-            .project
-            .vivado_hls_log_all.xml
-            vivado_hls.app
-        hls_brl_corr1/
-            .cproject
-            .project
-            vivado_hls.app
-    brl_corr/
-        .clinerules
-        .gitignore
-        README.md
-        vivavdo/
-            brl_corr.xpr
-    BYU_PYNQ_PR_Video_Pipeline/
-        LICENSE
-        README.md
-        ToDo.txt
-        log.txt
-        logo.png
-        setup.py
-        video/
-            .partial_bit.py.swp
-            PRControl.py
-            __init__.py
-            ascii_l0.bit
-            ascii_m0.bit
-            ascii_m1.bit
-            ascii_m2.bit
-            ascii_s0.bit
-            ascii_s1.bit
-            ascii_s2.bit
-            ascii_s3.bit
-            ascii_s4.bit
-            ascii_s5.bit
-            build_base_ip.tcl
-            constants.py
-            dilate_l0.bit
-            dilate_m0.bit
-            dilate_m1.bit
-            dilate_m2.bit
-            dilate_s0.bit
-            dilate_s1.bit
-            dilate_s2.bit
-            dilate_s3.bit
-            dilate_s4.bit
-            dilate_s5.bit
-            emboss_l0.bit
-            emboss_m0.bit
-            emboss_m1.bit
-            emboss_m2.bit
-            emboss_s0.bit
-            emboss_s1.bit
-            emboss_s2.bit
-            emboss_s3.bit
-            emboss_s4.bit
-            emboss_s5.bit
-            erode_l0.bit
-            erode_m0.bit
-            erode_m1.bit
-            erode_m2.bit
-            erode_s0.bit
-            erode_s1.bit
-            erode_s2.bit
-            erode_s3.bit
-            erode_s4.bit
-            erode_s5.bit
-            grey_l0.bit
-            grey_m0.bit
-            grey_m1.bit
-            grey_m2.bit
-            grey_s0.bit
-            grey_s1.bit
-            grey_s2.bit
-            grey_s3.bit
-            grey_s4.bit
-            grey_s5.bit
-            gscreen_mux.bit
-            image_l0.bit
-            invert_l0.bit
-            invert_m0.bit
-            invert_m1.bit
-            invert_m2.bit
-            invert_s0.bit
-            invert_s1.bit
-            invert_s2.bit
-            invert_s3.bit
-            invert_s4.bit
-            invert_s5.bit
-            japanese_l0.bit
-            japanese_m0.bit
-            japanese_m1.bit
-            japanese_m2.bit
-            japanese_s0.bit
-            japanese_s1.bit
-            japanese_s2.bit
-            japanese_s3.bit
-            japanese_s4.bit
-            japanese_s5.bit
-            kernel_l0.bit
-            kernel_m0.bit
-            kernel_m1.bit
-            kernel_m2.bit
-            limit_l0.bit
-            limit_m0.bit
-            limit_m1.bit
-            limit_m2.bit
-            limit_s0.bit
-            limit_s1.bit
-            limit_s2.bit
-            limit_s3.bit
-            limit_s4.bit
-            limit_s5.bit
-            lines_l0.bit
-            lines_m0.bit
-            lines_m1.bit
-            lines_m2.bit
-            lines_s0.bit
-            lines_s1.bit
-            lines_s2.bit
-            lines_s3.bit
-            lines_s4.bit
-            lines_s5.bit
-            mirror_l0.bit
-            mirror_m0.bit
-            mirror_m1.bit
-            mirror_m2.bit
-            mirror_s0.bit
-            mirror_s1.bit
-            mirror_s2.bit
-            mirror_s3.bit
-            mirror_s4.bit
-            mirror_s5.bit
-            mton_l0.bit
-            partial_bit.py
-            pass_l0.bit
-            pass_m0.bit
-            pass_m1.bit
-            pass_m2.bit
-            pass_s0.bit
-            pass_s1.bit
-            pass_s2.bit
-            pass_s3.bit
-            pass_s4.bit
-            pass_s5.bit
-            sobel_l0.bit
-            sobel_m0.bit
-            sobel_m1.bit
-            sobel_m2.bit
-            threshold_l0.bit
-            threshold_m0.bit
-            threshold_m1.bit
-            threshold_m2.bit
-            threshold_s0.bit
-            threshold_s1.bit
-            threshold_s2.bit
-            threshold_s3.bit
-            threshold_s4.bit
-            threshold_s5.bit
-            video.bit
-            video.bit.old
-            video.py
-            video.tcl
-        Video_notebooks/
-            ASCII test overlay.ipynb
-            BYU_Stretch_Y.bin
-            Demo-.ipynb
-            Demo.ipynb
-            Demo0.ipynb
-            Dilate Filter.ipynb
-            Emboss Filter.ipynb
-            Erode.ipynb
-            Grayscale.ipynb
-            Green Screen.ipynb
-            Image Overlay.ipynb
-            Invert Filter.ipynb
-            Japanese Text Overlay.ipynb
-            Kernel Filter.ipynb
-            Line Overlay.ipynb
-            MIrror.ipynb
-            RGB Filter.ipynb
-            Sobel Filter.ipynb
-            Threshold Filter.ipynb
-            background.jpg
-            background2.jpg
-            background3.jpg
-            cougar_256.bin
-            medallion_256.bin
-    BYU_PYNQ_PR_Video_Pipeline_HW/
-        .gitignore
-        README.md
-        Task Completed.docx
-        setup_vivado_msys_custom.sh
-        doc/
-            lut_create.py
-            system.bd.pdf
-            system.bd.png
-            system.bd.video.pdf
-            system.bd.video.png
-        drp/
-            build_prs.tcl
-            build_static_design+.log
-            build_static_design.log
-            build_static_design.tcl
-            part_gen.log
-            part_gen.tcl
-            part_gen_large.tcl
-            part_gen_mid.tcl
-            part_gen_mux.tcl
-            part_gen_small.tcl
-        ip/
-        Pynq-Z1/
-    HDMI17/
-        HDMI17.bak.xpr
-        HDMI17.xpr
-        ip_upgrade.log
-        HDMI17.cache/
-        HDMI17.hw/
-            HDMI17.lpr
-        HDMI17.ip_user_files/
-            README.txt
-        HDMI17.runs/
-        HDMI17.sim/
-        HDMI17.srcs/
-    HDMI_02/
-        HDMI_02.xpr
-        design_1.pdf
-        .Xil/
-        HDMI_02.cache/
-        HDMI_02.hw/
-            HDMI_02.lpr
-        HDMI_02.ip_user_files/
-            README.txt
-        HDMI_02.runs/
-        HDMI_02.sim/
-        HDMI_02.srcs/
-        Zybo-Z7-20-HDMI-v2018.2-2/
-            README.md
-    hdmi_barrel_distortion_correction/
-    hls/
-        barrel_correction.cpp
-        barrel_correction.h
-        barrel_correction1.cpp
-        barrel_correction_tb.cpp
-        hls_barrel_correction/
-            .cproject
-            .project
-            vivado_hls.app
-    pynqz2_dpu140/
-        README.md
-        apps/
-            Makefile
-        images/
-            2019-09-03_23h20_33.png
-            2019-09-03_23h22_30.png
-            2019-09-04_09h07_12.png
-            2019-09-04_11h33_32.png
-            2019-09-04_11h40_47.png
-            2019-09-04_15h25_50.png
-            2019-09-04_16h41_31.png
-            2019-09-04_16h50_04.png
-            2019-09-04_17h47_20.png
-            2019-09-04_17h56_03.png
-            2019-09-04_18h05_40.png
-            2019-09-04_18h09_36.png
-            2019-09-04_IP.png
-            2019-09-04_IPI.png
-            2019-09-04_PYNQ.png
-            2019-09-05_10h45_29.png
-            2019-09-05_10h48_40.png
-            2019-09-05_10h49_55.png
-            2019-09-05_10h51_08.png
-            2019-09-05_10h51_47.png
-            2019-09-05_10h52_47.png
-            2019-09-05_10h53_41.png
-            2019-09-06_16h54_49.png
-            2019-09-10_09h45_25.png
-            2019-09-10_10h45_15.png
-            2019-09-10_11h01_34.png
-            2019-09-10_11h02_03.png
-            2019-09-10_11h03_34.png
-            2019-09-10_11h04_20.png
-            2019-09-10_11h56_45.png
-            2019-09-10_12h12_24.png
-            2019-09-10_12h22_43.png
-            2019-09-10_12h23_14.png
-            2019-09-10_13h39_29.png
-            2019-09-10_13h43_06.png
-            2019-09-10_13h55_40.png
-            2019-09-13_13h07_26.png
-            IMG_7522.jpg
-        petalinux/
-            pynq_dpu.bsp
-        vivado/
-            design_1-.tcl
-            design_1.tcl
-        zynq7020_dnndk_v3.0/
-            install.sh
-            install.sh.orig
-    pynq_dpu/
-        pynq_dpu.xpr
-        pynq_dpu.cache/
-        pynq_dpu.gen/
-        pynq_dpu.hw/
-            pynq_dpu.lpr
-        pynq_dpu.ip_user_files/
-        pynq_dpu.sim/
-        pynq_dpu.srcs/
-    vitis/
-        .analytics
-        IDE.log
-        .metadata/
-            .lock
-            .log
-            version.ini
-        RemoteSystemsTempFiles/
-            .project
-    vivado-library/
-        .gitignore
-        License.txt
-        README.md
-        if/
-        ip/
-        module/
+.
+├── BYU_PYNQ_PR_Video_Pipeline/
+│   ├── Video_notebooks/
+│   │   ├── .ipynb_checkpoints/
+│   │   ├── ASCII test overlay.ipynb
+│   │   ├── BYU_Stretch_Y.bin
+│   │   ├── Demo-.ipynb
+│   │   ├── Demo.ipynb
+│   │   ├── Demo0.ipynb
+│   │   ├── Dilate Filter.ipynb
+│   │   ├── Emboss Filter.ipynb
+│   │   ├── Erode.ipynb
+│   │   ├── Grayscale.ipynb
+│   │   ├── Green Screen.ipynb
+│   │   ├── Image Overlay.ipynb
+│   │   ├── Invert Filter.ipynb
+│   │   ├── Japanese Text Overlay.ipynb
+│   │   ├── Kernel Filter.ipynb
+│   │   ├── Line Overlay.ipynb
+│   │   ├── MIrror.ipynb
+│   │   ├── RGB Filter.ipynb
+│   │   ├── Sobel Filter.ipynb
+│   │   ├── Threshold Filter.ipynb
+│   │   ├── background.jpg
+│   │   ├── background2.jpg
+│   │   ├── background3.jpg
+│   │   ├── cougar_256.bin
+│   │   └── medallion_256.bin
+│   ├── video/
+│   │   ├── .partial_bit.py.swp
+│   │   ├── PRControl.py
+│   │   ├── __init__.py
+│   │   ├── ascii_l0.bit
+│   │   ├── ascii_m0.bit
+│   │   ├── ascii_m1.bit
+│   │   ├── ascii_m2.bit
+│   │   ├── ascii_s0.bit
+│   │   ├── ascii_s1.bit
+│   │   ├── ascii_s2.bit
+│   │   ├── ascii_s3.bit
+│   │   ├── ascii_s4.bit
+│   │   ├── ascii_s5.bit
+│   │   ├── build_base_ip.tcl
+│   │   ├── constants.py
+│   │   ├── dilate_l0.bit
+│   │   ├── dilate_m0.bit
+│   │   ├── dilate_m1.bit
+│   │   ├── dilate_m2.bit
+│   │   ├── dilate_s0.bit
+│   │   ├── dilate_s1.bit
+│   │   ├── dilate_s2.bit
+│   │   ├── dilate_s3.bit
+│   │   ├── dilate_s4.bit
+│   │   ├── dilate_s5.bit
+│   │   ├── emboss_l0.bit
+│   │   ├── emboss_m0.bit
+│   │   ├── emboss_m1.bit
+│   │   ├── emboss_m2.bit
+│   │   ├── emboss_s0.bit
+│   │   ├── emboss_s1.bit
+│   │   ├── emboss_s2.bit
+│   │   ├── emboss_s3.bit
+│   │   ├── emboss_s4.bit
+│   │   ├── emboss_s5.bit
+│   │   ├── erode_l0.bit
+│   │   ├── erode_m0.bit
+│   │   ├── erode_m1.bit
+│   │   ├── erode_m2.bit
+│   │   ├── erode_s0.bit
+│   │   ├── erode_s1.bit
+│   │   ├── erode_s2.bit
+│   │   ├── erode_s3.bit
+│   │   ├── erode_s4.bit
+│   │   ├── erode_s5.bit
+│   │   ├── grey_l0.bit
+│   │   ├── grey_m0.bit
+│   │   ├── grey_m1.bit
+│   │   ├── grey_m2.bit
+│   │   ├── grey_s0.bit
+│   │   ├── grey_s1.bit
+│   │   ├── grey_s2.bit
+│   │   ├── grey_s3.bit
+│   │   ├── grey_s4.bit
+│   │   ├── grey_s5.bit
+│   │   ├── gscreen_mux.bit
+│   │   ├── image_l0.bit
+│   │   ├── invert_l0.bit
+│   │   ├── invert_m0.bit
+│   │   ├── invert_m1.bit
+│   │   ├── invert_m2.bit
+│   │   ├── invert_s0.bit
+│   │   ├── invert_s1.bit
+│   │   ├── invert_s2.bit
+│   │   ├── invert_s3.bit
+│   │   ├── invert_s4.bit
+│   │   ├── invert_s5.bit
+│   │   ├── japanese_l0.bit
+│   │   ├── japanese_m0.bit
+│   │   ├── japanese_m1.bit
+│   │   ├── japanese_m2.bit
+│   │   ├── japanese_s0.bit
+│   │   ├── japanese_s1.bit
+│   │   ├── japanese_s2.bit
+│   │   ├── japanese_s3.bit
+│   │   ├── japanese_s4.bit
+│   │   ├── japanese_s5.bit
+│   │   ├── kernel_l0.bit
+│   │   ├── kernel_m0.bit
+│   │   ├── kernel_m1.bit
+│   │   ├── kernel_m2.bit
+│   │   ├── limit_l0.bit
+│   │   ├── limit_m0.bit
+│   │   ├── limit_m1.bit
+│   │   ├── limit_m2.bit
+│   │   ├── limit_s0.bit
+│   │   ├── limit_s1.bit
+│   │   ├── limit_s2.bit
+│   │   ├── limit_s3.bit
+│   │   ├── limit_s4.bit
+│   │   ├── limit_s5.bit
+│   │   ├── lines_l0.bit
+│   │   ├── lines_m0.bit
+│   │   ├── lines_m1.bit
+│   │   ├── lines_m2.bit
+│   │   ├── lines_s0.bit
+│   │   ├── lines_s1.bit
+│   │   ├── lines_s2.bit
+│   │   ├── lines_s3.bit
+│   │   ├── lines_s4.bit
+│   │   ├── lines_s5.bit
+│   │   ├── mirror_l0.bit
+│   │   ├── mirror_m0.bit
+│   │   ├── mirror_m1.bit
+│   │   ├── mirror_m2.bit
+│   │   ├── mirror_s0.bit
+│   │   ├── mirror_s1.bit
+│   │   ├── mirror_s2.bit
+│   │   ├── mirror_s3.bit
+│   │   ├── mirror_s4.bit
+│   │   ├── mirror_s5.bit
+│   │   ├── mton_l0.bit
+│   │   ├── partial_bit.py
+│   │   ├── pass_l0.bit
+│   │   ├── pass_m0.bit
+│   │   ├── pass_m1.bit
+│   │   ├── pass_m2.bit
+│   │   ├── pass_s0.bit
+│   │   ├── pass_s1.bit
+│   │   ├── pass_s2.bit
+│   │   ├── pass_s3.bit
+│   │   ├── pass_s4.bit
+│   │   ├── pass_s5.bit
+│   │   ├── sobel_l0.bit
+│   │   ├── sobel_m0.bit
+│   │   ├── sobel_m1.bit
+│   │   ├── sobel_m2.bit
+│   │   ├── threshold_l0.bit
+│   │   ├── threshold_m0.bit
+│   │   ├── threshold_m1.bit
+│   │   ├── threshold_m2.bit
+│   │   ├── threshold_s0.bit
+│   │   ├── threshold_s1.bit
+│   │   ├── threshold_s2.bit
+│   │   ├── threshold_s3.bit
+│   │   ├── threshold_s4.bit
+│   │   ├── threshold_s5.bit
+│   │   ├── video.bit
+│   │   ├── video.bit.old
+│   │   ├── video.py
+│   │   └── video.tcl
+│   ├── LICENSE
+│   ├── README.md
+│   ├── ToDo.txt
+│   ├── log.txt
+│   ├── logo.png
+│   └── setup.py
+├── BYU_PYNQ_PR_Video_Pipeline_HW/
+│   ├── Pynq-Z1/
+│   │   └── video/
+│   ├── doc/
+│   │   ├── lut_create.py
+│   │   ├── system.bd.pdf
+│   │   ├── system.bd.png
+│   │   ├── system.bd.video.pdf
+│   │   └── system.bd.video.png
+│   ├── drp/
+│   │   ├── .cache/
+│   │   ├── Bitstreams/
+│   │   ├── Checkpoint/
+│   │   ├── Const/
+│   │   ├── Implement/
+│   │   ├── Source/
+│   │   ├── Static/
+│   │   ├── Synth/
+│   │   ├── hd_visual/
+│   │   ├── tmp/
+│   │   ├── build_prs.tcl
+│   │   ├── build_static_design+.log
+│   │   ├── build_static_design.log
+│   │   ├── build_static_design.tcl
+│   │   ├── part_gen.log
+│   │   ├── part_gen.tcl
+│   │   ├── part_gen_large.tcl
+│   │   ├── part_gen_mid.tcl
+│   │   ├── part_gen_mux.tcl
+│   │   └── part_gen_small.tcl
+│   ├── ip/
+│   │   ├── HLS_PR_WRAPPER_1.0/
+│   │   ├── PR_Control_1.0/
+│   │   ├── audio_codec_ctrl_v1.0/
+│   │   ├── audio_direct_1.1/
+│   │   ├── axi_dynclk_v1_0/
+│   │   ├── boolean_generator_1.1/
+│   │   ├── color_swap_1.0/
+│   │   ├── debouncer_1.1/
+│   │   ├── dff_en_reset_vector_1.0/
+│   │   ├── dvi2rgb_v1_7/
+│   │   ├── fsm_controller_1.1/
+│   │   ├── fsm_io_switch_1.1/
+│   │   ├── gclk_generator_1.0/
+│   │   ├── hls/
+│   │   ├── if/
+│   │   ├── interface_switch_1.1/
+│   │   ├── io_switch_1.1/
+│   │   ├── merg_1.0/
+│   │   ├── mux_vector_1.0/
+│   │   ├── pattern_controller_1.1/
+│   │   ├── rgb2dvi_v1_2/
+│   │   └── trace_generator_controller_1.1/
+│   ├── .gitignore
+│   ├── README.md
+│   ├── Task Completed.docx
+│   └── setup_vivado_msys_custom.sh
+├── HDMI17/
+│   ├── HDMI17.cache/
+│   │   ├── compile_simlib/
+│   │   ├── ip/
+│   │   └── wt/
+│   ├── HDMI17.hw/
+│   │   ├── hw_1/
+│   │   └── HDMI17.lpr
+│   ├── HDMI17.ip_user_files/
+│   │   ├── bd/
+│   │   ├── mem_init_files/
+│   │   └── README.txt
+│   ├── HDMI17.runs/
+│   │   ├── design_1_clk_wiz_0_0_synth_1/
+│   │   ├── design_1_dvi2rgb_0_0_synth_1/
+│   │   ├── design_1_rgb2dvi_0_1_synth_1/
+│   │   ├── impl_1/
+│   │   └── synth_1/
+│   ├── HDMI17.sim/
+│   ├── HDMI17.srcs/
+│   │   ├── constrs_1/
+│   │   └── sources_1/
+│   ├── HDMI17.bak.xpr
+│   ├── HDMI17.xpr
+│   └── ip_upgrade.log
+├── HDMI_02/
+│   ├── .Xil/
+│   ├── HDMI_02.cache/
+│   │   ├── compile_simlib/
+│   │   ├── ip/
+│   │   └── wt/
+│   ├── HDMI_02.hw/
+│   │   ├── backup/
+│   │   ├── hw_1/
+│   │   └── HDMI_02.lpr
+│   ├── HDMI_02.ip_user_files/
+│   │   ├── bd/
+│   │   ├── mem_init_files/
+│   │   └── README.txt
+│   ├── HDMI_02.runs/
+│   │   ├── .jobs/
+│   │   ├── design_1_clk_wiz_0_0_synth_1/
+│   │   ├── design_1_dvi2rgb_0_0_synth_1/
+│   │   ├── design_1_dvi2rgb_0_1_synth_1/
+│   │   ├── design_1_rgb2dvi_0_1_synth_1/
+│   │   ├── impl_1/
+│   │   └── synth_1/
+│   ├── HDMI_02.sim/
+│   ├── HDMI_02.srcs/
+│   │   ├── constrs_1/
+│   │   └── sources_1/
+│   ├── Zybo-Z7-20-HDMI-v2018.2-2/
+│   │   ├── sdk_appsrc/
+│   │   ├── vivado_proj/
+│   │   └── README.md
+│   ├── HDMI_02.xpr
+│   └── design_1.pdf
+├── barrel_distortion_correction/
+│   ├── -/
+│   │   ├── run_xsim_in_new_msys.sh
+│   │   ├── setup_vivado_git_bash.sh
+│   │   ├── setup_vivado_msys_fixed.sh
+│   │   └── temp_setup.sh
+│   ├── hdmi_io/
+│   │   └── hdmi_io.cache/
+│   ├── hls/
+│   │   ├── brl_corr/
+│   │   └── vivado_hls.log
+│   ├── hls_brl_corr/
+│   │   ├── .apc/
+│   │   ├── .settings/
+│   │   ├── sln1/
+│   │   ├── src/
+│   │   ├── .cproject
+│   │   ├── .project
+│   │   ├── .vivado_hls_log_all.xml
+│   │   ├── run_csim.tcl
+│   │   ├── sim_csim.sh
+│   │   └── vivado_hls.app
+│   ├── hls_brl_corr0/
+│   │   ├── .apc/
+│   │   ├── .settings/
+│   │   ├── bak1/
+│   │   ├── img_in/
+│   │   ├── img_out/
+│   │   ├── sln1/
+│   │   ├── src/
+│   │   ├── .cproject
+│   │   ├── .project
+│   │   ├── .vivado_hls_log_all.xml
+│   │   ├── run_csim.tcl
+│   │   ├── sim_csim.sh
+│   │   ├── vivado_hls.app
+│   │   └── vivado_hls.log
+│   ├── hls_brl_corr1/
+│   │   ├── .apc/
+│   │   ├── .settings/
+│   │   ├── hls_brl_corr1/
+│   │   ├── sln1/
+│   │   ├── src/
+│   │   ├── .cproject
+│   │   ├── .project
+│   │   ├── .vivado_hls_log_all.xml
+│   │   ├── run_csim.tcl
+│   │   ├── sim_csim-.sh
+│   │   ├── sim_csim.sh
+│   │   └── vivado_hls.app
+│   ├── hls_brl_corr2/
+│   │   ├── .apc/
+│   │   ├── .settings/
+│   │   ├── sln1/
+│   │   ├── src/
+│   │   ├── .cproject
+│   │   ├── .project
+│   │   └── .vivado_hls_log_all.xml
+│   ├── hls_brl_corr2023/
+│   │   ├── .apc/
+│   │   ├── .settings/
+│   │   ├── sln1/
+│   │   ├── src/
+│   │   ├── .cproject
+│   │   ├── .project
+│   │   ├── .vitis_hls_log_all.xml
+│   │   └── hls.app
+│   ├── hls_brl_corr3/
+│   │   ├── .apc/
+│   │   ├── .settings/
+│   │   ├── sln1/
+│   │   ├── src/
+│   │   ├── .cproject
+│   │   ├── .gitignore
+│   │   ├── .project
+│   │   ├── .vivado_hls_log_all.xml
+│   │   └── vivado_hls.app
+│   ├── scripts/
+│   │   └── update_clinerules_file_tree.py
+│   ├── vivado/
+│   │   ├── .Xiltemp/
+│   │   ├── hdmi_barrel_distortion_correction.cache/
+│   │   ├── hdmi_barrel_distortion_correction.hw/
+│   │   ├── hdmi_barrel_distortion_correction.ip_user_files/
+│   │   ├── hdmi_barrel_distortion_correction.runs/
+│   │   ├── hdmi_barrel_distortion_correction.sim/
+│   │   ├── hdmi_barrel_distortion_correction.srcs/
+│   │   ├── src/
+│   │   ├── xsim.dir/
+│   │   ├── hdmi_barrel_distortion_correction.bd.pdf
+│   │   └── hdmi_barrel_distortion_correction.xpr
+│   ├── vivado1/
+│   │   ├── hdmi_barrel_distortion_correction.cache/
+│   │   ├── hdmi_barrel_distortion_correction.hw/
+│   │   ├── hdmi_barrel_distortion_correction.ip_user_files/
+│   │   ├── hdmi_barrel_distortion_correction.runs/
+│   │   ├── hdmi_barrel_distortion_correction.sim/
+│   │   ├── hdmi_barrel_distortion_correction.srcs/
+│   │   ├── src/
+│   │   ├── xsim.dir/
+│   │   ├── hdmi_barrel_distortion_correction.bd.pdf
+│   │   └── hdmi_barrel_distortion_correction.xpr
+│   ├── .clinerules
+│   ├── .gitignore
+│   ├── README.md
+│   ├── compile_rtl_xvlog.sh
+│   ├── hls_brl_corr1.zip
+│   ├── hls_brl_corr_src_brl_corr_hls.cpp
+│   ├── image_to_raw.py
+│   ├── raw_to_image.py
+│   ├── run.tx
+│   ├── run_vivado_xsim.sh
+│   ├── setup_vivado_git_bash.sh
+│   └── vivado_hls.log
+├── barrel_distortion_correction1/
+│   ├── hls_brl_corr/
+│   │   ├── .apc/
+│   │   ├── .settings/
+│   │   ├── sln1/
+│   │   ├── src/
+│   │   ├── .cproject
+│   │   ├── .project
+│   │   └── .vivado_hls_log_all.xml
+│   └── hls_brl_corr0/
+│       ├── .apc/
+│       ├── .settings/
+│       ├── sln1/
+│       ├── .cproject
+│       ├── .project
+│       └── vivado_hls.app
+├── barrel_distortion_correction2/
+│   ├── hls_brl_corr/
+│   │   ├── .apc/
+│   │   ├── .settings/
+│   │   ├── sln1/
+│   │   ├── src/
+│   │   ├── .cproject
+│   │   ├── .gitignore
+│   │   ├── .project
+│   │   ├── .vivado_hls_log_all.xml
+│   │   └── vivado_hls.app
+│   ├── hls_brl_corr1/
+│   │   ├── .apc/
+│   │   ├── .settings/
+│   │   ├── sln1/
+│   │   ├── src/
+│   │   ├── .cproject
+│   │   ├── .project
+│   │   └── vivado_hls.app
+│   └── vivado_hls.log
+├── brl_corr/
+│   ├── vivavdo/
+│   │   ├── brl_corr.cache/
+│   │   ├── brl_corr.hw/
+│   │   ├── brl_corr.ip_user_files/
+│   │   ├── brl_corr.runs/
+│   │   ├── brl_corr.sim/
+│   │   ├── brl_corr.srcs/
+│   │   ├── src/
+│   │   └── brl_corr.xpr
+│   ├── .clinerules
+│   ├── .gitignore
+│   └── README.md
+├── hdmi_barrel_distortion_correction/
+├── hls/
+│   ├── hls_barrel_correction/
+│   │   ├── .apc/
+│   │   ├── .settings/
+│   │   ├── sln1/
+│   │   ├── .cproject
+│   │   ├── .project
+│   │   └── vivado_hls.app
+│   ├── barrel_correction.cpp
+│   ├── barrel_correction.h
+│   ├── barrel_correction1.cpp
+│   └── barrel_correction_tb.cpp
+├── pynq_dpu/
+│   ├── pynq_dpu.cache/
+│   │   ├── ip/
+│   │   └── wt/
+│   ├── pynq_dpu.gen/
+│   │   └── sources_1/
+│   ├── pynq_dpu.hw/
+│   │   └── pynq_dpu.lpr
+│   ├── pynq_dpu.ip_user_files/
+│   ├── pynq_dpu.sim/
+│   ├── pynq_dpu.srcs/
+│   │   └── sources_1/
+│   └── pynq_dpu.xpr
+├── pynqz2_dpu140/
+│   ├── apps/
+│   │   ├── image/
+│   │   ├── model/
+│   │   ├── src/
+│   │   └── Makefile
+│   ├── images/
+│   │   ├── 2019-09-03_23h20_33.png
+│   │   ├── 2019-09-03_23h22_30.png
+│   │   ├── 2019-09-04_09h07_12.png
+│   │   ├── 2019-09-04_11h33_32.png
+│   │   ├── 2019-09-04_11h40_47.png
+│   │   ├── 2019-09-04_15h25_50.png
+│   │   ├── 2019-09-04_16h41_31.png
+│   │   ├── 2019-09-04_16h50_04.png
+│   │   ├── 2019-09-04_17h47_20.png
+│   │   ├── 2019-09-04_17h56_03.png
+│   │   ├── 2019-09-04_18h05_40.png
+│   │   ├── 2019-09-04_18h09_36.png
+│   │   ├── 2019-09-04_IP.png
+│   │   ├── 2019-09-04_IPI.png
+│   │   ├── 2019-09-04_PYNQ.png
+│   │   ├── 2019-09-05_10h45_29.png
+│   │   ├── 2019-09-05_10h48_40.png
+│   │   ├── 2019-09-05_10h49_55.png
+│   │   ├── 2019-09-05_10h51_08.png
+│   │   ├── 2019-09-05_10h51_47.png
+│   │   ├── 2019-09-05_10h52_47.png
+│   │   ├── 2019-09-05_10h53_41.png
+│   │   ├── 2019-09-06_16h54_49.png
+│   │   ├── 2019-09-10_09h45_25.png
+│   │   ├── 2019-09-10_10h45_15.png
+│   │   ├── 2019-09-10_11h01_34.png
+│   │   ├── 2019-09-10_11h02_03.png
+│   │   ├── 2019-09-10_11h03_34.png
+│   │   ├── 2019-09-10_11h04_20.png
+│   │   ├── 2019-09-10_11h56_45.png
+│   │   ├── 2019-09-10_12h12_24.png
+│   │   ├── 2019-09-10_12h22_43.png
+│   │   ├── 2019-09-10_12h23_14.png
+│   │   ├── 2019-09-10_13h39_29.png
+│   │   ├── 2019-09-10_13h43_06.png
+│   │   ├── 2019-09-10_13h55_40.png
+│   │   ├── 2019-09-13_13h07_26.png
+│   │   └── IMG_7522.jpg
+│   ├── petalinux/
+│   │   ├── meta-user/
+│   │   └── pynq_dpu.bsp
+│   ├── vivado/
+│   │   ├── dpu_ip_v140/
+│   │   ├── design_1-.tcl
+│   │   └── design_1.tcl
+│   ├── zynq7020_dnndk_v3.0/
+│   │   ├── pkgs/
+│   │   ├── install.sh
+│   │   └── install.sh.orig
+│   └── README.md
+├── vitis/
+│   ├── .metadata/
+│   │   ├── .plugins/
+│   │   ├── .lock
+│   │   ├── .log
+│   │   └── version.ini
+│   ├── RemoteSystemsTempFiles/
+│   │   └── .project
+│   ├── .analytics
+│   └── IDE.log
+├── vivado-library/
+│   ├── if/
+│   │   ├── ZmodAWG_Calibration_v1_0/
+│   │   ├── ZmodScope_Calibration_v1_0/
+│   │   ├── pmod_v1_0/
+│   │   └── tmds_v1_0/
+│   ├── ip/
+│   │   ├── AXI_DPTI_1.0/
+│   │   ├── MIPI_CSI_2_RX/
+│   │   ├── MIPI_D_PHY_RX/
+│   │   ├── MotorFeedback_1.0/
+│   │   ├── PWM_1.0/
+│   │   ├── PWM_2.0/
+│   │   ├── PWM_Analyzer_1.0/
+│   │   ├── Pmods/
+│   │   ├── Sync_v1_0/
+│   │   ├── Zmods/
+│   │   ├── axi_dynclk/
+│   │   ├── axi_i2s_adi_1.2/
+│   │   ├── axi_ps2_1.0/
+│   │   ├── clock_forwarder/
+│   │   ├── dvi2rgb/
+│   │   ├── hls_contrast_stretch_1_0/
+│   │   ├── hls_gamma_correction_1_0/
+│   │   ├── hls_saturation_enhance_1_0/
+│   │   ├── rgb2dpvid_v1_0/
+│   │   ├── rgb2dvi/
+│   │   ├── rgb2vga_v1_0/
+│   │   ├── usb2device_v1_0/
+│   │   └── video_scaler/
+│   ├── module/
+│   │   └── synchronizers/
+│   ├── .gitignore
+│   ├── License.txt
+│   └── README.md
+├── hdmi_io1.xpr.zip
+├── hdmi_io_bak.xpr.zip
+└── vivado_hls.log

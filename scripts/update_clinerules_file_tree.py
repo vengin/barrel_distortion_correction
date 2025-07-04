@@ -2,7 +2,7 @@ import os
 
 def generate_file_tree(startpath='.', depth=4, ignore_dirs=None):
     """
-    Generates a string representation of the file tree.
+    Generates a string representation of the file tree with indentation lines.
     :param startpath: The directory to start the tree generation from.
     :param depth: The maximum depth to traverse.
     :param ignore_dirs: A list of directory names to ignore.
@@ -12,28 +12,30 @@ def generate_file_tree(startpath='.', depth=4, ignore_dirs=None):
         ignore_dirs = ['.git', '.vscode', '__pycache__']
 
     tree_str = []
-    for root, dirs, files in os.walk(startpath):
-        # Calculate current depth
-        current_depth = root.count(os.sep) - startpath.count(os.sep)
 
-        # Filter out ignored directories for the current level
-        dirs[:] = [d for d in dirs if d not in ignore_dirs]
-
+    def _build_tree(current_dir, current_depth, prefix=""):
         if current_depth > depth:
-            del dirs[:] # Stop descending into subdirectories
-            continue
+            return
 
-        # Indentation for current level
-        indent = '    ' * current_depth
+        contents = sorted(os.listdir(current_dir))
+        dirs = [d for d in contents if os.path.isdir(os.path.join(current_dir, d)) and d not in ignore_dirs]
+        files = [f for f in contents if os.path.isfile(os.path.join(current_dir, f))]
 
-        # Add current directory to tree
-        if root != startpath:
-            tree_str.append(f"{indent}{os.path.basename(root)}/")
+        for i, item in enumerate(dirs + files):
+            path = os.path.join(current_dir, item)
+            is_last = (i == len(dirs) + len(files) - 1)
 
-        # Add files in current directory
-        for f in sorted(files):
-            tree_str.append(f"{indent}    {f}")
+            if os.path.isdir(path):
+                connector = "└── " if is_last else "├── "
+                tree_str.append(f"{prefix}{connector}{item}/")
+                new_prefix = prefix + ("    " if is_last else "│   ")
+                _build_tree(path, current_depth + 1, new_prefix)
+            else:
+                connector = "└── " if is_last else "├── "
+                tree_str.append(f"{prefix}{connector}{item}")
 
+    tree_str.append(".") # Start with the current directory marker
+    _build_tree(startpath, 0)
     return "\n".join(tree_str)
 
 def update_clinerules_file(clinerules_path='.clinerules', tree_depth=4):
@@ -43,7 +45,7 @@ def update_clinerules_file(clinerules_path='.clinerules', tree_depth=4):
     :param tree_depth: The depth for the generated file tree.
     """
     try:
-        with open(clinerules_path, 'r') as f:
+        with open(clinerules_path, 'r', encoding='utf-8') as f:
             content = f.readlines()
 
         start_marker = "# Curent File Structure\n"
@@ -68,7 +70,7 @@ def update_clinerules_file(clinerules_path='.clinerules', tree_depth=4):
         new_content.append(current_file_tree + "\n") # Add the new tree
         new_content.extend(content[end_index:]) # Add everything after the old tree
 
-        with open(clinerules_path, 'w') as f:
+        with open(clinerules_path, 'w', encoding='utf-8') as f:
             f.writelines(new_content)
         print(f"Successfully updated file tree in {clinerules_path}")
 
