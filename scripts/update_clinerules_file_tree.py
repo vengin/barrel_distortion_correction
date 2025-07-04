@@ -38,49 +38,63 @@ def generate_file_tree(startpath='.', depth=4, ignore_dirs=None):
     _build_tree(startpath, 0)
     return "\n".join(tree_str)
 
-def update_clinerules_file(clinerules_path='.clinerules', tree_depth=4):
+def update_clinerules_file(tree_depth=4):
     """
     Updates the .clinerules file with the current file tree.
-    :param clinerules_path: Path to the .clinerules file.
+    It tries to find the .clinerules file in the current directory and then in the parent directory.
     :param tree_depth: The depth for the generated file tree.
     """
-    try:
-        with open(clinerules_path, 'r', encoding='utf-8') as f:
-            content = f.readlines()
+    possible_paths = ['.clinerules', '../.clinerules']
+    clinerules_path = None
+    content = None
 
-        start_marker = "# Curent File Structure\n"
-
+    for path in possible_paths:
         try:
-            start_index = content.index(start_marker)
-        except ValueError:
-            print(f"Error: Start marker '{start_marker.strip()}' not found in {clinerules_path}")
-            return
+            with open(path, 'r', encoding='utf-8') as f:
+                content = f.readlines()
+            clinerules_path = path
+            break
+        except FileNotFoundError:
+            continue
+        except Exception as e:
+            print(f"An error occurred while trying to read {path}: {e}")
+            continue
 
-        # Generate the new file tree, starting from the parent directory of the script
-        # This assumes the script is in 'scripts/' and .clinerules is in the parent
-        current_file_tree = generate_file_tree(startpath='..', depth=tree_depth)
+    if content is None:
+        print(f"Error: .clinerules file not found in {possible_paths}")
+        return
 
-        # Find the end of the existing file structure (or end of file)
-        end_index = start_index + 1
-        while end_index < len(content) and content[end_index].strip() != "":
-            end_index += 1
+    start_marker = "# Curent File Structure\n"
 
-        # Reconstruct the content
-        new_content = content[:start_index + 1] # Keep everything before and including the marker
-        new_content.append(current_file_tree + "\n") # Add the new tree
-        new_content.extend(content[end_index:]) # Add everything after the old tree
+    try:
+        start_index = content.index(start_marker)
+    except ValueError:
+        print(f"Error: Start marker '{start_marker.strip()}' not found in {clinerules_path}")
+        return
 
+    # Generate the new file tree, starting from the parent directory of the script
+    # This assumes the script is in 'scripts/' and .clinerules is in the parent
+    current_file_tree = generate_file_tree(startpath='..', depth=tree_depth)
+
+    # Find the end of the existing file structure (or end of file)
+    end_index = start_index + 1
+    while end_index < len(content) and content[end_index].strip() != "":
+        end_index += 1
+
+    # Reconstruct the content
+    new_content = content[:start_index + 1] # Keep everything before and including the marker
+    new_content.append(current_file_tree + "\n") # Add the new tree
+    new_content.extend(content[end_index:]) # Add everything after the old tree
+
+    try:
         with open(clinerules_path, 'w', encoding='utf-8') as f:
             f.writelines(new_content)
         print(f"Successfully updated file tree in {clinerules_path}")
-
-    except FileNotFoundError:
-        print(f"Error: File not found at {clinerules_path}")
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"An error occurred while trying to write to {clinerules_path}: {e}")
 
 if __name__ == "__main__":
     # The script is in 'scripts/', so we need to go up one level to the root directory
     # to generate the tree for the entire project.
     # The .clinerules file is also in the parent directory.
-    update_clinerules_file(clinerules_path='.clinerules', tree_depth=2)
+    update_clinerules_file(tree_depth=4)

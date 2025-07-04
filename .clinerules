@@ -86,6 +86,22 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 ├── BYU_PYNQ_PR_Video_Pipeline/
 │   ├── Video_notebooks/
 │   │   ├── .ipynb_checkpoints/
+│   │   │   ├── ASCII test overlay-checkpoint.ipynb
+│   │   │   ├── Demo-checkpoint.ipynb
+│   │   │   ├── Dilate Filter-checkpoint.ipynb
+│   │   │   ├── Emboss Filter-checkpoint.ipynb
+│   │   │   ├── Erode-checkpoint.ipynb
+│   │   │   ├── Grayscale-checkpoint.ipynb
+│   │   │   ├── Green Screen-checkpoint.ipynb
+│   │   │   ├── Image Overlay-checkpoint.ipynb
+│   │   │   ├── Invert Filter-checkpoint.ipynb
+│   │   │   ├── Japanese Text Overlay-checkpoint.ipynb
+│   │   │   ├── Kernel Filter-checkpoint.ipynb
+│   │   │   ├── Line Overlay-checkpoint.ipynb
+│   │   │   ├── MIrror-checkpoint.ipynb
+│   │   │   ├── RGB Filter-checkpoint.ipynb
+│   │   │   ├── Sobel Filter-checkpoint.ipynb
+│   │   │   └── Threshold Filter-checkpoint.ipynb
 │   │   ├── ASCII test overlay.ipynb
 │   │   ├── BYU_Stretch_Y.bin
 │   │   ├── Demo-.ipynb
@@ -261,6 +277,31 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 ├── BYU_PYNQ_PR_Video_Pipeline_HW/
 │   ├── Pynq-Z1/
 │   │   └── video/
+│   │       ├── .Xil/
+│   │       ├── video/
+│   │       │   ├── video.cache/
+│   │       │   ├── video.hw/
+│   │       │   ├── video.ip_user_files/
+│   │       │   ├── video.sim/
+│   │       │   ├── video.srcs/
+│   │       │   └── video.xpr
+│   │       ├── video0/
+│   │       │   ├── video.cache/
+│   │       │   ├── video.hw/
+│   │       │   ├── video.ip_user_files/
+│   │       │   ├── video.runs/
+│   │       │   ├── video.sim/
+│   │       │   ├── video.srcs/
+│   │       │   └── video.xpr
+│   │       ├── vivado/
+│   │       │   ├── constraints/
+│   │       │   ├── bare_top.v
+│   │       │   ├── fsync.vhd
+│   │       │   └── top.v
+│   │       ├── build_base_ip.tcl
+│   │       ├── video.log
+│   │       ├── video.tcl
+│   │       └── video.xpr.zip
 │   ├── doc/
 │   │   ├── lut_create.py
 │   │   ├── system.bd.pdf
@@ -269,15 +310,343 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │   │   └── system.bd.video.png
 │   ├── drp/
 │   │   ├── .cache/
+│   │   │   └── ip/
+│   │   │       └── 2017.4/
 │   │   ├── Bitstreams/
+│   │   │   ├── ascii_l0.bit
+│   │   │   ├── ascii_m0.bit
+│   │   │   ├── ascii_m1.bit
+│   │   │   ├── ascii_m2.bit
+│   │   │   ├── ascii_s0.bit
+│   │   │   ├── ascii_s1.bit
+│   │   │   ├── ascii_s2.bit
+│   │   │   ├── ascii_s3.bit
+│   │   │   ├── ascii_s4.bit
+│   │   │   ├── ascii_s5.bit
+│   │   │   ├── dilate_l0.bit
+│   │   │   ├── dilate_m0.bit
+│   │   │   ├── dilate_m1.bit
+│   │   │   ├── dilate_m2.bit
+│   │   │   ├── dilate_s0.bit
+│   │   │   ├── dilate_s1.bit
+│   │   │   ├── dilate_s2.bit
+│   │   │   ├── dilate_s3.bit
+│   │   │   ├── dilate_s4.bit
+│   │   │   ├── dilate_s5.bit
+│   │   │   ├── emboss_l0.bit
+│   │   │   ├── emboss_m0.bit
+│   │   │   ├── emboss_m1.bit
+│   │   │   ├── emboss_m2.bit
+│   │   │   ├── emboss_s0.bit
+│   │   │   ├── emboss_s1.bit
+│   │   │   ├── emboss_s2.bit
+│   │   │   ├── emboss_s3.bit
+│   │   │   ├── emboss_s4.bit
+│   │   │   ├── emboss_s5.bit
+│   │   │   ├── erode_l0.bit
+│   │   │   ├── erode_m0.bit
+│   │   │   ├── erode_m1.bit
+│   │   │   ├── erode_m2.bit
+│   │   │   ├── erode_s0.bit
+│   │   │   ├── erode_s1.bit
+│   │   │   ├── erode_s2.bit
+│   │   │   ├── erode_s3.bit
+│   │   │   ├── erode_s4.bit
+│   │   │   ├── erode_s5.bit
+│   │   │   ├── grey_l0.bit
+│   │   │   ├── grey_m0.bit
+│   │   │   ├── grey_m1.bit
+│   │   │   ├── grey_m2.bit
+│   │   │   ├── grey_s0.bit
+│   │   │   ├── grey_s1.bit
+│   │   │   ├── grey_s2.bit
+│   │   │   ├── grey_s3.bit
+│   │   │   ├── grey_s4.bit
+│   │   │   ├── grey_s5.bit
+│   │   │   ├── gscreen_mux.bit
+│   │   │   ├── image_l0.bit
+│   │   │   ├── invert_l0.bit
+│   │   │   ├── invert_m0.bit
+│   │   │   ├── invert_m1.bit
+│   │   │   ├── invert_m2.bit
+│   │   │   ├── invert_s0.bit
+│   │   │   ├── invert_s1.bit
+│   │   │   ├── invert_s2.bit
+│   │   │   ├── invert_s3.bit
+│   │   │   ├── invert_s4.bit
+│   │   │   ├── invert_s5.bit
+│   │   │   ├── japanese_l0.bit
+│   │   │   ├── japanese_m0.bit
+│   │   │   ├── japanese_m1.bit
+│   │   │   ├── japanese_m2.bit
+│   │   │   ├── japanese_s0.bit
+│   │   │   ├── japanese_s1.bit
+│   │   │   ├── japanese_s2.bit
+│   │   │   ├── japanese_s3.bit
+│   │   │   ├── japanese_s4.bit
+│   │   │   ├── japanese_s5.bit
+│   │   │   ├── kernel_l0.bit
+│   │   │   ├── kernel_m0.bit
+│   │   │   ├── kernel_m1.bit
+│   │   │   ├── kernel_m2.bit
+│   │   │   ├── limit_l0.bit
+│   │   │   ├── limit_m0.bit
+│   │   │   ├── limit_m1.bit
+│   │   │   ├── limit_m2.bit
+│   │   │   ├── limit_s0.bit
+│   │   │   ├── limit_s1.bit
+│   │   │   ├── limit_s2.bit
+│   │   │   ├── limit_s3.bit
+│   │   │   ├── limit_s4.bit
+│   │   │   ├── limit_s5.bit
+│   │   │   ├── lines_l0.bit
+│   │   │   ├── lines_m0.bit
+│   │   │   ├── lines_m1.bit
+│   │   │   ├── lines_m2.bit
+│   │   │   ├── lines_s0.bit
+│   │   │   ├── lines_s1.bit
+│   │   │   ├── lines_s2.bit
+│   │   │   ├── lines_s3.bit
+│   │   │   ├── lines_s4.bit
+│   │   │   ├── lines_s5.bit
+│   │   │   ├── mirror_l0.bit
+│   │   │   ├── mirror_m0.bit
+│   │   │   ├── mirror_m1.bit
+│   │   │   ├── mirror_m2.bit
+│   │   │   ├── mirror_s0.bit
+│   │   │   ├── mirror_s1.bit
+│   │   │   ├── mirror_s2.bit
+│   │   │   ├── mirror_s3.bit
+│   │   │   ├── mirror_s4.bit
+│   │   │   ├── mirror_s5.bit
+│   │   │   ├── pass_l0.bit
+│   │   │   ├── pass_m0.bit
+│   │   │   ├── pass_m1.bit
+│   │   │   ├── pass_m2.bit
+│   │   │   ├── pass_s0.bit
+│   │   │   ├── pass_s1.bit
+│   │   │   ├── pass_s2.bit
+│   │   │   ├── pass_s3.bit
+│   │   │   ├── pass_s4.bit
+│   │   │   ├── pass_s5.bit
+│   │   │   ├── readme.md
+│   │   │   ├── sobel_l0.bit
+│   │   │   ├── sobel_m0.bit
+│   │   │   ├── sobel_m1.bit
+│   │   │   ├── sobel_m2.bit
+│   │   │   ├── threshold_l0.bit
+│   │   │   ├── threshold_m0.bit
+│   │   │   ├── threshold_m1.bit
+│   │   │   ├── threshold_m2.bit
+│   │   │   ├── threshold_s0.bit
+│   │   │   ├── threshold_s1.bit
+│   │   │   ├── threshold_s2.bit
+│   │   │   ├── threshold_s3.bit
+│   │   │   ├── threshold_s4.bit
+│   │   │   ├── threshold_s5.bit
+│   │   │   ├── video.bit
+│   │   │   ├── video_L0_partial.bit
+│   │   │   ├── video_M0_partial.bit
+│   │   │   ├── video_M1_partial.bit
+│   │   │   ├── video_M2_partial.bit
+│   │   │   ├── video_MUX_partial.bit
+│   │   │   ├── video_S0_partial.bit
+│   │   │   ├── video_S1_partial.bit
+│   │   │   ├── video_S2_partial.bit
+│   │   │   ├── video_S3_partial.bit
+│   │   │   ├── video_S4_partial.bit
+│   │   │   └── video_S5_partial.bit
 │   │   ├── Checkpoint/
+│   │   │   ├── pr_block_design.dcp
+│   │   │   ├── readme.md
+│   │   │   └── static_route_design.dcp
 │   │   ├── Const/
+│   │   │   ├── 1080p.xdc
+│   │   │   └── top.xdc
 │   │   ├── Implement/
+│   │   │   ├── ascii.dcp
+│   │   │   ├── dilate.dcp
+│   │   │   ├── emboss.dcp
+│   │   │   ├── erode.dcp
+│   │   │   ├── grey.dcp
+│   │   │   ├── gscreen.dcp
+│   │   │   ├── image.dcp
+│   │   │   ├── invert.dcp
+│   │   │   ├── japanese.dcp
+│   │   │   ├── kernel.dcp
+│   │   │   ├── limit.dcp
+│   │   │   ├── lines.dcp
+│   │   │   ├── mirror.dcp
+│   │   │   ├── pass.dcp
+│   │   │   ├── pass_power.rpt
+│   │   │   ├── pass_route_design.dcp
+│   │   │   ├── pass_utilization.rpt
+│   │   │   ├── readme.md
+│   │   │   ├── sobel.dcp
+│   │   │   ├── static_power.rpt
+│   │   │   ├── static_utilization.rpt
+│   │   │   └── threshold.dcp
 │   │   ├── Source/
+│   │   │   ├── ascii/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── dilate/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── emboss/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── erode/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── grey/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── gscreen/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   └── pr.cpp
+│   │   │   ├── image/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── invert/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── japanese/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── kernel/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── limit/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── lines/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── mirror/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── mton/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── pass/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── sobel/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── test_mux/
+│   │   │   │   └── pr.cpp
+│   │   │   ├── threshold/
+│   │   │   │   ├── .cache/
+│   │   │   │   ├── HLS/
+│   │   │   │   ├── pr.cpp
+│   │   │   │   └── pr.h
+│   │   │   ├── PR_HDL.vhd
+│   │   │   ├── mux.tcl
+│   │   │   ├── split.vhd
+│   │   │   └── test.tcl
 │   │   ├── Static/
+│   │   │   ├── readme.md
+│   │   │   ├── top-.dcp
+│   │   │   └── top.dcp
 │   │   ├── Synth/
+│   │   │   ├── ascii.dcp
+│   │   │   ├── dilate.dcp
+│   │   │   ├── emboss.dcp
+│   │   │   ├── erode.dcp
+│   │   │   ├── grey.dcp
+│   │   │   ├── gscreen.dcp
+│   │   │   ├── image.dcp
+│   │   │   ├── invert.dcp
+│   │   │   ├── japanese.dcp
+│   │   │   ├── kernel.dcp
+│   │   │   ├── limit.dcp
+│   │   │   ├── lines.dcp
+│   │   │   ├── mirror.dcp
+│   │   │   ├── pass.dcp
+│   │   │   ├── readme.md
+│   │   │   ├── sobel.dcp
+│   │   │   └── threshold.dcp
 │   │   ├── hd_visual/
+│   │   │   ├── L0_AllTiles.tcl
+│   │   │   ├── L0_FrameTiles.tcl
+│   │   │   ├── L0_GlitchTiles.tcl
+│   │   │   ├── L0_RangedSites.tcl
+│   │   │   ├── M0_AllTiles.tcl
+│   │   │   ├── M0_FrameTiles.tcl
+│   │   │   ├── M0_GlitchTiles.tcl
+│   │   │   ├── M0_RangedSites.tcl
+│   │   │   ├── M1_AllTiles.tcl
+│   │   │   ├── M1_FrameTiles.tcl
+│   │   │   ├── M1_GlitchTiles.tcl
+│   │   │   ├── M1_RangedSites.tcl
+│   │   │   ├── M2_AllTiles.tcl
+│   │   │   ├── M2_FrameTiles.tcl
+│   │   │   ├── M2_GlitchTiles.tcl
+│   │   │   ├── M2_RangedSites.tcl
+│   │   │   ├── MUX_AllTiles.tcl
+│   │   │   ├── MUX_FrameTiles.tcl
+│   │   │   ├── MUX_GlitchTiles.tcl
+│   │   │   ├── MUX_RangedSites.tcl
+│   │   │   ├── S0_AllTiles.tcl
+│   │   │   ├── S0_FrameTiles.tcl
+│   │   │   ├── S0_GlitchTiles.tcl
+│   │   │   ├── S0_RangedSites.tcl
+│   │   │   ├── S1_AllTiles.tcl
+│   │   │   ├── S1_FrameTiles.tcl
+│   │   │   ├── S1_GlitchTiles.tcl
+│   │   │   ├── S1_RangedSites.tcl
+│   │   │   ├── S2_AllTiles.tcl
+│   │   │   ├── S2_FrameTiles.tcl
+│   │   │   ├── S2_GlitchTiles.tcl
+│   │   │   ├── S2_RangedSites.tcl
+│   │   │   ├── S3_AllTiles.tcl
+│   │   │   ├── S3_FrameTiles.tcl
+│   │   │   ├── S3_GlitchTiles.tcl
+│   │   │   ├── S3_RangedSites.tcl
+│   │   │   ├── S4_AllTiles.tcl
+│   │   │   ├── S4_FrameTiles.tcl
+│   │   │   ├── S4_GlitchTiles.tcl
+│   │   │   ├── S4_RangedSites.tcl
+│   │   │   ├── S5_AllTiles.tcl
+│   │   │   ├── S5_FrameTiles.tcl
+│   │   │   ├── S5_GlitchTiles.tcl
+│   │   │   ├── S5_RangedSites.tcl
+│   │   │   ├── blockedBelsRouteThrus.tcl
+│   │   │   ├── blockedPins.tcl
+│   │   │   └── blockedSitesInputs.tcl
 │   │   ├── tmp/
+│   │   │   └── readme.md
 │   │   ├── build_prs.tcl
 │   │   ├── build_static_design+.log
 │   │   ├── build_static_design.log
@@ -290,27 +659,332 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │   │   └── part_gen_small.tcl
 │   ├── ip/
 │   │   ├── HLS_PR_WRAPPER_1.0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── hdl/
+│   │   │   │   ├── HLS_PR_WRAPPER_v1_0.vhd
+│   │   │   │   ├── HLS_PR_WRAPPER_v1_0_M00_AXIS.vhd
+│   │   │   │   ├── HLS_PR_WRAPPER_v1_0_S00_AXIS.vhd
+│   │   │   │   └── sobel_hls_black_box.vhd
+│   │   │   ├── src/
+│   │   │   │   ├── fifo_generator_0/
+│   │   │   │   └── sobel_hls_0/
+│   │   │   ├── xgui/
+│   │   │   │   └── HLS_PR_WRAPPER_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── PR_Control_1.0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── PR_Control_v1_0/
+│   │   │   ├── example_designs/
+│   │   │   │   ├── bfm_design/
+│   │   │   │   └── debug_hw_design/
+│   │   │   ├── hdl/
+│   │   │   │   ├── PR_Control_v1_0.vhd
+│   │   │   │   └── PR_Control_v1_0_S00_AXI.vhd
+│   │   │   ├── xgui/
+│   │   │   │   └── PR_Control_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── audio_codec_ctrl_v1.0/
+│   │   │   ├── src/
+│   │   │   │   ├── address_decoder.vhd
+│   │   │   │   ├── axi_lite_ipif.vhd
+│   │   │   │   ├── common_types.vhd
+│   │   │   │   ├── family_support.vhd
+│   │   │   │   ├── i2s_ctrl.vhd
+│   │   │   │   ├── iis_deser.vhd
+│   │   │   │   ├── iis_ser.vhd
+│   │   │   │   ├── pselect_f.vhd
+│   │   │   │   ├── slave_attachment.vhd
+│   │   │   │   └── user_logic.vhd
+│   │   │   ├── xgui/
+│   │   │   │   ├── audio_codec_ctrl_v1_0.tcl
+│   │   │   │   └── i2s_ctrl_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── audio_direct_1.1/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── audio_direct_v1_0/
+│   │   │   ├── example_designs/
+│   │   │   │   ├── bfm_design/
+│   │   │   │   └── debug_hw_design/
+│   │   │   ├── hdl/
+│   │   │   │   └── audio_direct_v1_1.v
+│   │   │   ├── src/
+│   │   │   │   ├── PdmDes.v
+│   │   │   │   ├── PdmSer.v
+│   │   │   │   ├── audio_direct.v
+│   │   │   │   ├── audio_direct_path.v
+│   │   │   │   ├── d_axi_pdm_v1_2_S_AXI.vhd
+│   │   │   │   ├── fifo_512.edif
+│   │   │   │   ├── pdm_des.vhd
+│   │   │   │   ├── pdm_rxtx.vhd
+│   │   │   │   └── pdm_ser.vhd
+│   │   │   ├── xgui/
+│   │   │   │   └── audio_direct_v1_1.tcl
+│   │   │   └── component.xml
 │   │   ├── axi_dynclk_v1_0/
+│   │   │   ├── src/
+│   │   │   │   ├── axi_dynclk.vhd
+│   │   │   │   ├── axi_dynclk_S00_AXI.vhd
+│   │   │   │   └── mmcme2_drp.v
+│   │   │   ├── xgui/
+│   │   │   │   └── axi_dynclk_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── boolean_generator_1.1/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── boolean_generator_v1_0/
+│   │   │   ├── example_designs/
+│   │   │   │   ├── bfm_design/
+│   │   │   │   └── debug_hw_design/
+│   │   │   ├── hdl/
+│   │   │   │   ├── boolean_generator_v1_1.v
+│   │   │   │   └── boolean_generator_v1_1_S_AXI.v
+│   │   │   ├── src/
+│   │   │   │   ├── boolean_fsm.v
+│   │   │   │   ├── boolean_gr.v
+│   │   │   │   ├── boolean_input.v
+│   │   │   │   ├── boolean_lut.v
+│   │   │   │   └── input_mux.v
+│   │   │   ├── xgui/
+│   │   │   │   └── boolean_generator_v1_1.tcl
+│   │   │   └── component.xml
 │   │   ├── color_swap_1.0/
+│   │   │   ├── xgui/
+│   │   │   │   └── color_swap_v1_0.tcl
+│   │   │   ├── color_swap.v
+│   │   │   └── component.xml
 │   │   ├── debouncer_1.1/
+│   │   │   ├── gui/
+│   │   │   │   └── debouncer_v1_0.gtcl
+│   │   │   ├── xgui/
+│   │   │   │   └── debouncer_v1_1.tcl
+│   │   │   ├── component.xml
+│   │   │   └── debouncer.v
 │   │   ├── dff_en_reset_vector_1.0/
+│   │   │   ├── xgui/
+│   │   │   │   └── dff_en_reset_vector_v1_0.tcl
+│   │   │   ├── component.xml
+│   │   │   └── dff_en_reset_vector.v
 │   │   ├── dvi2rgb_v1_7/
+│   │   │   ├── docs/
+│   │   │   │   ├── 1024_edid.dat
+│   │   │   │   ├── 1080_edid.dat
+│   │   │   │   ├── 720p_edid.dat
+│   │   │   │   ├── 900p_edid.dat
+│   │   │   │   ├── dat2txt.cpp
+│   │   │   │   ├── dvi2rgb.pdf
+│   │   │   │   └── dvi2rgb_v1_7.docx
+│   │   │   ├── gui/
+│   │   │   │   └── dvi2rgb_v1_0.gtcl
+│   │   │   ├── src/
+│   │   │   │   ├── 1024_edid.data
+│   │   │   │   ├── 1080_edid.data
+│   │   │   │   ├── 720p_edid.data
+│   │   │   │   ├── 900p_edid.data
+│   │   │   │   ├── ChannelBond.vhd
+│   │   │   │   ├── DVI_Constants.vhd
+│   │   │   │   ├── EEPROM_8b.vhd
+│   │   │   │   ├── GlitchFilter.vhd
+│   │   │   │   ├── InputSERDES.vhd
+│   │   │   │   ├── PhaseAlign.vhd
+│   │   │   │   ├── ResyncToBUFG.vhd
+│   │   │   │   ├── SyncAsync.vhd
+│   │   │   │   ├── SyncAsyncReset.vhd
+│   │   │   │   ├── SyncBase.vhd
+│   │   │   │   ├── TMDS_Clocking.vhd
+│   │   │   │   ├── TMDS_Decoder.vhd
+│   │   │   │   ├── TWI_SlaveCtl.vhd
+│   │   │   │   ├── dvi2rgb.vhd
+│   │   │   │   ├── dvi2rgb.xdc
+│   │   │   │   └── dvi2rgb_ooc.xdc
+│   │   │   ├── xgui/
+│   │   │   │   ├── dvi2rgb_v1_3.tcl
+│   │   │   │   ├── dvi2rgb_v1_4.tcl
+│   │   │   │   ├── dvi2rgb_v1_5.tcl
+│   │   │   │   ├── dvi2rgb_v1_6.tcl
+│   │   │   │   └── dvi2rgb_v1_7.tcl
+│   │   │   └── component.xml
 │   │   ├── fsm_controller_1.1/
+│   │   │   ├── xgui/
+│   │   │   │   └── fsm_controller_v1_0.tcl
+│   │   │   ├── component.xml
+│   │   │   ├── fsm_controller.v
+│   │   │   └── pulse_gen.v
 │   │   ├── fsm_io_switch_1.1/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── fsm_io_switch_v1_0/
+│   │   │   ├── example_designs/
+│   │   │   │   ├── bfm_design/
+│   │   │   │   └── debug_hw_design/
+│   │   │   ├── hdl/
+│   │   │   │   ├── fsm_io_switch_v1_1.v
+│   │   │   │   └── fsm_io_switch_v1_1_S_AXI.v
+│   │   │   ├── src/
+│   │   │   │   ├── input_mux.v
+│   │   │   │   ├── mux_2_to_1.v
+│   │   │   │   └── output_demux.v
+│   │   │   ├── xgui/
+│   │   │   │   └── fsm_io_switch_v1_1.tcl
+│   │   │   └── component.xml
 │   │   ├── gclk_generator_1.0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── gclk_generator_v1_0/
+│   │   │   ├── example_designs/
+│   │   │   │   ├── bfm_design/
+│   │   │   │   └── debug_hw_design/
+│   │   │   ├── hdl/
+│   │   │   │   ├── gclk_generator_v1_0.v
+│   │   │   │   └── gclk_generator_v1_0_S_AXI.v
+│   │   │   ├── src/
+│   │   │   │   ├── counter.v
+│   │   │   │   └── pulse_gen.v
+│   │   │   ├── xgui/
+│   │   │   │   └── gclk_generator_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── hls/
+│   │   │   ├── BYU/
+│   │   │   │   ├── grey/
+│   │   │   │   ├── invert/
+│   │   │   │   ├── pass/
+│   │   │   │   └── sobel/
+│   │   │   ├── color_convert/
+│   │   │   │   ├── .apc/
+│   │   │   │   ├── .settings/
+│   │   │   │   ├── solution1/
+│   │   │   │   ├── .cproject
+│   │   │   │   ├── .project
+│   │   │   │   ├── .vivado_hls_log_all.xml
+│   │   │   │   ├── color_convert.cpp
+│   │   │   │   ├── color_convert_test.cpp
+│   │   │   │   ├── script.tcl
+│   │   │   │   └── vivado_hls.app
+│   │   │   ├── pixel_pack/
+│   │   │   │   ├── solution1/
+│   │   │   │   ├── pixel_pack.cpp
+│   │   │   │   ├── pixel_pack_test.cpp
+│   │   │   │   ├── script.tcl
+│   │   │   │   └── vivado_hls.app
+│   │   │   ├── pixel_unpack/
+│   │   │   │   ├── solution1/
+│   │   │   │   ├── pixel_unpack.cpp
+│   │   │   │   ├── pixel_unpack_test.cpp
+│   │   │   │   ├── script.tcl
+│   │   │   │   └── vivado_hls.app
+│   │   │   ├── sync/
+│   │   │   │   ├── greyscale/
+│   │   │   │   ├── invert/
+│   │   │   │   ├── sobel/
+│   │   │   │   ├── sync_test/
+│   │   │   │   └── vid_sync/
+│   │   │   ├── trace_cntrl_32/
+│   │   │   │   ├── solution1/
+│   │   │   │   ├── script.tcl
+│   │   │   │   ├── trace_cntrl_32.cpp
+│   │   │   │   └── vivado_hls.app
+│   │   │   ├── trace_cntrl_64/
+│   │   │   │   ├── solution1/
+│   │   │   │   ├── script.tcl
+│   │   │   │   ├── trace_cntrl_64.cpp
+│   │   │   │   └── vivado_hls.app
+│   │   │   ├── .gitignore
+│   │   │   ├── build_ip.bat
+│   │   │   ├── build_ip.sh
+│   │   │   └── vivado_hls.log
 │   │   ├── if/
+│   │   │   └── tmds_v1_0/
+│   │   │       ├── tmds.xml
+│   │   │       └── tmds_rtl.xml
 │   │   ├── interface_switch_1.1/
+│   │   │   ├── xgui/
+│   │   │   │   └── interface_switch_v1_0.tcl
+│   │   │   ├── component.xml
+│   │   │   ├── interface_switch.v
+│   │   │   └── mux_4_to_1.v
 │   │   ├── io_switch_1.1/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── io_switch_v1_0/
+│   │   │   ├── example_designs/
+│   │   │   │   ├── bfm_design/
+│   │   │   │   └── debug_hw_design/
+│   │   │   ├── gui/
+│   │   │   │   └── io_switch_v1_1.gtcl
+│   │   │   ├── hdl/
+│   │   │   │   ├── io_switch_v1_1.v
+│   │   │   │   └── io_switch_v1_1_S_AXI.v
+│   │   │   ├── src/
+│   │   │   │   ├── io_switch.v
+│   │   │   │   └── io_switch_bit.v
+│   │   │   ├── xgui/
+│   │   │   │   └── io_switch_v1_1.tcl
+│   │   │   └── component.xml
 │   │   ├── merg_1.0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── hdl/
+│   │   │   │   ├── HLS_Merger.vhd
+│   │   │   │   ├── merg_v1_0.vhd
+│   │   │   │   ├── merg_v1_0_M00_AXIS.vhd
+│   │   │   │   ├── merg_v1_0_M01_AXIS.vhd
+│   │   │   │   ├── merg_v1_0_S00_AXIS.vhd
+│   │   │   │   └── merg_v1_0_S01_AXIS.vhd
+│   │   │   ├── src/
+│   │   │   │   ├── fifo_generator_0/
+│   │   │   │   ├── fifo_generator_0_1/
+│   │   │   │   ├── fifo_merg/
+│   │   │   │   ├── merg_0/
+│   │   │   │   ├── vid_sync_0/
+│   │   │   │   ├── vid_sync_0_1/
+│   │   │   │   └── stream_sync.vhd
+│   │   │   ├── xgui/
+│   │   │   │   ├── HLS_Merger_v1_0.tcl
+│   │   │   │   └── merg_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── mux_vector_1.0/
+│   │   │   ├── xgui/
+│   │   │   │   └── mux_vector_v1_0.tcl
+│   │   │   ├── component.xml
+│   │   │   └── mux_vector.v
 │   │   ├── pattern_controller_1.1/
+│   │   │   ├── xgui/
+│   │   │   │   └── pattern_controller_v1_0.tcl
+│   │   │   ├── component.xml
+│   │   │   ├── pattern_controller.v
+│   │   │   └── pulse_gen.v
 │   │   ├── rgb2dvi_v1_2/
+│   │   │   ├── docs/
+│   │   │   │   └── rgb2dvi_v1_2.pdf
+│   │   │   ├── src/
+│   │   │   │   ├── ClockGen.vhd
+│   │   │   │   ├── DVI_Constants.vhd
+│   │   │   │   ├── OutputSERDES.vhd
+│   │   │   │   ├── SyncAsync.vhd
+│   │   │   │   ├── SyncAsyncReset.vhd
+│   │   │   │   ├── TMDS_Encoder.vhd
+│   │   │   │   ├── rgb2dvi.vhd
+│   │   │   │   ├── rgb2dvi.xdc
+│   │   │   │   ├── rgb2dvi_clocks.xdc
+│   │   │   │   └── rgb2dvi_ooc.xdc
+│   │   │   ├── xgui/
+│   │   │   │   ├── rgb2dvi_v1_1.tcl
+│   │   │   │   └── rgb2dvi_v1_2.tcl
+│   │   │   └── component.xml
 │   │   └── trace_generator_controller_1.1/
+│   │       ├── xgui/
+│   │       │   └── trace_generator_controller_v1_0.tcl
+│   │       ├── component.xml
+│   │       ├── pulse_gen.v
+│   │       └── trace_generator_controller.v
 │   ├── .gitignore
 │   ├── README.md
 │   ├── Task Completed.docx
@@ -318,25 +992,142 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 ├── HDMI17/
 │   ├── HDMI17.cache/
 │   │   ├── compile_simlib/
+│   │   │   ├── activehdl/
+│   │   │   ├── ies/
+│   │   │   ├── modelsim/
+│   │   │   ├── questa/
+│   │   │   ├── riviera/
+│   │   │   ├── vcs/
+│   │   │   └── xcelium/
 │   │   ├── ip/
+│   │   │   └── 2017.4/
 │   │   └── wt/
+│   │       ├── gui_handlers.wdf
+│   │       ├── java_command_handlers.wdf
+│   │       ├── project.wpc
+│   │       ├── synthesis.wdf
+│   │       ├── synthesis_details.wdf
+│   │       └── webtalk_pa.xml
 │   ├── HDMI17.hw/
 │   │   ├── hw_1/
+│   │   │   ├── wave/
+│   │   │   └── hw.xml
 │   │   └── HDMI17.lpr
 │   ├── HDMI17.ip_user_files/
 │   │   ├── bd/
+│   │   │   └── design_1/
+│   │   │       └── sim/
 │   │   ├── mem_init_files/
+│   │   │   ├── design_1_xlconstant_0_0.h
+│   │   │   ├── dgl_1080p_cea.data
+│   │   │   ├── dgl_1280_1024_cea.data
+│   │   │   ├── dgl_720p_cea.data
+│   │   │   └── xlconstant_v1_1.h
 │   │   └── README.txt
 │   ├── HDMI17.runs/
 │   │   ├── design_1_clk_wiz_0_0_synth_1/
 │   │   ├── design_1_dvi2rgb_0_0_synth_1/
 │   │   ├── design_1_rgb2dvi_0_1_synth_1/
 │   │   ├── impl_1/
+│   │   │   ├── .Xil/
+│   │   │   │   └── Vivado-23476-Michal-PC/
+│   │   │   ├── .Vivado_Implementation.queue.rst
+│   │   │   ├── .init_design.begin.rst
+│   │   │   ├── .init_design.end.rst
+│   │   │   ├── .opt_design.begin.rst
+│   │   │   ├── .opt_design.end.rst
+│   │   │   ├── .place_design.begin.rst
+│   │   │   ├── .place_design.end.rst
+│   │   │   ├── .route_design.begin.rst
+│   │   │   ├── .route_design.end.rst
+│   │   │   ├── .vivado.begin.rst
+│   │   │   ├── .vivado.end.rst
+│   │   │   ├── .write_bitstream.begin.rst
+│   │   │   ├── .write_bitstream.end.rst
+│   │   │   ├── ISEWrap.js
+│   │   │   ├── ISEWrap.sh
+│   │   │   ├── debug_nets.ltx
+│   │   │   ├── design_1_wrapper.bit
+│   │   │   ├── design_1_wrapper.hwdef
+│   │   │   ├── design_1_wrapper.ltx
+│   │   │   ├── design_1_wrapper.sysdef
+│   │   │   ├── design_1_wrapper.tcl
+│   │   │   ├── design_1_wrapper.vdi
+│   │   │   ├── design_1_wrapper_bus_skew_routed.pb
+│   │   │   ├── design_1_wrapper_bus_skew_routed.rpt
+│   │   │   ├── design_1_wrapper_bus_skew_routed.rpx
+│   │   │   ├── design_1_wrapper_clock_utilization_routed.rpt
+│   │   │   ├── design_1_wrapper_control_sets_placed.rpt
+│   │   │   ├── design_1_wrapper_drc_opted.pb
+│   │   │   ├── design_1_wrapper_drc_opted.rpt
+│   │   │   ├── design_1_wrapper_drc_opted.rpx
+│   │   │   ├── design_1_wrapper_drc_routed.pb
+│   │   │   ├── design_1_wrapper_drc_routed.rpt
+│   │   │   ├── design_1_wrapper_drc_routed.rpx
+│   │   │   ├── design_1_wrapper_io_placed.rpt
+│   │   │   ├── design_1_wrapper_methodology_drc_routed.pb
+│   │   │   ├── design_1_wrapper_methodology_drc_routed.rpt
+│   │   │   ├── design_1_wrapper_methodology_drc_routed.rpx
+│   │   │   ├── design_1_wrapper_opt.dcp
+│   │   │   ├── design_1_wrapper_placed.dcp
+│   │   │   ├── design_1_wrapper_power_routed.rpt
+│   │   │   ├── design_1_wrapper_power_routed.rpx
+│   │   │   ├── design_1_wrapper_power_summary_routed.pb
+│   │   │   ├── design_1_wrapper_route_status.pb
+│   │   │   ├── design_1_wrapper_route_status.rpt
+│   │   │   ├── design_1_wrapper_routed.dcp
+│   │   │   ├── design_1_wrapper_timing_summary_routed.pb
+│   │   │   ├── design_1_wrapper_timing_summary_routed.rpt
+│   │   │   ├── design_1_wrapper_timing_summary_routed.rpx
+│   │   │   ├── design_1_wrapper_utilization_placed.pb
+│   │   │   ├── design_1_wrapper_utilization_placed.rpt
+│   │   │   ├── gen_run.xml
+│   │   │   ├── htr.txt
+│   │   │   ├── init_design.pb
+│   │   │   ├── opt_design.pb
+│   │   │   ├── place_design.pb
+│   │   │   ├── project.wdf
+│   │   │   ├── route_design.pb
+│   │   │   ├── rundef.js
+│   │   │   ├── runme.bat
+│   │   │   ├── runme.log
+│   │   │   ├── runme.sh
+│   │   │   ├── usage_statistics_webtalk.html
+│   │   │   ├── usage_statistics_webtalk.xml
+│   │   │   ├── vivado.jou
+│   │   │   ├── vivado.pb
+│   │   │   └── write_bitstream.pb
 │   │   └── synth_1/
+│   │       ├── .Xil/
+│   │       │   └── design_1_wrapper_propImpl.xdc
+│   │       ├── .Vivado_Synthesis.queue.rst
+│   │       ├── .vivado.begin.rst
+│   │       ├── .vivado.end.rst
+│   │       ├── ISEWrap.js
+│   │       ├── ISEWrap.sh
+│   │       ├── __synthesis_is_complete__
+│   │       ├── design_1_wrapper.dcp
+│   │       ├── design_1_wrapper.tcl
+│   │       ├── design_1_wrapper.vds
+│   │       ├── design_1_wrapper_utilization_synth.pb
+│   │       ├── design_1_wrapper_utilization_synth.rpt
+│   │       ├── dont_touch.xdc
+│   │       ├── gen_run.xml
+│   │       ├── htr.txt
+│   │       ├── rundef.js
+│   │       ├── runme.bat
+│   │       ├── runme.log
+│   │       ├── runme.sh
+│   │       ├── vivado.jou
+│   │       └── vivado.pb
 │   ├── HDMI17.sim/
 │   ├── HDMI17.srcs/
 │   │   ├── constrs_1/
+│   │   │   └── imports/
+│   │   │       └── digilent-xdc-master/
 │   │   └── sources_1/
+│   │       └── bd/
+│   │           └── design_1/
 │   ├── HDMI17.bak.xpr
 │   ├── HDMI17.xpr
 │   └── ip_upgrade.log
@@ -344,31 +1135,325 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │   ├── .Xil/
 │   ├── HDMI_02.cache/
 │   │   ├── compile_simlib/
+│   │   │   ├── activehdl/
+│   │   │   ├── ies/
+│   │   │   ├── modelsim/
+│   │   │   ├── questa/
+│   │   │   ├── riviera/
+│   │   │   ├── vcs/
+│   │   │   └── xcelium/
 │   │   ├── ip/
+│   │   │   └── 2018.2.2/
+│   │   │       ├── 25f4b175f1fe5ea3/
+│   │   │       ├── 25f4b175f1fe5ea3.logs/
+│   │   │       ├── 2b54b8434dbfcc3a/
+│   │   │       ├── 2b54b8434dbfcc3a.logs/
+│   │   │       ├── 79b92f8e6b0384eb/
+│   │   │       ├── 79b92f8e6b0384eb.logs/
+│   │   │       ├── 7c0791f130705d73/
+│   │   │       ├── 7c0791f130705d73.logs/
+│   │   │       ├── a8a348e992ea5c43/
+│   │   │       ├── a8a348e992ea5c43.logs/
+│   │   │       ├── d42a8fb40df8e173/
+│   │   │       ├── d42a8fb40df8e173.logs/
+│   │   │       ├── e84a4959d0eebd85/
+│   │   │       ├── e84a4959d0eebd85.logs/
+│   │   │       ├── f499ead168a60b61/
+│   │   │       ├── f499ead168a60b61.logs/
+│   │   │       ├── fa8a70d35f84a7b1/
+│   │   │       └── fa8a70d35f84a7b1.logs/
 │   │   └── wt/
+│   │       ├── gui_handlers.wdf
+│   │       ├── java_command_handlers.wdf
+│   │       ├── project.wpc
+│   │       ├── synthesis.wdf
+│   │       ├── synthesis_details.wdf
+│   │       └── webtalk_pa.xml
 │   ├── HDMI_02.hw/
 │   │   ├── backup/
+│   │   │   ├── hw_ila_data_1.ila
+│   │   │   └── hw_ila_data_2.ila
 │   │   ├── hw_1/
+│   │   │   ├── layout/
+│   │   │   ├── wave/
+│   │   │   │   ├── hw_ila_data_1/
+│   │   │   │   └── hw_ila_data_2/
+│   │   │   └── hw.xml
 │   │   └── HDMI_02.lpr
 │   ├── HDMI_02.ip_user_files/
 │   │   ├── bd/
+│   │   │   └── design_1/
+│   │   │       ├── ip/
+│   │   │       └── sim/
 │   │   ├── mem_init_files/
+│   │   │   ├── design_1_xlconstant_0_0.h
+│   │   │   ├── dgl_1080p_cea.data
+│   │   │   ├── dgl_1280_1024_cea.data
+│   │   │   ├── dgl_720p_cea.data
+│   │   │   └── xlconstant_v1_1.h
 │   │   └── README.txt
 │   ├── HDMI_02.runs/
 │   │   ├── .jobs/
+│   │   │   ├── vrs_config_1.xml
+│   │   │   ├── vrs_config_10.xml
+│   │   │   ├── vrs_config_11.xml
+│   │   │   ├── vrs_config_12.xml
+│   │   │   ├── vrs_config_2.xml
+│   │   │   ├── vrs_config_3.xml
+│   │   │   ├── vrs_config_4.xml
+│   │   │   ├── vrs_config_5.xml
+│   │   │   ├── vrs_config_6.xml
+│   │   │   ├── vrs_config_7.xml
+│   │   │   ├── vrs_config_8.xml
+│   │   │   └── vrs_config_9.xml
 │   │   ├── design_1_clk_wiz_0_0_synth_1/
+│   │   │   ├── .Xil/
+│   │   │   │   └── design_1_clk_wiz_0_0_propImpl.xdc
+│   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   ├── .vivado.begin.rst
+│   │   │   ├── .vivado.end.rst
+│   │   │   ├── ISEWrap.js
+│   │   │   ├── ISEWrap.sh
+│   │   │   ├── __synthesis_is_complete__
+│   │   │   ├── design_1_clk_wiz_0_0.dcp
+│   │   │   ├── design_1_clk_wiz_0_0.tcl
+│   │   │   ├── design_1_clk_wiz_0_0.vds
+│   │   │   ├── design_1_clk_wiz_0_0_utilization_synth.pb
+│   │   │   ├── design_1_clk_wiz_0_0_utilization_synth.rpt
+│   │   │   ├── dont_touch.xdc
+│   │   │   ├── gen_run.xml
+│   │   │   ├── htr.txt
+│   │   │   ├── rundef.js
+│   │   │   ├── runme.bat
+│   │   │   ├── runme.log
+│   │   │   ├── runme.sh
+│   │   │   ├── vivado.jou
+│   │   │   └── vivado.pb
 │   │   ├── design_1_dvi2rgb_0_0_synth_1/
+│   │   │   ├── .Xil/
+│   │   │   │   └── design_1_dvi2rgb_0_0_propImpl.xdc
+│   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   ├── .vivado.begin.rst
+│   │   │   ├── .vivado.end.rst
+│   │   │   ├── ISEWrap.js
+│   │   │   ├── ISEWrap.sh
+│   │   │   ├── __synthesis_is_complete__
+│   │   │   ├── design_1_dvi2rgb_0_0.dcp
+│   │   │   ├── design_1_dvi2rgb_0_0.tcl
+│   │   │   ├── design_1_dvi2rgb_0_0.vds
+│   │   │   ├── design_1_dvi2rgb_0_0_utilization_synth.pb
+│   │   │   ├── design_1_dvi2rgb_0_0_utilization_synth.rpt
+│   │   │   ├── dont_touch.xdc
+│   │   │   ├── gen_run.xml
+│   │   │   ├── htr.txt
+│   │   │   ├── rundef.js
+│   │   │   ├── runme.bat
+│   │   │   ├── runme.log
+│   │   │   ├── runme.sh
+│   │   │   ├── vivado.jou
+│   │   │   └── vivado.pb
 │   │   ├── design_1_dvi2rgb_0_1_synth_1/
+│   │   │   └── vivado.pb
 │   │   ├── design_1_rgb2dvi_0_1_synth_1/
+│   │   │   ├── .Xil/
+│   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   ├── .vivado.begin.rst
+│   │   │   ├── .vivado.end.rst
+│   │   │   ├── ISEWrap.js
+│   │   │   ├── ISEWrap.sh
+│   │   │   ├── __synthesis_is_complete__
+│   │   │   ├── design_1_rgb2dvi_0_1.dcp
+│   │   │   ├── design_1_rgb2dvi_0_1.tcl
+│   │   │   ├── design_1_rgb2dvi_0_1.vds
+│   │   │   ├── design_1_rgb2dvi_0_1_utilization_synth.pb
+│   │   │   ├── design_1_rgb2dvi_0_1_utilization_synth.rpt
+│   │   │   ├── dont_touch.xdc
+│   │   │   ├── gen_run.xml
+│   │   │   ├── htr.txt
+│   │   │   ├── rundef.js
+│   │   │   ├── runme.bat
+│   │   │   ├── runme.log
+│   │   │   ├── runme.sh
+│   │   │   ├── vivado.jou
+│   │   │   └── vivado.pb
 │   │   ├── impl_1/
+│   │   │   ├── .Xil/
+│   │   │   │   └── Vivado-23476-Michal-PC/
+│   │   │   ├── .Vivado_Implementation.queue.rst
+│   │   │   ├── .init_design.begin.rst
+│   │   │   ├── .init_design.end.rst
+│   │   │   ├── .opt_design.begin.rst
+│   │   │   ├── .opt_design.end.rst
+│   │   │   ├── .place_design.begin.rst
+│   │   │   ├── .place_design.end.rst
+│   │   │   ├── .route_design.begin.rst
+│   │   │   ├── .route_design.end.rst
+│   │   │   ├── .vivado.begin.rst
+│   │   │   ├── .vivado.end.rst
+│   │   │   ├── .write_bitstream.begin.rst
+│   │   │   ├── .write_bitstream.end.rst
+│   │   │   ├── ISEWrap.js
+│   │   │   ├── ISEWrap.sh
+│   │   │   ├── debug_nets.ltx
+│   │   │   ├── design_1_wrapper.bit
+│   │   │   ├── design_1_wrapper.hwdef
+│   │   │   ├── design_1_wrapper.ltx
+│   │   │   ├── design_1_wrapper.sysdef
+│   │   │   ├── design_1_wrapper.tcl
+│   │   │   ├── design_1_wrapper.vdi
+│   │   │   ├── design_1_wrapper_bus_skew_routed.pb
+│   │   │   ├── design_1_wrapper_bus_skew_routed.rpt
+│   │   │   ├── design_1_wrapper_bus_skew_routed.rpx
+│   │   │   ├── design_1_wrapper_clock_utilization_routed.rpt
+│   │   │   ├── design_1_wrapper_control_sets_placed.rpt
+│   │   │   ├── design_1_wrapper_drc_opted.pb
+│   │   │   ├── design_1_wrapper_drc_opted.rpt
+│   │   │   ├── design_1_wrapper_drc_opted.rpx
+│   │   │   ├── design_1_wrapper_drc_routed.pb
+│   │   │   ├── design_1_wrapper_drc_routed.rpt
+│   │   │   ├── design_1_wrapper_drc_routed.rpx
+│   │   │   ├── design_1_wrapper_io_placed.rpt
+│   │   │   ├── design_1_wrapper_methodology_drc_routed.pb
+│   │   │   ├── design_1_wrapper_methodology_drc_routed.rpt
+│   │   │   ├── design_1_wrapper_methodology_drc_routed.rpx
+│   │   │   ├── design_1_wrapper_opt.dcp
+│   │   │   ├── design_1_wrapper_placed.dcp
+│   │   │   ├── design_1_wrapper_power_routed.rpt
+│   │   │   ├── design_1_wrapper_power_routed.rpx
+│   │   │   ├── design_1_wrapper_power_summary_routed.pb
+│   │   │   ├── design_1_wrapper_route_status.pb
+│   │   │   ├── design_1_wrapper_route_status.rpt
+│   │   │   ├── design_1_wrapper_routed.dcp
+│   │   │   ├── design_1_wrapper_timing_summary_routed.pb
+│   │   │   ├── design_1_wrapper_timing_summary_routed.rpt
+│   │   │   ├── design_1_wrapper_timing_summary_routed.rpx
+│   │   │   ├── design_1_wrapper_utilization_placed.pb
+│   │   │   ├── design_1_wrapper_utilization_placed.rpt
+│   │   │   ├── gen_run.xml
+│   │   │   ├── htr.txt
+│   │   │   ├── init_design.pb
+│   │   │   ├── opt_design.pb
+│   │   │   ├── place_design.pb
+│   │   │   ├── project.wdf
+│   │   │   ├── route_design.pb
+│   │   │   ├── rundef.js
+│   │   │   ├── runme.bat
+│   │   │   ├── runme.log
+│   │   │   ├── runme.sh
+│   │   │   ├── usage_statistics_webtalk.html
+│   │   │   ├── usage_statistics_webtalk.xml
+│   │   │   ├── vivado.jou
+│   │   │   ├── vivado.pb
+│   │   │   └── write_bitstream.pb
 │   │   └── synth_1/
+│   │       ├── .Xil/
+│   │       │   └── design_1_wrapper_propImpl.xdc
+│   │       ├── .Vivado_Synthesis.queue.rst
+│   │       ├── .vivado.begin.rst
+│   │       ├── .vivado.end.rst
+│   │       ├── ISEWrap.js
+│   │       ├── ISEWrap.sh
+│   │       ├── __synthesis_is_complete__
+│   │       ├── design_1_wrapper.dcp
+│   │       ├── design_1_wrapper.tcl
+│   │       ├── design_1_wrapper.vds
+│   │       ├── design_1_wrapper_utilization_synth.pb
+│   │       ├── design_1_wrapper_utilization_synth.rpt
+│   │       ├── dont_touch.xdc
+│   │       ├── gen_run.xml
+│   │       ├── htr.txt
+│   │       ├── rundef.js
+│   │       ├── runme.bat
+│   │       ├── runme.log
+│   │       ├── runme.sh
+│   │       ├── vivado.jou
+│   │       └── vivado.pb
 │   ├── HDMI_02.sim/
 │   ├── HDMI_02.srcs/
 │   │   ├── constrs_1/
+│   │   │   └── imports/
+│   │   │       └── digilent-xdc-master/
 │   │   └── sources_1/
+│   │       └── bd/
+│   │           └── design_1/
 │   ├── Zybo-Z7-20-HDMI-v2018.2-2/
 │   │   ├── sdk_appsrc/
+│   │   │   ├── display_ctrl/
+│   │   │   │   ├── display_ctrl.c
+│   │   │   │   ├── display_ctrl.h
+│   │   │   │   └── vga_modes.h
+│   │   │   ├── dynclk/
+│   │   │   │   ├── dynclk.c
+│   │   │   │   └── dynclk.h
+│   │   │   ├── intc/
+│   │   │   │   ├── intc.c
+│   │   │   │   └── intc.h
+│   │   │   ├── timer_ps/
+│   │   │   │   ├── timer_ps.c
+│   │   │   │   └── timer_ps.h
+│   │   │   ├── video_capture/
+│   │   │   │   ├── video_capture.c
+│   │   │   │   └── video_capture.h
+│   │   │   ├── README.txt
+│   │   │   ├── Xilinx.spec
+│   │   │   ├── lscript.ld
+│   │   │   ├── video_demo.c
+│   │   │   └── video_demo.h
 │   │   ├── vivado_proj/
+│   │   │   ├── .Xil/
+│   │   │   │   ├── -13956-Michal-PC/
+│   │   │   │   └── Vivado-1092-Michal-PC/
+│   │   │   ├── Zybo-Z7-20-HDMI.board/
+│   │   │   │   └── zybo-z7-20/
+│   │   │   ├── Zybo-Z7-20-HDMI.cache/
+│   │   │   │   ├── compile_simlib/
+│   │   │   │   └── wt/
+│   │   │   ├── Zybo-Z7-20-HDMI.hw/
+│   │   │   │   ├── hw_1/
+│   │   │   │   └── Zybo-Z7-20-HDMI.lpr
+│   │   │   ├── Zybo-Z7-20-HDMI.ip_user_files/
+│   │   │   ├── Zybo-Z7-20-HDMI.ipdefs/
+│   │   │   │   └── repo_0/
+│   │   │   ├── Zybo-Z7-20-HDMI.runs/
+│   │   │   │   ├── design_1_auto_pc_0_synth_1/
+│   │   │   │   ├── design_1_auto_pc_1_synth_1/
+│   │   │   │   ├── design_1_axi_dynclk_0_0_synth_1/
+│   │   │   │   ├── design_1_axi_gpio_video_0_synth_1/
+│   │   │   │   ├── design_1_axi_vdma_0_0_synth_1/
+│   │   │   │   ├── design_1_axis_subset_converter_in_0_synth_1/
+│   │   │   │   ├── design_1_axis_subset_converter_out_0_synth_1/
+│   │   │   │   ├── design_1_dvi2rgb_1_0_synth_1/
+│   │   │   │   ├── design_1_proc_sys_reset_0_0_synth_1/
+│   │   │   │   ├── design_1_processing_system7_0_0_synth_1/
+│   │   │   │   ├── design_1_rgb2dvi_0_0_synth_1/
+│   │   │   │   ├── design_1_rst_ps7_0_100M_0_synth_1/
+│   │   │   │   ├── design_1_rst_ps7_0_133M_0_synth_1/
+│   │   │   │   ├── design_1_v_axi4s_vid_out_0_0_synth_1/
+│   │   │   │   ├── design_1_v_tc_in_0_synth_1/
+│   │   │   │   ├── design_1_v_tc_out_0_synth_1/
+│   │   │   │   ├── design_1_v_vid_in_axi4s_0_0_synth_1/
+│   │   │   │   ├── design_1_xbar_0_synth_1/
+│   │   │   │   ├── design_1_xbar_1_synth_1/
+│   │   │   │   ├── design_1_xlconcat_0_0_synth_1/
+│   │   │   │   ├── design_1_xlconstant_0_0_synth_1/
+│   │   │   │   ├── impl_1/
+│   │   │   │   └── synth_1/
+│   │   │   ├── Zybo-Z7-20-HDMI.sdk/
+│   │   │   │   └── design_1_wrapper.hdf
+│   │   │   ├── Zybo-Z7-20-HDMI.sim/
+│   │   │   ├── Zybo-Z7-20-HDMI.srcs/
+│   │   │   │   ├── constrs_1/
+│   │   │   │   └── sources_1/
+│   │   │   ├── Zybo-Z7-20-HDMI.xpr
+│   │   │   ├── archive_project_summary.txt
+│   │   │   ├── vivado.jou
+│   │   │   ├── vivado.log
+│   │   │   ├── vivado_21456.backup.jou
+│   │   │   ├── vivado_21456.backup.log
+│   │   │   ├── vivado_712.backup.jou
+│   │   │   ├── vivado_712.backup.log
+│   │   │   ├── vivado_9160.backup.jou
+│   │   │   └── vivado_9160.backup.log
 │   │   └── README.md
 │   ├── HDMI_02.xpr
 │   └── design_1.pdf
@@ -380,14 +1465,84 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │   │   └── temp_setup.sh
 │   ├── hdmi_io/
 │   │   └── hdmi_io.cache/
+│   │       └── compile_simlib/
+│   │           └── xcelium/
 │   ├── hls/
 │   │   ├── brl_corr/
+│   │   │   ├── .apc/
+│   │   │   │   ├── .src/
+│   │   │   │   ├── .tb/
+│   │   │   │   └── autopilot.apfmapping
+│   │   │   ├── .settings/
+│   │   │   │   ├── brl_corr.Debug.launch
+│   │   │   │   ├── brl_corr.Release.launch
+│   │   │   │   └── language.settings.xml
+│   │   │   ├── sln1/
+│   │   │   │   ├── .autopilot/
+│   │   │   │   ├── .tcls/
+│   │   │   │   ├── csim/
+│   │   │   │   ├── directives.tcl
+│   │   │   │   ├── script.tcl
+│   │   │   │   ├── sln1.aps
+│   │   │   │   ├── sln1.directive
+│   │   │   │   └── sln1.log
+│   │   │   ├── .cproject
+│   │   │   ├── .project
+│   │   │   ├── .vivado_hls_log_all.xml
+│   │   │   └── vivado_hls.app
 │   │   └── vivado_hls.log
 │   ├── hls_brl_corr/
 │   │   ├── .apc/
+│   │   │   ├── .src/
+│   │   │   ├── .tb/
+│   │   │   └── autopilot.apfmapping
 │   │   ├── .settings/
+│   │   │   ├── hls_brl_corr.Debug.launch
+│   │   │   ├── hls_brl_corr.Release.launch
+│   │   │   └── language.settings.xml
 │   │   ├── sln1/
+│   │   │   ├── .autopilot/
+│   │   │   │   ├── db/
+│   │   │   │   └── .autopilot_exit
+│   │   │   ├── .tcls/
+│   │   │   ├── csim/
+│   │   │   │   ├── build/
+│   │   │   │   ├── report/
+│   │   │   │   └── .lst_opt.tcl
+│   │   │   ├── directives.tcl
+│   │   │   ├── script.tcl
+│   │   │   ├── sln1.aps
+│   │   │   ├── sln1.directive
+│   │   │   └── sln1.log
 │   │   ├── src/
+│   │   │   ├── bak/
+│   │   │   │   ├── v0/
+│   │   │   │   ├── v6/
+│   │   │   │   ├── v7/
+│   │   │   │   ├── v8/
+│   │   │   │   ├── brl_corr_hls_v1.cpp
+│   │   │   │   └── brl_corr_hls_v5.cpp
+│   │   │   ├── img_in/
+│   │   │   │   ├── img_128x100.png
+│   │   │   │   ├── img_128x100_0.png
+│   │   │   │   └── img_128x100_in.txt
+│   │   │   ├── img_out/
+│   │   │   │   ├── img_128x100.png
+│   │   │   │   ├── img_128x100_K1=+2.png
+│   │   │   │   ├── img_128x100_K1=-2.png
+│   │   │   │   ├── img_128x100_K1=0.5,-0.3.png
+│   │   │   │   ├── img_128x100_K1=0.5.png
+│   │   │   │   ├── img_128x100_out.txt
+│   │   │   │   └── img_128x100_out_K1=-2.txt
+│   │   │   ├── q/
+│   │   │   │   ├── 1brl_corr_K1=0.3.png
+│   │   │   │   ├── 2brl_corr_hls_K1=10.png
+│   │   │   │   └── brl_corr_hls_K1=10.png
+│   │   │   ├── brl_corr_hls.cpp
+│   │   │   ├── brl_corr_hls.h
+│   │   │   ├── brl_corr_hls1.cpp
+│   │   │   ├── brl_corr_hls_tb.cpp
+│   │   │   └── img_corr.py
 │   │   ├── .cproject
 │   │   ├── .project
 │   │   ├── .vivado_hls_log_all.xml
@@ -396,12 +1551,65 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │   │   └── vivado_hls.app
 │   ├── hls_brl_corr0/
 │   │   ├── .apc/
+│   │   │   ├── .src/
+│   │   │   ├── .tb/
+│   │   │   └── autopilot.apfmapping
 │   │   ├── .settings/
+│   │   │   ├── hls_brl_corr.Debug.launch
+│   │   │   ├── hls_brl_corr.Release.launch
+│   │   │   └── language.settings.xml
 │   │   ├── bak1/
+│   │   │   ├── run_csim.tcl
+│   │   │   └── sim_csim.sh
 │   │   ├── img_in/
+│   │   │   ├── img_128x100.png
+│   │   │   ├── img_128x100_0.png
+│   │   │   ├── img_128x100_1.png
+│   │   │   └── img_128x100_in.txt
 │   │   ├── img_out/
 │   │   ├── sln1/
+│   │   │   ├── .autopilot/
+│   │   │   │   ├── db/
+│   │   │   │   └── .autopilot_exit
+│   │   │   ├── .tcls/
+│   │   │   ├── csim/
+│   │   │   │   ├── build/
+│   │   │   │   ├── report/
+│   │   │   │   └── .lst_opt.tcl
+│   │   │   ├── directives.tcl
+│   │   │   ├── script.tcl
+│   │   │   ├── sln1.aps
+│   │   │   ├── sln1.directive
+│   │   │   └── sln1.log
 │   │   ├── src/
+│   │   │   ├── bak/
+│   │   │   │   ├── v0/
+│   │   │   │   ├── v6/
+│   │   │   │   ├── v7/
+│   │   │   │   ├── v8/
+│   │   │   │   ├── brl_corr_hls_v1.cpp
+│   │   │   │   └── brl_corr_hls_v5.cpp
+│   │   │   ├── img_in/
+│   │   │   │   ├── img_128x100.png
+│   │   │   │   ├── img_128x100_0.png
+│   │   │   │   └── img_128x100_in.txt
+│   │   │   ├── img_out/
+│   │   │   │   ├── img_128x100.png
+│   │   │   │   ├── img_128x100_K1=+2.png
+│   │   │   │   ├── img_128x100_K1=-2.png
+│   │   │   │   ├── img_128x100_K1=0.5,-0.3.png
+│   │   │   │   ├── img_128x100_K1=0.5.png
+│   │   │   │   ├── img_128x100_out.txt
+│   │   │   │   └── img_128x100_out_K1=-2.txt
+│   │   │   ├── q/
+│   │   │   │   ├── 1brl_corr_K1=0.3.png
+│   │   │   │   ├── 2brl_corr_hls_K1=10.png
+│   │   │   │   └── brl_corr_hls_K1=10.png
+│   │   │   ├── brl_corr_hls.cpp
+│   │   │   ├── brl_corr_hls.h
+│   │   │   ├── brl_corr_hls1.cpp
+│   │   │   ├── brl_corr_hls_tb.cpp
+│   │   │   └── img_corr.py
 │   │   ├── .cproject
 │   │   ├── .project
 │   │   ├── .vivado_hls_log_all.xml
@@ -411,10 +1619,55 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │   │   └── vivado_hls.log
 │   ├── hls_brl_corr1/
 │   │   ├── .apc/
+│   │   │   ├── .src/
+│   │   │   ├── .tb/
+│   │   │   └── autopilot.apfmapping
 │   │   ├── .settings/
+│   │   │   ├── hls_brl_corr1.Debug.launch
+│   │   │   ├── hls_brl_corr1.Release.launch
+│   │   │   └── language.settings.xml
 │   │   ├── hls_brl_corr1/
+│   │   │   ├── sln1/
+│   │   │   │   ├── .autopilot/
+│   │   │   │   ├── csim/
+│   │   │   │   ├── sln1.aps
+│   │   │   │   └── sln1.log
+│   │   │   └── vivado_hls.app
 │   │   ├── sln1/
+│   │   │   ├── .autopilot/
+│   │   │   │   ├── db/
+│   │   │   │   └── .autopilot_exit
+│   │   │   ├── .tcls/
+│   │   │   ├── csim/
+│   │   │   │   ├── build/
+│   │   │   │   ├── report/
+│   │   │   │   └── .lst_opt.tcl
+│   │   │   ├── directives.tcl
+│   │   │   ├── script.tcl
+│   │   │   ├── sln1.aps
+│   │   │   ├── sln1.directive
+│   │   │   └── sln1.log
 │   │   ├── src/
+│   │   │   ├── img_in/
+│   │   │   │   ├── img_128x100.png
+│   │   │   │   ├── img_128x100_0.png
+│   │   │   │   └── img_128x100_in.txt
+│   │   │   ├── img_out/
+│   │   │   │   ├── img_128x100.png
+│   │   │   │   ├── img_128x100_K1=+2.png
+│   │   │   │   ├── img_128x100_K1=-2.png
+│   │   │   │   ├── img_128x100_K1=0.5,-0.3.png
+│   │   │   │   ├── img_128x100_K1=0.5.png
+│   │   │   │   ├── img_128x100_out.txt
+│   │   │   │   └── img_128x100_out_K1=-2.txt
+│   │   │   ├── q/
+│   │   │   │   ├── 1brl_corr_K1=0.3.png
+│   │   │   │   ├── 2brl_corr_hls_K1=10.png
+│   │   │   │   └── brl_corr_hls_K1=10.png
+│   │   │   ├── brl_corr_hls.cpp
+│   │   │   ├── brl_corr_hls.h
+│   │   │   ├── brl_corr_hls_tb.cpp
+│   │   │   └── img_corr.py
 │   │   ├── .cproject
 │   │   ├── .project
 │   │   ├── .vivado_hls_log_all.xml
@@ -424,26 +1677,102 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │   │   └── vivado_hls.app
 │   ├── hls_brl_corr2/
 │   │   ├── .apc/
+│   │   │   ├── .src/
+│   │   │   ├── .tb/
+│   │   │   └── autopilot.apfmapping
 │   │   ├── .settings/
+│   │   │   ├── hls_brl_corr1.Debug.launch
+│   │   │   ├── hls_brl_corr1.Release.launch
+│   │   │   └── language.settings.xml
 │   │   ├── sln1/
+│   │   │   ├── .autopilot/
+│   │   │   │   ├── db/
+│   │   │   │   └── .autopilot_exit
+│   │   │   ├── .tcls/
+│   │   │   ├── csim/
+│   │   │   │   ├── build/
+│   │   │   │   ├── report/
+│   │   │   │   └── .lst_opt.tcl
+│   │   │   ├── directives.tcl
+│   │   │   ├── script.tcl
+│   │   │   ├── sln1.aps
+│   │   │   ├── sln1.directive
+│   │   │   └── sln1.log
 │   │   ├── src/
+│   │   │   ├── brl_corr_hls.cpp
+│   │   │   ├── brl_corr_hls.h
+│   │   │   └── brl_corr_hls_tb.cpp
 │   │   ├── .cproject
 │   │   ├── .project
 │   │   └── .vivado_hls_log_all.xml
 │   ├── hls_brl_corr2023/
 │   │   ├── .apc/
+│   │   │   ├── .src/
+│   │   │   ├── .tb/
+│   │   │   └── autopilot.apfmapping
 │   │   ├── .settings/
+│   │   │   ├── hls_brl_corr2023.Debug.launch
+│   │   │   ├── hls_brl_corr2023.Release.launch
+│   │   │   └── language.settings.xml
 │   │   ├── sln1/
+│   │   │   ├── .autopilot/
+│   │   │   │   ├── db/
+│   │   │   │   └── .autopilot_exit
+│   │   │   ├── .tcls/
+│   │   │   ├── csim/
+│   │   │   │   ├── build/
+│   │   │   │   ├── report/
+│   │   │   │   └── .lst_opt.tcl
+│   │   │   ├── directives.tcl
+│   │   │   ├── script.tcl
+│   │   │   ├── sln1.aps
+│   │   │   ├── sln1.directive
+│   │   │   └── sln1.log
 │   │   ├── src/
+│   │   │   └── brl_corr_hls.cpp
 │   │   ├── .cproject
 │   │   ├── .project
 │   │   ├── .vitis_hls_log_all.xml
 │   │   └── hls.app
 │   ├── hls_brl_corr3/
 │   │   ├── .apc/
+│   │   │   ├── .src/
+│   │   │   ├── .tb/
+│   │   │   └── autopilot.apfmapping
 │   │   ├── .settings/
+│   │   │   ├── hls_brl_corr1.Debug.launch
+│   │   │   ├── hls_brl_corr1.Release.launch
+│   │   │   └── language.settings.xml
 │   │   ├── sln1/
+│   │   │   ├── .autopilot/
+│   │   │   │   ├── db/
+│   │   │   │   └── .autopilot_exit
+│   │   │   ├── .tcls/
+│   │   │   ├── csim/
+│   │   │   │   ├── build/
+│   │   │   │   ├── report/
+│   │   │   │   └── .lst_opt.tcl
+│   │   │   ├── directives.tcl
+│   │   │   ├── script.tcl
+│   │   │   ├── sln1.aps
+│   │   │   ├── sln1.directive
+│   │   │   └── sln1.log
 │   │   ├── src/
+│   │   │   ├── img_in/
+│   │   │   │   ├── img_128x100.png
+│   │   │   │   ├── img_128x100_0.png
+│   │   │   │   └── img_128x100_in.txt
+│   │   │   ├── img_out/
+│   │   │   │   ├── img_128x100.png
+│   │   │   │   ├── img_128x100_K1=+2.png
+│   │   │   │   ├── img_128x100_K1=-2.png
+│   │   │   │   ├── img_128x100_K1=0.5,-0.3.png
+│   │   │   │   ├── img_128x100_K1=0.5.png
+│   │   │   │   ├── img_128x100_out.txt
+│   │   │   │   └── img_128x100_out_K1=-2.txt
+│   │   │   ├── brl_corr_hls.cpp
+│   │   │   ├── brl_corr_hls.h
+│   │   │   └── brl_corr_hls_tb.cpp
 │   │   ├── .cproject
 │   │   ├── .gitignore
 │   │   ├── .project
@@ -454,24 +1783,559 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │   ├── vivado/
 │   │   ├── .Xiltemp/
 │   │   ├── hdmi_barrel_distortion_correction.cache/
+│   │   │   ├── compile_simlib/
+│   │   │   │   ├── activehdl/
+│   │   │   │   ├── ies/
+│   │   │   │   ├── modelsim/
+│   │   │   │   ├── questa/
+│   │   │   │   ├── riviera/
+│   │   │   │   ├── vcs/
+│   │   │   │   └── xcelium/
+│   │   │   ├── ip/
+│   │   │   │   └── 2017.4/
+│   │   │   └── wt/
+│   │   │       ├── gui_handlers.wdf
+│   │   │       ├── java_command_handlers.wdf
+│   │   │       ├── project.wpc
+│   │   │       ├── synthesis.wdf
+│   │   │       ├── synthesis_details.wdf
+│   │   │       ├── webtalk_pa.xml
+│   │   │       └── xsim.wdf
 │   │   ├── hdmi_barrel_distortion_correction.hw/
+│   │   │   ├── hw_1/
+│   │   │   │   ├── wave/
+│   │   │   │   └── hw.xml
+│   │   │   └── hdmi_barrel_distortion_correction.lpr
 │   │   ├── hdmi_barrel_distortion_correction.ip_user_files/
+│   │   │   ├── bd/
+│   │   │   │   └── bd/
+│   │   │   ├── mem_init_files/
+│   │   │   │   ├── dgl_1080p_cea.data
+│   │   │   │   ├── dgl_1280_1024_cea.data
+│   │   │   │   └── dgl_720p_cea.data
+│   │   │   └── README.txt
 │   │   ├── hdmi_barrel_distortion_correction.runs/
+│   │   │   ├── bd_clk_wiz_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_clk_wiz_0_0.dcp
+│   │   │   │   ├── bd_clk_wiz_0_0.tcl
+│   │   │   │   ├── bd_clk_wiz_0_0.vds
+│   │   │   │   ├── bd_clk_wiz_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_clk_wiz_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_dvi2rgb_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_dvi2rgb_0_0.dcp
+│   │   │   │   ├── bd_dvi2rgb_0_0.tcl
+│   │   │   │   ├── bd_dvi2rgb_0_0.vds
+│   │   │   │   ├── bd_dvi2rgb_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_dvi2rgb_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── fsm_encoding.os
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_rgb2dvi_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_rgb2dvi_0_0.dcp
+│   │   │   │   ├── bd_rgb2dvi_0_0.tcl
+│   │   │   │   ├── bd_rgb2dvi_0_0.vds
+│   │   │   │   ├── bd_rgb2dvi_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_rgb2dvi_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_v_axi4s_vid_out_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0.dcp
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0.tcl
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0.vds
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── fsm_encoding.os
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_v_tc_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_v_tc_0_0.dcp
+│   │   │   │   ├── bd_v_tc_0_0.tcl
+│   │   │   │   ├── bd_v_tc_0_0.vds
+│   │   │   │   ├── bd_v_tc_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_v_tc_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_v_vid_in_axi4s_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0.dcp
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0.tcl
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0.vds
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── impl_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Implementation.queue.rst
+│   │   │   │   ├── .init_design.begin.rst
+│   │   │   │   ├── .init_design.end.rst
+│   │   │   │   ├── .opt_design.begin.rst
+│   │   │   │   ├── .opt_design.end.rst
+│   │   │   │   ├── .place_design.begin.rst
+│   │   │   │   ├── .place_design.end.rst
+│   │   │   │   ├── .route_design.begin.rst
+│   │   │   │   ├── .route_design.end.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── .write_bitstream.begin.rst
+│   │   │   │   ├── .write_bitstream.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_wrapper.bit
+│   │   │   │   ├── bd_wrapper.hwdef
+│   │   │   │   ├── bd_wrapper.sysdef
+│   │   │   │   ├── bd_wrapper.tcl
+│   │   │   │   ├── bd_wrapper.vdi
+│   │   │   │   ├── bd_wrapper_clock_utilization_routed.rpt
+│   │   │   │   ├── bd_wrapper_control_sets_placed.rpt
+│   │   │   │   ├── bd_wrapper_drc_opted.pb
+│   │   │   │   ├── bd_wrapper_drc_opted.rpt
+│   │   │   │   ├── bd_wrapper_drc_opted.rpx
+│   │   │   │   ├── bd_wrapper_drc_routed.pb
+│   │   │   │   ├── bd_wrapper_drc_routed.rpt
+│   │   │   │   ├── bd_wrapper_drc_routed.rpx
+│   │   │   │   ├── bd_wrapper_io_placed.rpt
+│   │   │   │   ├── bd_wrapper_methodology_drc_routed.pb
+│   │   │   │   ├── bd_wrapper_methodology_drc_routed.rpt
+│   │   │   │   ├── bd_wrapper_methodology_drc_routed.rpx
+│   │   │   │   ├── bd_wrapper_opt.dcp
+│   │   │   │   ├── bd_wrapper_placed.dcp
+│   │   │   │   ├── bd_wrapper_power_routed.rpt
+│   │   │   │   ├── bd_wrapper_power_routed.rpx
+│   │   │   │   ├── bd_wrapper_power_summary_routed.pb
+│   │   │   │   ├── bd_wrapper_route_status.pb
+│   │   │   │   ├── bd_wrapper_route_status.rpt
+│   │   │   │   ├── bd_wrapper_routed.dcp
+│   │   │   │   ├── bd_wrapper_timing_summary_routed.rpt
+│   │   │   │   ├── bd_wrapper_timing_summary_routed.rpx
+│   │   │   │   ├── bd_wrapper_utilization_placed.pb
+│   │   │   │   ├── bd_wrapper_utilization_placed.rpt
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── init_design.pb
+│   │   │   │   ├── opt_design.pb
+│   │   │   │   ├── place_design.pb
+│   │   │   │   ├── project.wdf
+│   │   │   │   ├── route_design.pb
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── usage_statistics_webtalk.html
+│   │   │   │   ├── usage_statistics_webtalk.xml
+│   │   │   │   ├── vivado.jou
+│   │   │   │   ├── vivado.pb
+│   │   │   │   └── write_bitstream.pb
+│   │   │   └── synth_1/
+│   │   │       ├── .Xil/
+│   │   │       ├── .Vivado_Synthesis.queue.rst
+│   │   │       ├── .vivado.begin.rst
+│   │   │       ├── .vivado.end.rst
+│   │   │       ├── ISEWrap.js
+│   │   │       ├── ISEWrap.sh
+│   │   │       ├── bd_wrapper.dcp
+│   │   │       ├── bd_wrapper.tcl
+│   │   │       ├── bd_wrapper.vds
+│   │   │       ├── bd_wrapper_utilization_synth.pb
+│   │   │       ├── bd_wrapper_utilization_synth.rpt
+│   │   │       ├── dont_touch.xdc
+│   │   │       ├── gen_run.xml
+│   │   │       ├── htr.txt
+│   │   │       ├── rundef.js
+│   │   │       ├── runme.bat
+│   │   │       ├── runme.log
+│   │   │       ├── runme.sh
+│   │   │       ├── vivado.jou
+│   │   │       └── vivado.pb
 │   │   ├── hdmi_barrel_distortion_correction.sim/
+│   │   │   └── sim_1/
+│   │   │       └── behav/
 │   │   ├── hdmi_barrel_distortion_correction.srcs/
+│   │   │   ├── constrs_1/
+│   │   │   └── sources_1/
+│   │   │       └── bd/
 │   │   ├── src/
+│   │   │   ├── constrs/
+│   │   │   │   └── top_bd_wrapper.xdc
+│   │   │   ├── rtl/
+│   │   │   │   ├── -/
+│   │   │   │   ├── barrel_distortion_correction(gemini mod).v
+│   │   │   │   ├── barrel_distortion_correction.v
+│   │   │   │   ├── barrel_distortion_correction0.v
+│   │   │   │   ├── barrel_distortion_correction1.v
+│   │   │   │   ├── barrel_distortion_correction2.v
+│   │   │   │   ├── barrel_distortion_correction3.v
+│   │   │   │   ├── lut_create.py
+│   │   │   │   └── top_bd_wrapper.v
+│   │   │   └── tb/
+│   │   │       ├── -/
+│   │   │       ├── img/
+│   │   │       ├── img_in/
+│   │   │       ├── img_out/
+│   │   │       ├── sim_out/
+│   │   │       ├── barrel_distortion_correction_tb.v
+│   │   │       ├── image_to_raw.py
+│   │   │       ├── raw_to_image.py
+│   │   │       ├── sim0.sh
+│   │   │       ├── sim1.sh
+│   │   │       ├── sim2.sh
+│   │   │       └── simulate_barrel_distortion.sh
 │   │   ├── xsim.dir/
+│   │   │   └── xil_defaultlib/
 │   │   ├── hdmi_barrel_distortion_correction.bd.pdf
 │   │   └── hdmi_barrel_distortion_correction.xpr
 │   ├── vivado1/
 │   │   ├── hdmi_barrel_distortion_correction.cache/
+│   │   │   ├── compile_simlib/
+│   │   │   │   ├── activehdl/
+│   │   │   │   ├── ies/
+│   │   │   │   ├── modelsim/
+│   │   │   │   ├── questa/
+│   │   │   │   ├── riviera/
+│   │   │   │   ├── vcs/
+│   │   │   │   └── xcelium/
+│   │   │   ├── ip/
+│   │   │   │   └── 2017.4/
+│   │   │   └── wt/
+│   │   │       ├── gui_handlers.wdf
+│   │   │       ├── java_command_handlers.wdf
+│   │   │       ├── project.wpc
+│   │   │       ├── synthesis.wdf
+│   │   │       ├── synthesis_details.wdf
+│   │   │       ├── webtalk_pa.xml
+│   │   │       └── xsim.wdf
 │   │   ├── hdmi_barrel_distortion_correction.hw/
+│   │   │   ├── hw_1/
+│   │   │   │   ├── wave/
+│   │   │   │   └── hw.xml
+│   │   │   └── hdmi_barrel_distortion_correction.lpr
 │   │   ├── hdmi_barrel_distortion_correction.ip_user_files/
+│   │   │   ├── bd/
+│   │   │   │   └── bd/
+│   │   │   ├── mem_init_files/
+│   │   │   │   ├── dgl_1080p_cea.data
+│   │   │   │   ├── dgl_1280_1024_cea.data
+│   │   │   │   └── dgl_720p_cea.data
+│   │   │   └── README.txt
 │   │   ├── hdmi_barrel_distortion_correction.runs/
+│   │   │   ├── bd_clk_wiz_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_clk_wiz_0_0.dcp
+│   │   │   │   ├── bd_clk_wiz_0_0.tcl
+│   │   │   │   ├── bd_clk_wiz_0_0.vds
+│   │   │   │   ├── bd_clk_wiz_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_clk_wiz_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_dvi2rgb_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_dvi2rgb_0_0.dcp
+│   │   │   │   ├── bd_dvi2rgb_0_0.tcl
+│   │   │   │   ├── bd_dvi2rgb_0_0.vds
+│   │   │   │   ├── bd_dvi2rgb_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_dvi2rgb_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── fsm_encoding.os
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_rgb2dvi_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_rgb2dvi_0_0.dcp
+│   │   │   │   ├── bd_rgb2dvi_0_0.tcl
+│   │   │   │   ├── bd_rgb2dvi_0_0.vds
+│   │   │   │   ├── bd_rgb2dvi_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_rgb2dvi_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_v_axi4s_vid_out_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0.dcp
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0.tcl
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0.vds
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── fsm_encoding.os
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_v_tc_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_v_tc_0_0.dcp
+│   │   │   │   ├── bd_v_tc_0_0.tcl
+│   │   │   │   ├── bd_v_tc_0_0.vds
+│   │   │   │   ├── bd_v_tc_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_v_tc_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_v_vid_in_axi4s_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0.dcp
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0.tcl
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0.vds
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── impl_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Implementation.queue.rst
+│   │   │   │   ├── .init_design.begin.rst
+│   │   │   │   ├── .init_design.end.rst
+│   │   │   │   ├── .opt_design.begin.rst
+│   │   │   │   ├── .opt_design.end.rst
+│   │   │   │   ├── .place_design.begin.rst
+│   │   │   │   ├── .place_design.end.rst
+│   │   │   │   ├── .route_design.begin.rst
+│   │   │   │   ├── .route_design.end.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── .write_bitstream.begin.rst
+│   │   │   │   ├── .write_bitstream.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_wrapper.bit
+│   │   │   │   ├── bd_wrapper.hwdef
+│   │   │   │   ├── bd_wrapper.sysdef
+│   │   │   │   ├── bd_wrapper.tcl
+│   │   │   │   ├── bd_wrapper.vdi
+│   │   │   │   ├── bd_wrapper_clock_utilization_routed.rpt
+│   │   │   │   ├── bd_wrapper_control_sets_placed.rpt
+│   │   │   │   ├── bd_wrapper_drc_opted.pb
+│   │   │   │   ├── bd_wrapper_drc_opted.rpt
+│   │   │   │   ├── bd_wrapper_drc_opted.rpx
+│   │   │   │   ├── bd_wrapper_drc_routed.pb
+│   │   │   │   ├── bd_wrapper_drc_routed.rpt
+│   │   │   │   ├── bd_wrapper_drc_routed.rpx
+│   │   │   │   ├── bd_wrapper_io_placed.rpt
+│   │   │   │   ├── bd_wrapper_methodology_drc_routed.pb
+│   │   │   │   ├── bd_wrapper_methodology_drc_routed.rpt
+│   │   │   │   ├── bd_wrapper_methodology_drc_routed.rpx
+│   │   │   │   ├── bd_wrapper_opt.dcp
+│   │   │   │   ├── bd_wrapper_placed.dcp
+│   │   │   │   ├── bd_wrapper_power_routed.rpt
+│   │   │   │   ├── bd_wrapper_power_routed.rpx
+│   │   │   │   ├── bd_wrapper_power_summary_routed.pb
+│   │   │   │   ├── bd_wrapper_route_status.pb
+│   │   │   │   ├── bd_wrapper_route_status.rpt
+│   │   │   │   ├── bd_wrapper_routed.dcp
+│   │   │   │   ├── bd_wrapper_timing_summary_routed.rpt
+│   │   │   │   ├── bd_wrapper_timing_summary_routed.rpx
+│   │   │   │   ├── bd_wrapper_utilization_placed.pb
+│   │   │   │   ├── bd_wrapper_utilization_placed.rpt
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── init_design.pb
+│   │   │   │   ├── opt_design.pb
+│   │   │   │   ├── place_design.pb
+│   │   │   │   ├── project.wdf
+│   │   │   │   ├── route_design.pb
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── usage_statistics_webtalk.html
+│   │   │   │   ├── usage_statistics_webtalk.xml
+│   │   │   │   ├── vivado.jou
+│   │   │   │   ├── vivado.pb
+│   │   │   │   └── write_bitstream.pb
+│   │   │   └── synth_1/
+│   │   │       ├── .Xil/
+│   │   │       ├── .Vivado_Synthesis.queue.rst
+│   │   │       ├── .vivado.begin.rst
+│   │   │       ├── .vivado.end.rst
+│   │   │       ├── ISEWrap.js
+│   │   │       ├── ISEWrap.sh
+│   │   │       ├── bd_wrapper.dcp
+│   │   │       ├── bd_wrapper.tcl
+│   │   │       ├── bd_wrapper.vds
+│   │   │       ├── bd_wrapper_utilization_synth.pb
+│   │   │       ├── bd_wrapper_utilization_synth.rpt
+│   │   │       ├── dont_touch.xdc
+│   │   │       ├── gen_run.xml
+│   │   │       ├── htr.txt
+│   │   │       ├── rundef.js
+│   │   │       ├── runme.bat
+│   │   │       ├── runme.log
+│   │   │       ├── runme.sh
+│   │   │       ├── vivado.jou
+│   │   │       └── vivado.pb
 │   │   ├── hdmi_barrel_distortion_correction.sim/
+│   │   │   └── sim_1/
+│   │   │       └── behav/
 │   │   ├── hdmi_barrel_distortion_correction.srcs/
+│   │   │   ├── constrs_1/
+│   │   │   └── sources_1/
+│   │   │       └── bd/
 │   │   ├── src/
+│   │   │   ├── constrs/
+│   │   │   │   └── top_bd_wrapper.xdc
+│   │   │   ├── rtl/
+│   │   │   │   ├── -/
+│   │   │   │   ├── barrel_distortion_correction.v
+│   │   │   │   ├── lut_create.py
+│   │   │   │   └── top_bd_wrapper.v
+│   │   │   └── tb/
+│   │   │       ├── -/
+│   │   │       ├── img/
+│   │   │       ├── img_in/
+│   │   │       ├── img_out/
+│   │   │       ├── sim_out/
+│   │   │       ├── barrel_distortion_correction_tb.v
+│   │   │       ├── image_to_raw.py
+│   │   │       ├── raw_to_image.py
+│   │   │       ├── sim.sh
+│   │   │       └── simulate_barrel_distortion.sh
 │   │   ├── xsim.dir/
+│   │   │   └── xil_defaultlib/
 │   │   ├── hdmi_barrel_distortion_correction.bd.pdf
 │   │   └── hdmi_barrel_distortion_correction.xpr
 │   ├── .clinerules
@@ -489,25 +2353,92 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 ├── barrel_distortion_correction1/
 │   ├── hls_brl_corr/
 │   │   ├── .apc/
+│   │   │   ├── .src/
+│   │   │   ├── .tb/
+│   │   │   └── autopilot.apfmapping
 │   │   ├── .settings/
+│   │   │   ├── hls_brl_corr1.Debug.launch
+│   │   │   ├── hls_brl_corr1.Release.launch
+│   │   │   └── language.settings.xml
 │   │   ├── sln1/
+│   │   │   ├── .autopilot/
+│   │   │   │   ├── db/
+│   │   │   │   └── .autopilot_exit
+│   │   │   ├── .tcls/
+│   │   │   ├── csim/
+│   │   │   │   ├── build/
+│   │   │   │   ├── report/
+│   │   │   │   └── .lst_opt.tcl
+│   │   │   ├── directives.tcl
+│   │   │   ├── script.tcl
+│   │   │   ├── sln1.aps
+│   │   │   ├── sln1.directive
+│   │   │   └── sln1.log
 │   │   ├── src/
+│   │   │   ├── brl_corr_hls.cpp
+│   │   │   ├── brl_corr_hls.h
+│   │   │   └── brl_corr_hls_tb.cpp
 │   │   ├── .cproject
 │   │   ├── .project
 │   │   └── .vivado_hls_log_all.xml
 │   └── hls_brl_corr0/
 │       ├── .apc/
+│       │   ├── .src/
+│       │   ├── .tb/
+│       │   └── autopilot.apfmapping
 │       ├── .settings/
+│       │   ├── hls_brl_corr.Debug.launch
+│       │   ├── hls_brl_corr.Release.launch
+│       │   └── language.settings.xml
 │       ├── sln1/
+│       │   ├── .tcls/
+│       │   ├── directives.tcl
+│       │   ├── script.tcl
+│       │   ├── sln1.aps
+│       │   └── sln1.directive
 │       ├── .cproject
 │       ├── .project
 │       └── vivado_hls.app
 ├── barrel_distortion_correction2/
 │   ├── hls_brl_corr/
 │   │   ├── .apc/
+│   │   │   ├── .src/
+│   │   │   ├── .tb/
+│   │   │   └── autopilot.apfmapping
 │   │   ├── .settings/
+│   │   │   ├── hls_brl_corr1.Debug.launch
+│   │   │   ├── hls_brl_corr1.Release.launch
+│   │   │   └── language.settings.xml
 │   │   ├── sln1/
+│   │   │   ├── .autopilot/
+│   │   │   │   ├── db/
+│   │   │   │   └── .autopilot_exit
+│   │   │   ├── .tcls/
+│   │   │   ├── csim/
+│   │   │   │   ├── build/
+│   │   │   │   ├── report/
+│   │   │   │   └── .lst_opt.tcl
+│   │   │   ├── directives.tcl
+│   │   │   ├── script.tcl
+│   │   │   ├── sln1.aps
+│   │   │   ├── sln1.directive
+│   │   │   └── sln1.log
 │   │   ├── src/
+│   │   │   ├── img_in/
+│   │   │   │   ├── img_128x100.png
+│   │   │   │   ├── img_128x100_0.png
+│   │   │   │   └── img_128x100_in.txt
+│   │   │   ├── img_out/
+│   │   │   │   ├── img_128x100.png
+│   │   │   │   ├── img_128x100_K1=+2.png
+│   │   │   │   ├── img_128x100_K1=-2.png
+│   │   │   │   ├── img_128x100_K1=0.5,-0.3.png
+│   │   │   │   ├── img_128x100_K1=0.5.png
+│   │   │   │   ├── img_128x100_out.txt
+│   │   │   │   └── img_128x100_out_K1=-2.txt
+│   │   │   ├── brl_corr_hls.cpp
+│   │   │   ├── brl_corr_hls.h
+│   │   │   └── brl_corr_hls_tb.cpp
 │   │   ├── .cproject
 │   │   ├── .gitignore
 │   │   ├── .project
@@ -515,9 +2446,23 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │   │   └── vivado_hls.app
 │   ├── hls_brl_corr1/
 │   │   ├── .apc/
+│   │   │   ├── .src/
+│   │   │   ├── .tb/
+│   │   │   └── autopilot.apfmapping
 │   │   ├── .settings/
+│   │   │   ├── hls_brl_corr1.Debug.launch
+│   │   │   ├── hls_brl_corr1.Release.launch
+│   │   │   └── language.settings.xml
 │   │   ├── sln1/
+│   │   │   ├── .tcls/
+│   │   │   ├── directives.tcl
+│   │   │   ├── script.tcl
+│   │   │   ├── sln1.aps
+│   │   │   └── sln1.directive
 │   │   ├── src/
+│   │   │   ├── brl_corr_hls.cpp
+│   │   │   ├── brl_corr_hls.h
+│   │   │   └── brl_corr_hls_tb.cpp
 │   │   ├── .cproject
 │   │   ├── .project
 │   │   └── vivado_hls.app
@@ -525,12 +2470,273 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 ├── brl_corr/
 │   ├── vivavdo/
 │   │   ├── brl_corr.cache/
+│   │   │   ├── compile_simlib/
+│   │   │   │   ├── activehdl/
+│   │   │   │   ├── ies/
+│   │   │   │   ├── modelsim/
+│   │   │   │   ├── questa/
+│   │   │   │   ├── riviera/
+│   │   │   │   ├── vcs/
+│   │   │   │   └── xcelium/
+│   │   │   └── wt/
+│   │   │       ├── gui_handlers.wdf
+│   │   │       ├── java_command_handlers.wdf
+│   │   │       ├── project.wpc
+│   │   │       ├── synthesis.wdf
+│   │   │       ├── synthesis_details.wdf
+│   │   │       ├── webtalk_pa.xml
+│   │   │       └── xsim.wdf
 │   │   ├── brl_corr.hw/
+│   │   │   ├── hw_1/
+│   │   │   │   ├── wave/
+│   │   │   │   └── hw.xml
+│   │   │   └── brl_corr.lpr
 │   │   ├── brl_corr.ip_user_files/
+│   │   │   ├── bd/
+│   │   │   │   └── bd/
+│   │   │   ├── mem_init_files/
+│   │   │   │   ├── dgl_1080p_cea.data
+│   │   │   │   ├── dgl_1280_1024_cea.data
+│   │   │   │   └── dgl_720p_cea.data
+│   │   │   └── README.txt
 │   │   ├── brl_corr.runs/
+│   │   │   ├── bd_clk_wiz_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_clk_wiz_0_0.dcp
+│   │   │   │   ├── bd_clk_wiz_0_0.tcl
+│   │   │   │   ├── bd_clk_wiz_0_0.vds
+│   │   │   │   ├── bd_clk_wiz_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_clk_wiz_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_dvi2rgb_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_dvi2rgb_0_0.dcp
+│   │   │   │   ├── bd_dvi2rgb_0_0.tcl
+│   │   │   │   ├── bd_dvi2rgb_0_0.vds
+│   │   │   │   ├── bd_dvi2rgb_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_dvi2rgb_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── fsm_encoding.os
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_rgb2dvi_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_rgb2dvi_0_0.dcp
+│   │   │   │   ├── bd_rgb2dvi_0_0.tcl
+│   │   │   │   ├── bd_rgb2dvi_0_0.vds
+│   │   │   │   ├── bd_rgb2dvi_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_rgb2dvi_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_v_axi4s_vid_out_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0.dcp
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0.tcl
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0.vds
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_v_axi4s_vid_out_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── fsm_encoding.os
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_v_tc_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_v_tc_0_0.dcp
+│   │   │   │   ├── bd_v_tc_0_0.tcl
+│   │   │   │   ├── bd_v_tc_0_0.vds
+│   │   │   │   ├── bd_v_tc_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_v_tc_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── bd_v_vid_in_axi4s_0_0_synth_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Synthesis.queue.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0.dcp
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0.tcl
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0.vds
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0_utilization_synth.pb
+│   │   │   │   ├── bd_v_vid_in_axi4s_0_0_utilization_synth.rpt
+│   │   │   │   ├── dont_touch.xdc
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── vivado.jou
+│   │   │   │   └── vivado.pb
+│   │   │   ├── impl_1/
+│   │   │   │   ├── .Xil/
+│   │   │   │   ├── .Vivado_Implementation.queue.rst
+│   │   │   │   ├── .init_design.begin.rst
+│   │   │   │   ├── .init_design.end.rst
+│   │   │   │   ├── .opt_design.begin.rst
+│   │   │   │   ├── .opt_design.end.rst
+│   │   │   │   ├── .place_design.begin.rst
+│   │   │   │   ├── .place_design.end.rst
+│   │   │   │   ├── .route_design.begin.rst
+│   │   │   │   ├── .route_design.end.rst
+│   │   │   │   ├── .vivado.begin.rst
+│   │   │   │   ├── .vivado.end.rst
+│   │   │   │   ├── .write_bitstream.begin.rst
+│   │   │   │   ├── .write_bitstream.end.rst
+│   │   │   │   ├── ISEWrap.js
+│   │   │   │   ├── ISEWrap.sh
+│   │   │   │   ├── bd_wrapper.bit
+│   │   │   │   ├── bd_wrapper.hwdef
+│   │   │   │   ├── bd_wrapper.sysdef
+│   │   │   │   ├── bd_wrapper.tcl
+│   │   │   │   ├── bd_wrapper.vdi
+│   │   │   │   ├── bd_wrapper_clock_utilization_routed.rpt
+│   │   │   │   ├── bd_wrapper_control_sets_placed.rpt
+│   │   │   │   ├── bd_wrapper_drc_opted.pb
+│   │   │   │   ├── bd_wrapper_drc_opted.rpt
+│   │   │   │   ├── bd_wrapper_drc_opted.rpx
+│   │   │   │   ├── bd_wrapper_drc_routed.pb
+│   │   │   │   ├── bd_wrapper_drc_routed.rpt
+│   │   │   │   ├── bd_wrapper_drc_routed.rpx
+│   │   │   │   ├── bd_wrapper_io_placed.rpt
+│   │   │   │   ├── bd_wrapper_methodology_drc_routed.pb
+│   │   │   │   ├── bd_wrapper_methodology_drc_routed.rpt
+│   │   │   │   ├── bd_wrapper_methodology_drc_routed.rpx
+│   │   │   │   ├── bd_wrapper_opt.dcp
+│   │   │   │   ├── bd_wrapper_placed.dcp
+│   │   │   │   ├── bd_wrapper_power_routed.rpt
+│   │   │   │   ├── bd_wrapper_power_routed.rpx
+│   │   │   │   ├── bd_wrapper_power_summary_routed.pb
+│   │   │   │   ├── bd_wrapper_route_status.pb
+│   │   │   │   ├── bd_wrapper_route_status.rpt
+│   │   │   │   ├── bd_wrapper_routed.dcp
+│   │   │   │   ├── bd_wrapper_timing_summary_routed.rpt
+│   │   │   │   ├── bd_wrapper_timing_summary_routed.rpx
+│   │   │   │   ├── bd_wrapper_utilization_placed.pb
+│   │   │   │   ├── bd_wrapper_utilization_placed.rpt
+│   │   │   │   ├── gen_run.xml
+│   │   │   │   ├── htr.txt
+│   │   │   │   ├── init_design.pb
+│   │   │   │   ├── opt_design.pb
+│   │   │   │   ├── place_design.pb
+│   │   │   │   ├── project.wdf
+│   │   │   │   ├── route_design.pb
+│   │   │   │   ├── rundef.js
+│   │   │   │   ├── runme.bat
+│   │   │   │   ├── runme.log
+│   │   │   │   ├── runme.sh
+│   │   │   │   ├── usage_statistics_webtalk.html
+│   │   │   │   ├── usage_statistics_webtalk.xml
+│   │   │   │   ├── vivado.jou
+│   │   │   │   ├── vivado.pb
+│   │   │   │   └── write_bitstream.pb
+│   │   │   └── synth_1/
+│   │   │       ├── .Xil/
+│   │   │       ├── .Vivado_Synthesis.queue.rst
+│   │   │       ├── .vivado.begin.rst
+│   │   │       ├── .vivado.end.rst
+│   │   │       ├── ISEWrap.js
+│   │   │       ├── ISEWrap.sh
+│   │   │       ├── bd_wrapper.dcp
+│   │   │       ├── bd_wrapper.tcl
+│   │   │       ├── bd_wrapper.vds
+│   │   │       ├── bd_wrapper_utilization_synth.pb
+│   │   │       ├── bd_wrapper_utilization_synth.rpt
+│   │   │       ├── dont_touch.xdc
+│   │   │       ├── gen_run.xml
+│   │   │       ├── htr.txt
+│   │   │       ├── rundef.js
+│   │   │       ├── runme.bat
+│   │   │       ├── runme.log
+│   │   │       ├── runme.sh
+│   │   │       ├── vivado.jou
+│   │   │       └── vivado.pb
 │   │   ├── brl_corr.sim/
+│   │   │   └── sim_1/
+│   │   │       └── behav/
 │   │   ├── brl_corr.srcs/
+│   │   │   └── sources_1/
+│   │   │       └── bd/
 │   │   ├── src/
+│   │   │   ├── constrs/
+│   │   │   │   └── top_bd_wrapper.xdc
+│   │   │   ├── rtl/
+│   │   │   │   ├── -/
+│   │   │   │   ├── brl_corr_coe_file/
+│   │   │   │   ├── brl_corr.v
+│   │   │   │   ├── gen_brl_corr_coe.py
+│   │   │   │   └── top_bd_wrapper.v
+│   │   │   └── tb/
+│   │   │       ├── -/
+│   │   │       ├── img/
+│   │   │       ├── img_in/
+│   │   │       ├── img_out/
+│   │   │       ├── sim_out/
+│   │   │       ├── brl_corr_tb.v
+│   │   │       ├── image_to_raw.py
+│   │   │       ├── raw_to_image.py
+│   │   │       ├── sim.sh
+│   │   │       └── simulate_barrel_distortion.sh
 │   │   └── brl_corr.xpr
 │   ├── .clinerules
 │   ├── .gitignore
@@ -539,8 +2745,19 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 ├── hls/
 │   ├── hls_barrel_correction/
 │   │   ├── .apc/
+│   │   │   ├── .src/
+│   │   │   ├── .tb/
+│   │   │   └── autopilot.apfmapping
 │   │   ├── .settings/
+│   │   │   ├── hls_barrel_correction.Debug.launch
+│   │   │   ├── hls_barrel_correction.Release.launch
+│   │   │   └── language.settings.xml
 │   │   ├── sln1/
+│   │   │   ├── .tcls/
+│   │   │   ├── directives.tcl
+│   │   │   ├── script.tcl
+│   │   │   ├── sln1.aps
+│   │   │   └── sln1.directive
 │   │   ├── .cproject
 │   │   ├── .project
 │   │   └── vivado_hls.app
@@ -551,21 +2768,35 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 ├── pynq_dpu/
 │   ├── pynq_dpu.cache/
 │   │   ├── ip/
+│   │   │   └── 2024.2/
 │   │   └── wt/
+│   │       └── project.wpc
 │   ├── pynq_dpu.gen/
 │   │   └── sources_1/
+│   │       └── bd/
+│   │           └── design_1/
 │   ├── pynq_dpu.hw/
 │   │   └── pynq_dpu.lpr
 │   ├── pynq_dpu.ip_user_files/
 │   ├── pynq_dpu.sim/
 │   ├── pynq_dpu.srcs/
 │   │   └── sources_1/
+│   │       └── bd/
+│   │           ├── bd/
+│   │           └── design_1/
 │   └── pynq_dpu.xpr
 ├── pynqz2_dpu140/
 │   ├── apps/
 │   │   ├── image/
+│   │   │   ├── coco_test.jpg
+│   │   │   └── resize.png
 │   │   ├── model/
+│   │   │   └── dpu_yolo.elf
 │   │   ├── src/
+│   │   │   ├── image.h
+│   │   │   ├── main.cpp
+│   │   │   ├── time_helper.hpp
+│   │   │   └── transform.h
 │   │   └── Makefile
 │   ├── images/
 │   │   ├── 2019-09-03_23h20_33.png
@@ -608,19 +2839,108 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │   │   └── IMG_7522.jpg
 │   ├── petalinux/
 │   │   ├── meta-user/
+│   │   │   ├── recipes-apps/
+│   │   │   │   ├── autostart/
+│   │   │   │   ├── dnndk/
+│   │   │   │   ├── gpio-demo/
+│   │   │   │   └── peekpoke/
+│   │   │   ├── recipes-core/
+│   │   │   │   └── base-files/
+│   │   │   └── recipes-modules/
+│   │   │       └── dpu/
 │   │   └── pynq_dpu.bsp
 │   ├── vivado/
 │   │   ├── dpu_ip_v140/
+│   │   │   └── dpu/
+│   │   │       ├── bd/
+│   │   │       ├── doc/
+│   │   │       ├── gui/
+│   │   │       ├── hdl/
+│   │   │       ├── inc/
+│   │   │       ├── ttcl/
+│   │   │       ├── xci/
+│   │   │       ├── xgui/
+│   │   │       └── component.xml
 │   │   ├── design_1-.tcl
 │   │   └── design_1.tcl
 │   ├── zynq7020_dnndk_v3.0/
 │   │   ├── pkgs/
+│   │   │   ├── bin/
+│   │   │   │   ├── dexplorer
+│   │   │   │   └── dsight
+│   │   │   ├── driver/
+│   │   │   │   ├── Makefile
+│   │   │   │   ├── dpucore.c
+│   │   │   │   ├── dpucore.h
+│   │   │   │   ├── dpudef.h
+│   │   │   │   ├── dpuext.c
+│   │   │   │   └── dpuext.h
+│   │   │   ├── include/
+│   │   │   │   ├── dnndk.h
+│   │   │   │   ├── dputils.h
+│   │   │   │   └── n2cube.h
+│   │   │   └── lib/
+│   │   │       ├── echarts.js
+│   │   │       ├── libdputils.so.3.1
+│   │   │       ├── libdputils.so.3.3
+│   │   │       ├── libdsight.a
+│   │   │       ├── libhineon.so
+│   │   │       └── libn2cube.so
 │   │   ├── install.sh
 │   │   └── install.sh.orig
 │   └── README.md
 ├── vitis/
 │   ├── .metadata/
 │   │   ├── .plugins/
+│   │   │   ├── com.xilinx.sdsoc.ui/
+│   │   │   │   └── dialog_settings.xml
+│   │   │   ├── com.xilinx.sdx.core/
+│   │   │   │   └── dialog_settings.xml
+│   │   │   ├── com.xilinx.sdx.npw/
+│   │   │   │   └── dialog_settings.xml
+│   │   │   ├── org.eclipse.cdt.core/
+│   │   │   │   └── .log
+│   │   │   ├── org.eclipse.cdt.make.core/
+│   │   │   │   ├── specs.c
+│   │   │   │   └── specs.cpp
+│   │   │   ├── org.eclipse.core.resources/
+│   │   │   │   ├── .history/
+│   │   │   │   ├── .projects/
+│   │   │   │   ├── .root/
+│   │   │   │   └── .safetable/
+│   │   │   ├── org.eclipse.core.runtime/
+│   │   │   │   └── .settings/
+│   │   │   ├── org.eclipse.debug.core/
+│   │   │   ├── org.eclipse.e4.workbench/
+│   │   │   │   └── workbench.xmi
+│   │   │   ├── org.eclipse.emf.ecore/
+│   │   │   ├── org.eclipse.jdt.core/
+│   │   │   │   ├── assumedExternalFilesCache
+│   │   │   │   ├── externalFilesCache
+│   │   │   │   ├── nonChainingJarsCache
+│   │   │   │   └── variablesAndContainers.dat
+│   │   │   ├── org.eclipse.jdt.ui/
+│   │   │   │   ├── OpenTypeHistory.xml
+│   │   │   │   └── QualifiedTypeNameHistory.xml
+│   │   │   ├── org.eclipse.pde.core/
+│   │   │   │   ├── .cache/
+│   │   │   │   └── .p2/
+│   │   │   ├── org.eclipse.rse.core/
+│   │   │   │   ├── initializerMarks/
+│   │   │   │   ├── profiles/
+│   │   │   │   └── .log
+│   │   │   ├── org.eclipse.rse.ui/
+│   │   │   │   └── .log
+│   │   │   ├── org.eclipse.tcf/
+│   │   │   │   └── certificates/
+│   │   │   ├── org.eclipse.tcf.debug/
+│   │   │   │   └── peers.ini
+│   │   │   ├── org.eclipse.tm.terminal.view.ui/
+│   │   │   │   └── .executables/
+│   │   │   ├── org.eclipse.tracecompass.tmf.analysis.xml.core/
+│   │   │   │   └── xml_files/
+│   │   │   └── org.eclipse.ui.workbench/
+│   │   │       └── workingsets.xml
 │   │   ├── .lock
 │   │   ├── .log
 │   │   └── version.ini
@@ -631,35 +2951,823 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 ├── vivado-library/
 │   ├── if/
 │   │   ├── ZmodAWG_Calibration_v1_0/
+│   │   │   ├── ZmodAWG_Calibration.xml
+│   │   │   └── ZmodAWG_Calibration_rtl.xml
 │   │   ├── ZmodScope_Calibration_v1_0/
+│   │   │   ├── ZmodScope_Calibration.xml
+│   │   │   └── ZmodScope_Calibration_rtl.xml
 │   │   ├── pmod_v1_0/
+│   │   │   ├── pmod.xml
+│   │   │   └── pmod_rtl.xml
 │   │   └── tmds_v1_0/
+│   │       ├── tmds.xml
+│   │       └── tmds_rtl.xml
 │   ├── ip/
 │   │   ├── AXI_DPTI_1.0/
+│   │   │   ├── doc/
+│   │   │   │   ├── AXI DPTI.doc
+│   │   │   │   └── AXI DPTI.pdf
+│   │   │   ├── drivers/
+│   │   │   │   └── AXI_DPTI_v1_0/
+│   │   │   ├── src/
+│   │   │   │   ├── fifo_generator_dpti/
+│   │   │   │   ├── AXI_DPTI_ooc.xdc
+│   │   │   │   ├── AXI_DPTI_v1_0.vhd
+│   │   │   │   ├── AXI_DPTI_v1_0_AXI_LITE.vhd
+│   │   │   │   ├── AXI_S_To_DPTI_Converter.vhd
+│   │   │   │   ├── DPTI_To_AXI_S_Converter.vhd
+│   │   │   │   ├── HandshakeData.vhd
+│   │   │   │   ├── SyncAsync.vhd
+│   │   │   │   ├── SyncAsyncReset.vhd
+│   │   │   │   └── timing.xdc
+│   │   │   ├── xgui/
+│   │   │   │   ├── AXI_DPTI_v1_0.tcl
+│   │   │   │   └── AXI_DPTI_v1_1.tcl
+│   │   │   └── component.xml
 │   │   ├── MIPI_CSI_2_RX/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── docs/
+│   │   │   │   ├── mipi_csi_2_rx.docx
+│   │   │   │   └── mipi_csi_2_rx.pdf
+│   │   │   ├── drivers/
+│   │   │   │   └── MIPI_CSI_2_RX_v1_0/
+│   │   │   ├── example_designs/
+│   │   │   │   ├── bfm_design/
+│   │   │   │   └── debug_hw_design/
+│   │   │   ├── hdl/
+│   │   │   │   ├── cdc_fifo/
+│   │   │   │   ├── ila_rxclk/
+│   │   │   │   ├── ila_rxclk_lane/
+│   │   │   │   ├── ila_vidclk/
+│   │   │   │   ├── line_buffer/
+│   │   │   │   ├── CRC16_behavioral.vhd
+│   │   │   │   ├── DebugLib.vhd
+│   │   │   │   ├── ECC.vhd
+│   │   │   │   ├── LLP.vhd
+│   │   │   │   ├── LM.vhd
+│   │   │   │   ├── MIPI_CSI2_Rx.vhd
+│   │   │   │   ├── MIPI_CSI2_RxTop.vhd
+│   │   │   │   ├── MIPI_CSI_2_RX_v1_0_S_AXI_LITE.vhd
+│   │   │   │   ├── SimpleFIFO.vhd
+│   │   │   │   ├── SyncAsync.vhd
+│   │   │   │   ├── SyncAsyncReset.vhd
+│   │   │   │   ├── mipi_csi2_rx.xdc
+│   │   │   │   ├── mipi_csi2_rx_clocks.xdc
+│   │   │   │   └── mipi_csi2_rx_ooc.xdc
+│   │   │   ├── tb/
+│   │   │   │   ├── mypkg.vhd
+│   │   │   │   ├── tb_ECC.vhd
+│   │   │   │   ├── tb_LLP.vhd
+│   │   │   │   ├── tb_LM.vhd
+│   │   │   │   ├── tb_MIPI_CSI2.vhd
+│   │   │   │   └── tb_mipi_csi2_rx.wcfg
+│   │   │   ├── xgui/
+│   │   │   │   ├── MIPI_CSI_2_RX_v1_0.tcl
+│   │   │   │   ├── MIPI_CSI_2_RX_v1_1.tcl
+│   │   │   │   └── MIPI_CSI_2_RX_v1_2.tcl
+│   │   │   ├── .gitignore
+│   │   │   └── component.xml
 │   │   ├── MIPI_D_PHY_RX/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── docs/
+│   │   │   │   ├── mipi_d_phy_rx.docx
+│   │   │   │   └── mipi_d_phy_rx.pdf
+│   │   │   ├── drivers/
+│   │   │   │   └── MIPI_D_PHY_RX_v1_0/
+│   │   │   ├── example_designs/
+│   │   │   │   ├── bfm_design/
+│   │   │   │   └── debug_hw_design/
+│   │   │   ├── gui/
+│   │   │   │   └── MIPI_D_PHY_RX_v1_2.gtcl
+│   │   │   ├── hdl/
+│   │   │   │   ├── ila_scnn_refclk/
+│   │   │   │   ├── ila_sfen_refclk/
+│   │   │   │   ├── ila_sfen_rxclk/
+│   │   │   │   ├── DPHY_LaneSCNN.vhd
+│   │   │   │   ├── DPHY_LaneSFEN.vhd
+│   │   │   │   ├── DPHY_Pkg.vhd
+│   │   │   │   ├── DebugLib.vhd
+│   │   │   │   ├── GlitchFilter.vhd
+│   │   │   │   ├── HS_Clocking.vhd
+│   │   │   │   ├── HS_Deserializer.vhd
+│   │   │   │   ├── InputBuffer.vhd
+│   │   │   │   ├── MIPI_DPHY_Receiver.vhd
+│   │   │   │   ├── MIPI_DPHY_Receiver.xdc
+│   │   │   │   ├── MIPI_DPHY_Receiver_clocks.xdc
+│   │   │   │   ├── MIPI_DPHY_Receiver_ooc.xdc
+│   │   │   │   ├── S_AXI_Lite.vhd
+│   │   │   │   ├── SyncAsync.vhd
+│   │   │   │   └── SyncAsyncReset.vhd
+│   │   │   ├── tb/
+│   │   │   │   ├── MIPI_DPHY_Receiver_behav.wcfg
+│   │   │   │   ├── tb_DPHY_LaneSFEN.vhd
+│   │   │   │   └── tb_MIPI_DPHY_Receiver.vhd
+│   │   │   ├── xgui/
+│   │   │   │   ├── MIPI_D_PHY_RX_v1_0.tcl
+│   │   │   │   ├── MIPI_D_PHY_RX_v1_1.tcl
+│   │   │   │   ├── MIPI_D_PHY_RX_v1_2.tcl
+│   │   │   │   └── MIPI_D_PHY_RX_v1_3.tcl
+│   │   │   ├── .gitignore
+│   │   │   └── component.xml
 │   │   ├── MotorFeedback_1.0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── MotorFeedback_v1_0/
+│   │   │   ├── hdl/
+│   │   │   │   ├── MotorFeedback_v1_0.v
+│   │   │   │   ├── MotorFeedback_v1_0_S00_AXI.v
+│   │   │   │   ├── posCounter.v
+│   │   │   │   └── posManager.v
+│   │   │   ├── xgui/
+│   │   │   │   └── MotorFeedback_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── PWM_1.0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── PWM_v1_0/
+│   │   │   ├── hdl/
+│   │   │   │   ├── PWM_v1_0.v
+│   │   │   │   └── PWM_v1_0_PWM_AXI.v
+│   │   │   ├── xgui/
+│   │   │   │   └── PWM_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── PWM_2.0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── PWM_v1_0/
+│   │   │   ├── hdl/
+│   │   │   │   ├── PWM_AXI.sv
+│   │   │   │   └── PWM_v2_0.sv
+│   │   │   ├── xgui/
+│   │   │   │   ├── PWM_v1_0.tcl
+│   │   │   │   └── PWM_v2_0.tcl
+│   │   │   └── component.xml
 │   │   ├── PWM_Analyzer_1.0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── PWM_Analyzer_v1_0/
+│   │   │   ├── hdl/
+│   │   │   │   ├── PWM_Analyzer_v1_0.v
+│   │   │   │   ├── PWM_Analyzer_v1_0_S00_AXI.v
+│   │   │   │   └── pulseLength.v
+│   │   │   ├── xgui/
+│   │   │   │   └── PWM_Analyzer_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── Pmods/
+│   │   │   ├── PmodACL2_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodACL_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodAD1_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── hdl/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodAD2_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodAD5_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodALS_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── ipshared/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodAMP2_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodAQS_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodBLE_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodBT2_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodCAN_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodCLS_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodCMPS2_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodCOLOR_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodDA1_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodDHB1_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodDPG1_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodENC_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodESP32_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodGPIO_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodGPS_v1_1/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodGYRO_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodHYGRO_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodJSTK2_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodJSTK_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodKYPD_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodMAXSONAR_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodMTDS_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodNAV_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodOLED_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodPIR_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodR2R_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodRTCC_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodSD_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodSF3_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodTC1_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodTMP3_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── PmodWIFI_v1_0/
+│   │   │   │   ├── drivers/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── Pmod_Bridge_v1_0/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   ├── Pmod_Bridge_v1_1/
+│   │   │   │   ├── gui/
+│   │   │   │   ├── src/
+│   │   │   │   ├── utils/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── .gitignore
+│   │   │   │   ├── README.md
+│   │   │   │   └── component.xml
+│   │   │   └── pmodOLEDrgb_v1_0/
+│   │   │       ├── bd/
+│   │   │       ├── drivers/
+│   │   │       ├── hdl/
+│   │   │       ├── ip/
+│   │   │       ├── utils/
+│   │   │       ├── xgui/
+│   │   │       ├── .gitignore
+│   │   │       ├── README.md
+│   │   │       └── component.xml
 │   │   ├── Sync_v1_0/
+│   │   │   ├── docs/
+│   │   │   │   ├── Sync_v1_0.docx
+│   │   │   │   └── Sync_v1_0.pdf
+│   │   │   ├── src/
+│   │   │   │   ├── Sync.vhd
+│   │   │   │   ├── Sync.xdc
+│   │   │   │   └── SyncAsync.vhd
+│   │   │   ├── xgui/
+│   │   │   │   └── Sync_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── Zmods/
+│   │   │   ├── ZmodAWGController/
+│   │   │   │   ├── constr/
+│   │   │   │   ├── docs/
+│   │   │   │   ├── src/
+│   │   │   │   ├── tb/
+│   │   │   │   ├── xgui/
+│   │   │   │   └── component.xml
+│   │   │   ├── ZmodDigitizerController/
+│   │   │   │   ├── docs/
+│   │   │   │   ├── gui/
+│   │   │   │   ├── src/
+│   │   │   │   ├── tb/
+│   │   │   │   ├── xgui/
+│   │   │   │   ├── ZmodDigitizer_Calib.xml
+│   │   │   │   ├── ZmodDigitizer_Calib_rtl.xml
+│   │   │   │   └── component.xml
+│   │   │   ├── ZmodSDRController/
+│   │   │   │   ├── docs/
+│   │   │   │   ├── gui/
+│   │   │   │   ├── src/
+│   │   │   │   ├── tb/
+│   │   │   │   ├── xgui/
+│   │   │   │   └── component.xml
+│   │   │   └── ZmodScopeController/
+│   │   │       ├── docs/
+│   │   │       ├── gui/
+│   │   │       ├── src/
+│   │   │       ├── tb/
+│   │   │       ├── xgui/
+│   │   │       └── component.xml
 │   │   ├── axi_dynclk/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── dynclk/
+│   │   │   ├── src/
+│   │   │   │   ├── SyncAsync.vhd
+│   │   │   │   ├── axi_dynclk.vhd
+│   │   │   │   ├── axi_dynclk.xdc
+│   │   │   │   ├── axi_dynclk_S00_AXI.vhd
+│   │   │   │   └── mmcme2_drp.v
+│   │   │   ├── xgui/
+│   │   │   │   └── axi_dynclk_v1_1.tcl
+│   │   │   └── component.xml
 │   │   ├── axi_i2s_adi_1.2/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── drivers/
+│   │   │   │   └── axi_i2s_adi_v1_0/
+│   │   │   ├── example_designs/
+│   │   │   │   ├── bfm_design/
+│   │   │   │   └── debug_hw_design/
+│   │   │   ├── hdl/
+│   │   │   │   ├── adi_common/
+│   │   │   │   ├── axi_i2s_adi_S_AXI.vhd
+│   │   │   │   ├── axi_i2s_adi_v1_2.vhd
+│   │   │   │   ├── fifo_synchronizer.vhd
+│   │   │   │   ├── i2s_clkgen.vhd
+│   │   │   │   ├── i2s_controller.vhd
+│   │   │   │   ├── i2s_rx.vhd
+│   │   │   │   └── i2s_tx.vhd
+│   │   │   ├── xgui/
+│   │   │   │   ├── axi_i2s_adi_v1_2.tcl
+│   │   │   │   └── axi_i2s_adi_v1_2.tcl~
+│   │   │   └── component.xml
 │   │   ├── axi_ps2_1.0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── doc/
+│   │   │   │   ├── AXI PS2.doc
+│   │   │   │   └── AXI PS2.pdf
+│   │   │   ├── drivers/
+│   │   │   │   └── axi_ps2_v1_0/
+│   │   │   ├── src/
+│   │   │   │   ├── Ps2Interface.vhd
+│   │   │   │   ├── Ps2InterfaceWrapper.vhd
+│   │   │   │   ├── SyncAsync.vhd
+│   │   │   │   ├── axi_ps2_v1_0.vhd
+│   │   │   │   ├── axi_ps2_v1_0_S_AXI.vhd
+│   │   │   │   └── fifo_generator_0.xci
+│   │   │   ├── xgui/
+│   │   │   │   └── axi_ps2_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── clock_forwarder/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── hdl/
+│   │   │   │   └── clock_forwarder.vhd
+│   │   │   ├── xgui/
+│   │   │   │   ├── clock_forwarder_v1_0.tcl
+│   │   │   │   └── clock_forwarder_v1_1.tcl
+│   │   │   └── component.xml
 │   │   ├── dvi2rgb/
+│   │   │   ├── docs/
+│   │   │   │   ├── Advantiv_DGL_1080P_CEA.dat
+│   │   │   │   ├── Advantiv_DGL_1280_1024_CEA.dat
+│   │   │   │   ├── Advantiv_DGL_720P_CEA.dat
+│   │   │   │   ├── dvi2rgb.docx
+│   │   │   │   └── dvi2rgb.pdf
+│   │   │   ├── gui/
+│   │   │   │   └── dvi2rgb_v1_0.gtcl
+│   │   │   ├── src/
+│   │   │   │   ├── ila_pixclk/
+│   │   │   │   ├── ila_refclk/
+│   │   │   │   ├── ChannelBond.vhd
+│   │   │   │   ├── DVI_Constants.vhd
+│   │   │   │   ├── EEPROM_8b.vhd
+│   │   │   │   ├── GlitchFilter.vhd
+│   │   │   │   ├── InputSERDES.vhd
+│   │   │   │   ├── PhaseAlign.vhd
+│   │   │   │   ├── ResyncToBUFG.vhd
+│   │   │   │   ├── SyncAsync.vhd
+│   │   │   │   ├── SyncAsyncReset.vhd
+│   │   │   │   ├── SyncBase.vhd
+│   │   │   │   ├── TMDS_Clocking.vhd
+│   │   │   │   ├── TMDS_Decoder.vhd
+│   │   │   │   ├── TWI_SlaveCtl.vhd
+│   │   │   │   ├── dgl_1080p_cea.data
+│   │   │   │   ├── dgl_1280_1024_cea.data
+│   │   │   │   ├── dgl_720p_cea.data
+│   │   │   │   ├── dvi2rgb.vhd
+│   │   │   │   ├── dvi2rgb.xdc
+│   │   │   │   ├── dvi2rgb_ooc.xdc
+│   │   │   │   └── ila_timing_workaround.xdc
+│   │   │   ├── xgui/
+│   │   │   │   ├── dvi2rgb_v1_3.tcl
+│   │   │   │   ├── dvi2rgb_v1_4.tcl
+│   │   │   │   ├── dvi2rgb_v1_5.tcl
+│   │   │   │   ├── dvi2rgb_v1_6.tcl
+│   │   │   │   ├── dvi2rgb_v1_7.tcl
+│   │   │   │   ├── dvi2rgb_v1_8.tcl
+│   │   │   │   ├── dvi2rgb_v1_9.tcl
+│   │   │   │   └── dvi2rgb_v2_0.tcl
+│   │   │   ├── .gitignore
+│   │   │   └── component.xml
 │   │   ├── hls_contrast_stretch_1_0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── constraints/
+│   │   │   │   └── hls_contrast_stretch_ooc.xdc
+│   │   │   ├── doc/
+│   │   │   │   ├── HLS_Contrast_Stretch_v1_0.docx
+│   │   │   │   ├── HLS_Contrast_Stretch_v1_0.pdf
+│   │   │   │   └── ReleaseNotes.txt
+│   │   │   ├── drivers/
+│   │   │   │   └── hls_contrast_stretch_v1_0/
+│   │   │   ├── hdl/
+│   │   │   │   ├── verilog/
+│   │   │   │   └── vhdl/
+│   │   │   ├── hls_src/
+│   │   │   │   ├── hls_contrast_strech.cpp
+│   │   │   │   ├── hls_contrast_strech.h
+│   │   │   │   ├── hls_contrast_strech_test.cpp
+│   │   │   │   └── rover.bmp
+│   │   │   ├── misc/
+│   │   │   │   └── logo.png
+│   │   │   ├── xgui/
+│   │   │   │   └── hls_contrast_stretch_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── hls_gamma_correction_1_0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── constraints/
+│   │   │   │   └── hls_gamma_correction_ooc.xdc
+│   │   │   ├── doc/
+│   │   │   │   ├── HLS_Gamma Correction_v1_0.docx
+│   │   │   │   ├── HLS_Gamma Correction_v1_0.pdf
+│   │   │   │   └── ReleaseNotes.txt
+│   │   │   ├── drivers/
+│   │   │   │   └── hls_gamma_correction_v1_0/
+│   │   │   ├── hdl/
+│   │   │   │   ├── verilog/
+│   │   │   │   └── vhdl/
+│   │   │   ├── hls_src/
+│   │   │   │   ├── hls_gamma_correction.cpp
+│   │   │   │   ├── hls_gamma_correction.h
+│   │   │   │   ├── hls_gamma_correction_test.cpp
+│   │   │   │   └── rover.bmp
+│   │   │   ├── misc/
+│   │   │   │   └── logo.png
+│   │   │   ├── xgui/
+│   │   │   │   └── hls_gamma_correction_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── hls_saturation_enhance_1_0/
+│   │   │   ├── bd/
+│   │   │   │   └── bd.tcl
+│   │   │   ├── constraints/
+│   │   │   │   └── hls_saturation_enhance_ooc.xdc
+│   │   │   ├── doc/
+│   │   │   │   ├── HLS_Saturation_Enhancement_v1_0.docx
+│   │   │   │   ├── HLS_Saturation_Enhancement_v1_0.pdf
+│   │   │   │   └── ReleaseNotes.txt
+│   │   │   ├── drivers/
+│   │   │   │   └── hls_saturation_enhance_v1_0/
+│   │   │   ├── hdl/
+│   │   │   │   ├── verilog/
+│   │   │   │   └── vhdl/
+│   │   │   ├── hls_src/
+│   │   │   │   ├── hls_saturation_enhanche.cpp
+│   │   │   │   ├── hls_saturation_enhanche.h
+│   │   │   │   ├── hls_saturation_enhanche_test.cpp
+│   │   │   │   └── rover.bmp
+│   │   │   ├── misc/
+│   │   │   │   └── logo.png
+│   │   │   ├── xgui/
+│   │   │   │   └── hls_saturation_enhance_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── rgb2dpvid_v1_0/
+│   │   │   ├── docs/
+│   │   │   │   └── rgb2dpvid_v1_0.pdf
+│   │   │   ├── src/
+│   │   │   │   └── rgb2dpvid.vhd
+│   │   │   ├── xgui/
+│   │   │   │   └── rgb2dpvid_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── rgb2dvi/
+│   │   │   ├── docs/
+│   │   │   │   ├── rgb2dvi.docx
+│   │   │   │   └── rgb2dvi.pdf
+│   │   │   ├── src/
+│   │   │   │   ├── ClockGen.vhd
+│   │   │   │   ├── DVI_Constants.vhd
+│   │   │   │   ├── OutputSERDES.vhd
+│   │   │   │   ├── SyncAsync.vhd
+│   │   │   │   ├── SyncAsyncReset.vhd
+│   │   │   │   ├── TMDS_Encoder.vhd
+│   │   │   │   ├── rgb2dvi.vhd
+│   │   │   │   ├── rgb2dvi.xdc
+│   │   │   │   ├── rgb2dvi_clocks.xdc
+│   │   │   │   └── rgb2dvi_ooc.xdc
+│   │   │   ├── xgui/
+│   │   │   │   ├── rgb2dvi_v1_1.tcl
+│   │   │   │   ├── rgb2dvi_v1_2.tcl
+│   │   │   │   ├── rgb2dvi_v1_3.tcl
+│   │   │   │   └── rgb2dvi_v1_4.tcl
+│   │   │   └── component.xml
 │   │   ├── rgb2vga_v1_0/
+│   │   │   ├── docs/
+│   │   │   │   └── rgb2vga_v1_0.pdf
+│   │   │   ├── src/
+│   │   │   │   └── rgb2vga.vhd
+│   │   │   ├── xgui/
+│   │   │   │   └── rgb2vga_v1_0.tcl
+│   │   │   └── component.xml
 │   │   ├── usb2device_v1_0/
+│   │   │   ├── docs/
+│   │   │   │   ├── USB_Device.docx
+│   │   │   │   └── USB_Device.pdf
+│   │   │   ├── src/
+│   │   │   │   ├── TX_FIFO/
+│   │   │   │   ├── axi_dma_0/
+│   │   │   │   ├── blk_mem_gen_1/
+│   │   │   │   ├── fifo_generator_0/
+│   │   │   │   ├── fifo_generator_command/
+│   │   │   │   ├── fifo_generator_input_buffer/
+│   │   │   │   ├── Context.vhd
+│   │   │   │   ├── Context_to_Stream.vhd
+│   │   │   │   ├── Control_Registers.vhd
+│   │   │   │   ├── DMA_Operations.vhd
+│   │   │   │   ├── DMA_Transfer_Manager.vhd
+│   │   │   │   ├── FIFO.vhd
+│   │   │   │   ├── HS_Negotiation.vhd
+│   │   │   │   ├── HandshakeData.vhd
+│   │   │   │   ├── Protocol_Engine.vhd
+│   │   │   │   ├── Receive_Path.vhd
+│   │   │   │   ├── ResetBridge.vhd
+│   │   │   │   ├── SyncAsync.vhd
+│   │   │   │   ├── Transmit_Path.vhd
+│   │   │   │   ├── ULPI.vhd
+│   │   │   │   ├── axi_master.vhd
+│   │   │   │   ├── constrs_1.xdc
+│   │   │   │   ├── crc16.vhd
+│   │   │   │   ├── crc5.vhd
+│   │   │   │   ├── packet_decoder.vhd
+│   │   │   │   └── top.vhd
+│   │   │   ├── xgui/
+│   │   │   │   └── usb2device_v1_0.tcl
+│   │   │   ├── .gitignore
+│   │   │   └── component.xml
 │   │   └── video_scaler/
+│   │       ├── bd/
+│   │       │   └── bd.tcl
+│   │       ├── constraints/
+│   │       │   └── video_scaler_ooc.xdc
+│   │       ├── doc/
+│   │       │   ├── ReleaseNotes.txt
+│   │       │   ├── video_scaler.docx
+│   │       │   └── video_scaler.pdf
+│   │       ├── drivers/
+│   │       │   └── video_scaler_v1_0/
+│   │       ├── hdl/
+│   │       │   ├── verilog/
+│   │       │   └── vhdl/
+│   │       ├── hls_src/
+│   │       │   ├── test/
+│   │       │   ├── script.tcl
+│   │       │   ├── video_scaler.cpp
+│   │       │   ├── video_scaler.h
+│   │       │   └── video_scaler_test.cpp
+│   │       ├── misc/
+│   │       │   └── logo.png
+│   │       ├── xgui/
+│   │       │   └── video_scaler_v1_0.tcl
+│   │       └── component.xml
 │   ├── module/
 │   │   └── synchronizers/
+│   │       ├── example/
+│   │       │   ├── proj.tcl
+│   │       │   ├── top.vhd
+│   │       │   └── top.xdc
+│   │       ├── HandshakeData.vhd
+│   │       ├── ResetBridge.vhd
+│   │       ├── SyncAsync.vhd
+│   │       └── SyncBase.vhd
 │   ├── .gitignore
 │   ├── License.txt
 │   └── README.md
