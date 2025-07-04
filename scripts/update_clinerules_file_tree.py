@@ -1,6 +1,6 @@
 import os
 
-def generate_file_tree(startpath='.', depth=4, ignore_dirs=None):
+def generate_file_tree(startpath='.', depth=3, ignore_dirs=None):
     """
     Generates a string representation of the file tree with indentation lines.
     :param startpath: The directory to start the tree generation from.
@@ -38,7 +38,7 @@ def generate_file_tree(startpath='.', depth=4, ignore_dirs=None):
     _build_tree(startpath, 0)
     return "\n".join(tree_str)
 
-def update_clinerules_file(tree_depth=4):
+def update_clinerules_file(tree_depth=3):
     """
     Updates the .clinerules file with the current file tree.
     It tries to find the .clinerules file in the current directory and then in the parent directory.
@@ -74,7 +74,7 @@ def update_clinerules_file(tree_depth=4):
 
     # Generate the new file tree, starting from the parent directory of the script
     # This assumes the script is in 'scripts/' and .clinerules is in the parent
-    current_file_tree = generate_file_tree(startpath='..', depth=tree_depth)
+    current_file_tree = generate_file_tree(startpath='.', depth=tree_depth)
 
     # Find the end of the existing file structure (or end of file)
     end_index = start_index + 1
@@ -97,4 +97,4 @@ if __name__ == "__main__":
     # The script is in 'scripts/', so we need to go up one level to the root directory
     # to generate the tree for the entire project.
     # The .clinerules file is also in the parent directory.
-    update_clinerules_file(tree_depth=4)
+    update_clinerules_file(tree_depth=3)
