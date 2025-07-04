@@ -52,16 +52,37 @@ void barrel_correction_accel(
     }
 
     // Shift line_buffer and insert the new line
-    line_buffer.shift_up(1); // Shift all lines up by one
-    for (int x = 0; x < width; x++) {
+    #ifdef DEBUG
+      if (y == height / 2) { // Print for the entire line at y=height/2
+        printf("\n--- DEBUG: LINE BUFFER STATE BEFORE SHIFT (y=%d) ---\n", y);
+        for (int i = 0; i < 3; i++) { // Print first 3 lines
+          printf("  Line %d (before shift, x=%d): %d\n", i, width / 2, (int)line_buffer.getval(i, width / 2));
+        }
+      }
+    #endif
+
+    line_buffer.shift_pixels_up(1); // Shift all lines up by one
+
+    #ifdef DEBUG
+      if (y == height / 2) {
+        printf("\n--- DEBUG: LINE BUFFER STATE AFTER SHIFT (y=%d) ---\n", y);
+        for (int i = 0; i < 3; i++) { // Print first 3 lines
+          printf("  Line %d (after shift, x=%d): %d\n", i, width / 2, (int)line_buffer.getval(i, width / 2));
+        }
+      }
+    #endif
+
+    for (int x_inner = 0; x_inner < width; x_inner++) {
 #pragma HLS UNROLL
-      line_buffer.insert_bottom(current_line_buffer[x], x); // Insert the new line pixel by pixel at the bottom
+//      line_buffer.insert_pixel(current_line_buffer[x_inner], NUM_BUFFER_LINES - 1, x_inner); // Insert the new line pixel by pixel at the bottom
 
       #ifdef DEBUG
-        if (y == height / 2 && x == width / 2) {
+        if (y == height / 2 && x_inner == width / 2) {
           printf("\n--- DEBUG: LINE BUFFER INSERTION CHECK ---\n");
-          printf("  Value inserted into line buffer at (%d, %d): %d\n", x, y, (int)current_line_buffer[x]);
-          printf("  Value retrieved from line buffer (newest line): %d\n", (int)line_buffer.getval(NUM_BUFFER_LINES - 1, x));
+          printf("  Value inserted into line buffer at (%d, %d): %d\n", x_inner, y, (int)current_line_buffer[x_inner]);
+          printf("  Value retrieved from line buffer (newest line): %d\n", (int)line_buffer.getval(0, x_inner));
+          printf("  Value retrieved from line buffer (prev[-1] line): %d\n", (int)line_buffer.getval(1, x_inner));
+          printf("  Value retrieved from line buffer (prev[-2] line): %d\n", (int)line_buffer.getval(2, x_inner));
         }
       #endif
     }
@@ -111,13 +132,22 @@ void barrel_correction_accel(
             }
           #endif
 
-          int buf_y = y_floor - y + (NUM_BUFFER_LINES - 1);
-          bool buf_valid = (buf_y >= 0 && buf_y < NUM_BUFFER_LINES - 1);
+          // Calculate line buffer indices
+          // line_buffer.getval(0, x) is the newest line (current 'y')
+          // line_buffer.getval(i, x) is line 'y-i'
+          // We need y_floor and y_floor + 1 from the original image
+          // Index for y_floor: y - y_floor
+          // Index for y_floor + 1: y - (y_floor + 1)
+          int idx_y_floor     = y - y_floor;
+          int idx_y_floor_plus1 = y - (y_floor + 1);
+
+          // Check if both required lines are within the buffer bounds
+          bool buf_valid = (idx_y_floor_plus1 >= 0 && idx_y_floor < NUM_BUFFER_LINES);
 
           #ifdef DEBUG
             if (y_out == height / 2 && x == width / 2) {
               printf("\n--- DEBUG: BUFFER VALIDITY ---\n");
-              printf("  buf_y: %d, buf_valid: %s\n", buf_y, buf_valid ? "TRUE" : "FALSE");
+              printf("  idx_y_floor: %d, idx_y_floor_plus1: %d, buf_valid: %s\n", idx_y_floor, idx_y_floor_plus1, buf_valid ? "TRUE" : "FALSE");
             }
           #endif
 
@@ -132,10 +162,10 @@ void barrel_correction_accel(
               }
             #endif
 
-            pixel_t p00 = line_buffer.getval(buf_y,     x_floor);
-            pixel_t p10 = line_buffer.getval(buf_y,     x_floor + 1);
-            pixel_t p01 = line_buffer.getval(buf_y + 1, x_floor);
-            pixel_t p11 = line_buffer.getval(buf_y + 1, x_floor + 1);
+            pixel_t p00 = line_buffer.getval(idx_y_floor,     x_floor);
+            pixel_t p10 = line_buffer.getval(idx_y_floor,     x_floor + 1);
+            pixel_t p01 = line_buffer.getval(idx_y_floor_plus1, x_floor);
+            pixel_t p11 = line_buffer.getval(idx_y_floor_plus1, x_floor + 1);
 
             CORD_FP interp_val = p00*(1-dx)*(1-dy) + p10*dx*(1-dy) + p01*(1-dx)*dy + p11*dx*dy;
             output_pixel = interp_val.to_uint();
@@ -145,20 +175,20 @@ void barrel_correction_accel(
               if (y_out == height / 2 && x == width / 2) {
                 printf("\n--- DEBUG: CENTER PIXEL (LOGIC) ---\n");
                 printf("  in_bounds check: PASSED\n");
-                printf("  buf_y check: PASSED (buf_y = %d)\n", buf_y);
+                printf("  buf_y check: PASSED (idx_y_floor = %d, idx_y_floor_plus1 = %d)\n", idx_y_floor, idx_y_floor_plus1);
                 printf("  Original pixel values: p00=%d, p10=%d, p01=%d, p11=%d\n", (int)p00, (int)p10, (int)p01, (int)p11);
                 printf("  Interpolated value: %f\n", (float)interp_val);
                 printf("  Final output_pixel value: %d\n", (int)output_pixel);
               }
             #endif
           }
-          #ifdef DEBUG
-          else if (y_out == height / 2 && x == width / 2) {
-            printf("\n--- DEBUG: CENTER PIXEL (LOGIC) ---\n");
-            printf("  in_bounds check: PASSED\n");
-            printf("  buf_y check: FAILED (buf_y = %d)\n", buf_y);
-          }
-          #endif
+//          #ifdef DEBUG
+//          else if (y_out == height / 2 && x == width / 2) {
+//            printf("\n--- DEBUG: CENTER PIXEL (LOGIC) ---\n");
+//            printf("  in_bounds check: PASSED\n");
+//            printf("  buf_y check: FAILED (buf_y = %d)\n", buf_y);
+//          }
+//          #endif
         }
         #ifdef DEBUG
         else if (y_out == height / 2 && x == width / 2) {
@@ -183,7 +213,7 @@ void barrel_correction_accel(
       }
     }
   }
-}
+} // Closing brace for barrel_correction_accel
 
 // ===================================================================
 //                  SIMULATION WRAPPER (Unchanged)
