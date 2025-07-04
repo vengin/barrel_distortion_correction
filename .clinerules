@@ -78,11 +78,130 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 - **Simulation of AXI Interfaces**: Use Vivado's AXI protocol checker to ensure your AXI transactions are correct. Perform simulations to verify that the data transfer mechanism works under different scenarios and with different traffic loads.
 - **Real-Time Debugging with ILA**: When debugging in real hardware, use Vivado's Integrated Logic Analyzer (ILA) to capture AXI transactions in real time. This helps verify the correct implementation of the AXI protocol and DMA transfers.
 
-----
+│----
 
 # Curent File Structure
-D:/work/vivado/pynq/barrel_distortion_correction/scripts
-└──update_clinerules_file_tree.py
+D:/work/vivado/pynq/barrel_distortion_correction
+├──-
+│   ├──run_xsim_in_new_msys.sh
+│   ├──setup_vivado_git_bash.sh
+│   ├──setup_vivado_msys_fixed.sh
+│   └──temp_setup.sh
+├──hdmi_io
+│   └──hdmi_io.cache
+├──hls
+│   ├──brl_corr
+│   └──vivado_hls.log
+├──hls_brl_corr
+│   ├──.apc
+│   ├──.settings
+│   ├──sln1
+│   ├──src
+│   ├──.cproject
+│   ├──.project
+│   ├──.vivado_hls_log_all.xml
+│   ├──run_csim.tcl
+│   ├──sim_csim.sh
+│   └──vivado_hls.app
+├──hls_brl_corr0
+│   ├──.apc
+│   ├──.settings
+│   ├──bak1
+│   ├──img_in
+│   ├──img_out
+│   ├──sln1
+│   ├──src
+│   ├──.cproject
+│   ├──.project
+│   ├──.vivado_hls_log_all.xml
+│   ├──run_csim.tcl
+│   ├──sim_csim.sh
+│   ├──vivado_hls.app
+│   └──vivado_hls.log
+├──hls_brl_corr1
+│   ├──.apc
+│   ├──.settings
+│   ├──hls_brl_corr1
+│   ├──sln1
+│   ├──src
+│   ├──.cproject
+│   ├──.project
+│   ├──.vivado_hls_log_all.xml
+│   ├──run_csim.tcl
+│   ├──sim_csim-.sh
+│   ├──sim_csim.sh
+│   └──vivado_hls.app
+├──hls_brl_corr2
+│   ├──.apc
+│   ├──.settings
+│   ├──sln1
+│   ├──src
+│   ├──.cproject
+│   ├──.project
+│   └──.vivado_hls_log_all.xml
+├──hls_brl_corr2023
+│   ├──.apc
+│   ├──.settings
+│   ├──sln1
+│   ├──src
+│   ├──.cproject
+│   ├──.project
+│   ├──.vitis_hls_log_all.xml
+│   └──hls.app
+├──hls_brl_corr3
+│   ├──.apc
+│   ├──.settings
+│   ├──sln1
+│   ├──src
+│   ├──.cproject
+│   ├──.gitignore
+│   ├──.project
+│   ├──.vivado_hls_log_all.xml
+│   └──vivado_hls.app
+├──scripts
+│   └──update_clinerules_file_tree.py
+├──vivado
+│   ├──.Xiltemp
+│   ├──hdmi_barrel_distortion_correction.cache
+│   ├──hdmi_barrel_distortion_correction.hw
+│   ├──hdmi_barrel_distortion_correction.ip_user_files
+│   ├──hdmi_barrel_distortion_correction.runs
+│   ├──hdmi_barrel_distortion_correction.sim
+│   ├──hdmi_barrel_distortion_correction.srcs
+│   ├──src
+│   ├──xsim.dir
+│   ├──hdmi_barrel_distortion_correction.bd.pdf
+│   └──hdmi_barrel_distortion_correction.xpr
+├──vivado1
+│   ├──hdmi_barrel_distortion_correction.cache
+│   ├──hdmi_barrel_distortion_correction.hw
+│   ├──hdmi_barrel_distortion_correction.ip_user_files
+│   ├──hdmi_barrel_distortion_correction.runs
+│   ├──hdmi_barrel_distortion_correction.sim
+│   ├──hdmi_barrel_distortion_correction.srcs
+│   ├──src
+│   ├──xsim.dir
+│   ├──hdmi_barrel_distortion_correction.bd.pdf
+│   └──hdmi_barrel_distortion_correction.xpr
+├──.clinerules
+├──.clinerules-
+├──.gitignore
+├──1.md
+├──1.txt
+├──1a.md
+├──1a.txt
+├──2.md
+├──README.md
+├──compile_rtl_xvlog.sh
+├──hls_brl_corr1.zip
+├──hls_brl_corr_src_brl_corr_hls.cpp
+├──image_to_raw.py
+├──raw_to_image.py
+├──run.tx
+├──run_vivado_xsim.sh
+├──setup_vivado_git_bash.sh
+├──symbols.txt
+└──vivado_hls.log
 
 usr@DESKTOP-OIK79P6:/mnt/c$ tree -L 1
 .

@@ -47,8 +47,7 @@ def update_clinerules_file(tree_depth=2):
     It tries to find the .clinerules file in the current directory and then in the parent directory.
     :param tree_depth: The depth for the generated file tree.
     """
-    #possible_paths = ['.clinerules', '../.clinerules']
-    possible_paths = ['1.txt', '1.txt']
+    possible_paths = ['.clinerules', '../.clinerules']
     clinerules_path = None
     content = None
 
