@@ -1,6 +1,6 @@
 import os
 
-def generate_file_tree(startpath='.', depth=3, ignore_dirs=None):
+def generate_file_tree(startpath='.', depth=4, ignore_dirs=None):
     """
     Generates a string representation of the file tree with indentation lines.
     :param startpath: The directory to start the tree generation from.
@@ -12,6 +12,10 @@ def generate_file_tree(startpath='.', depth=3, ignore_dirs=None):
         ignore_dirs = ['.git', '.vscode', '__pycache__']
 
     tree_str = []
+
+    # Get the absolute path of the starting directory
+    abs_startpath = os.path.abspath(startpath)
+    tree_str.append(abs_startpath.replace('\\', '/')) # Use forward slashes for consistency
 
     def _build_tree(current_dir, current_depth, prefix=""):
         if current_depth > depth:
@@ -26,19 +30,18 @@ def generate_file_tree(startpath='.', depth=3, ignore_dirs=None):
             is_last = (i == len(dirs) + len(files) - 1)
 
             if os.path.isdir(path):
-                connector = "└── " if is_last else "├── "
-                tree_str.append(f"{prefix}{connector}{item}/")
+                connector = "└──" if is_last else "├──"
+                tree_str.append(f"{prefix}{connector}{item}") # Removed trailing slash and space
                 new_prefix = prefix + ("    " if is_last else "│   ")
                 _build_tree(path, current_depth + 1, new_prefix)
             else:
-                connector = "└── " if is_last else "├── "
-                tree_str.append(f"{prefix}{connector}{item}")
+                connector = "└──" if is_last else "├──"
+                tree_str.append(f"{prefix}{connector}{item}") # Removed space
 
-    tree_str.append(".") # Start with the current directory marker
     _build_tree(startpath, 0)
     return "\n".join(tree_str)
 
-def update_clinerules_file(tree_depth=3):
+def update_clinerules_file(tree_depth=2):
     """
     Updates the .clinerules file with the current file tree.
     It tries to find the .clinerules file in the current directory and then in the parent directory.
@@ -72,8 +75,7 @@ def update_clinerules_file(tree_depth=3):
         print(f"Error: Start marker '{start_marker.strip()}' not found in {clinerules_path}")
         return
 
-    # Generate the new file tree, starting from the parent directory of the script
-    # This assumes the script is in 'scripts/' and .clinerules is in the parent
+    # Generate the new file tree, starting from the project root (two levels up from scripts/)
     current_file_tree = generate_file_tree(startpath='.', depth=tree_depth)
 
     # Find the end of the existing file structure (or end of file)
@@ -97,4 +99,4 @@ if __name__ == "__main__":
     # The script is in 'scripts/', so we need to go up one level to the root directory
     # to generate the tree for the entire project.
     # The .clinerules file is also in the parent directory.
-    update_clinerules_file(tree_depth=3)
+    update_clinerules_file(tree_depth=1)
