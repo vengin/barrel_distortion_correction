@@ -85,7 +85,7 @@ def update_clinerules_file(tree_depth=2):
 
     # Reconstruct the content
     new_content = content[:start_index + 1] # Keep everything before and including the marker
-    new_content.append(current_file_tree + "\n") # Add the new tree
+    new_content.append("```\n" + current_file_tree + "\n```\n") # Add the new tree wrapped in backticks
     new_content.extend(content[end_index:]) # Add everything after the old tree
 
     try:

@@ -81,6 +81,7 @@ You are an expert FPGA and embedded engineer, proficient in VHDL, Verilog, Syste
 │----
 
 # Curent File Structure
+```
 D:/work/vivado/pynq/barrel_distortion_correction
 ├──-
 │   ├──run_xsim_in_new_msys.sh
@@ -184,13 +185,7 @@ D:/work/vivado/pynq/barrel_distortion_correction
 │   ├──hdmi_barrel_distortion_correction.bd.pdf
 │   └──hdmi_barrel_distortion_correction.xpr
 ├──.clinerules
-├──.clinerules-
 ├──.gitignore
-├──1.md
-├──1.txt
-├──1a.md
-├──1a.txt
-├──2.md
 ├──README.md
 ├──compile_rtl_xvlog.sh
 ├──hls_brl_corr1.zip
@@ -202,56 +197,4 @@ D:/work/vivado/pynq/barrel_distortion_correction
 ├──setup_vivado_git_bash.sh
 ├──symbols.txt
 └──vivado_hls.log
-
-usr@DESKTOP-OIK79P6:/mnt/c$ tree -L 1
-.
-├── !portable
-├── $Recycle.Bin
-├── $WINRE_BACKUP_PARTITION.MARKER
-├── AMD
-├── Config.Msi
-├── Documents and Settings -> /mnt/c/Users
-├── DumpStack.log
-├── DumpStack.log.tmp
-├── Intel
-├── NexU-APR
-├── PF
-├── PFWindhawk
-├── PerfLogs
-├── Program Files
-├── Program Files (x86)
-├── ProgramData
-├── Recovery
-├── System Volume Information
-├── Users
-├── Windows
-├── Xilinx
-├── _ide
-├── appverifUI.dll
-├── flexlm
-├── inetpub
-├── msys64
-├── proj -> /mnt/d/proj
-├── quartus
-├── tmp
-├── vfcompat.dll
-└── vm
-
-├── proj -> /mnt/d/proj
-├── quartus
-│   ├── 20.1
-│   ├── 24.1std
-│   └── lic_qsim_24_any.dat
-├── tmp
-│   ├── 2nd SSD turns off.txt
-│   ├── GRA1D03.tmp
-│   ├── GRA266B.tmp
-│   ├── dk_log.txt
-│   ├── pwrcfg.txt
-│   ├── pwrcfg1.txt
-│   ├── qbittorrent_5.1.0_x64_setup(1).exe
-│   ├── scan.bat
-│   └── share
-├── vfcompat.dll
-└── vm
-    └── !shared -> /mnt/d/vm/!shared/
+```
