@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 import os
 
-#
+
+################################################################################
 def barrel_distortion_correction(image, k1, k2=0, k3=0):
   """
   Barrel distortion correction function.
@@ -102,6 +103,8 @@ def barrel_distortion_correction(image, k1, k2=0, k3=0):
 
   return corrected_image
 
+
+################################################################################
 def main():
   # Input and output file paths
 #  input_file  = 'img_in/img_128x100.png'
@@ -153,5 +156,7 @@ def main():
   except Exception as e:
     print(f"Error occurred: {str(e)}")
 
+
+################################################################################
 if __name__ == "__main__":
   main()

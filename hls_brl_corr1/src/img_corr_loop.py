@@ -2,7 +2,8 @@ import numpy as np
 import os
 import cv2
 
-#
+
+#################################################################################
 def barrel_distortion_correction(image, k1):
   """
   Barrel distortion correction function.
@@ -20,9 +21,6 @@ def barrel_distortion_correction(image, k1):
 
   x_center = width / 2
   y_center = height / 2
-
-  # lut_x = np.zeros((height, width), dtype=np.uint16)
-  # lut_y = np.zeros((height, width), dtype=np.uint16)
 
   # Create output image
   corrected_image = np.zeros_like(image)
@@ -44,10 +42,10 @@ def barrel_distortion_correction(image, k1):
 
       corrected_image[y_u, x_u] = image[y_d, x_d]
 
-
   return corrected_image
 
 
+################################################################################
 def main():
   # Input and output file paths
   dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr1/src/'
@@ -59,10 +57,6 @@ def main():
 
   # Distortion parameters
   k1 =+0.01  # Adjust this value based on your needs
-             # Positive: inward distortion (pincushion)
-             # Negative: outward undistortion (barrel correction)
-  # k2 = 0.0   # Secondary distortion coefficient
-  # k3 = 0.0   # Tertiary distortion coefficient
 
   try:
     # Create output directory if it doesn't exist
@@ -99,24 +93,7 @@ def main():
   except Exception as e:
     print(f"Error occurred: {str(e)}")
 
+
+################################################################################
 if __name__ == "__main__":
   main()
-
-# # Settings
-# width = 640
-# height = 480
-#   # Distortion parameters
-#   k1 =-0.10  # Adjust this value based on your needs
-#              # Positive: inward distortion (pincushion)
-#              # Negative: outward undistortion (barrel correction)
-
-# lut_x, lut_y = generate_lut(width, height, k1, k2, k3)
-
-# # Debug: print value ranges
-# print("Min X:", np.min(lut_x), "Max X:", np.max(lut_x))
-# print("Min Y:", np.min(lut_y), "Max Y:", np.max(lut_y))
-# print("Number of values in each LUT:", width * height)
-
-# # Save LUT files
-# save_coe(os.path.join(output_dir, "lut_x.coe"), lut_x)
-# save_coe(os.path.join(output_dir, "lut_y.coe"), lut_y)
