@@ -7,8 +7,8 @@ import time
 #################################################################################
 def barrel_distortion_correction(image, k1_float):
   """
-  Barrel distortion using a reverse mapping approach with simulated fixed-point arithmetic using NumPy.
-  This version is optimized for performance by using vectorized operations.
+  Barrel distortion using a reverse mapping approach with simulated fixed-point arithmetic.
+  This version uses loops to better match HDL/C++ implementation.
 
   Args:
     image: Input image (numpy array)
@@ -28,58 +28,54 @@ def barrel_distortion_correction(image, k1_float):
   x_c = int(width / 2 * SCALE)
   y_c = int(height / 2 * SCALE)
 
-  # Create coordinate grids
-  x_d, y_d = np.meshgrid(np.arange(width), np.arange(height))
+  # Create an empty output image
+  corrected_image = np.zeros_like(image)
 
-  # Scale destination coordinates
-  x_d_scaled = x_d * SCALE
-  y_d_scaled = y_d * SCALE
+  for y_d_int in range(height):
+    for x_d_int in range(width):
+      # Scale destination coordinates
+      x_d = x_d_int * SCALE
+      y_d = y_d_int * SCALE
 
-  # Normalize coordinates relative to center
-  x = ((x_d_scaled - x_c) * SCALE) // x_c
-  y = ((y_d_scaled - y_c) * SCALE) // y_c
+      # Normalize coordinates relative to center
+      x = ((x_d - x_c) * SCALE) // x_c
+      y = ((y_d - y_c) * SCALE) // y_c
 
-  # r_sq (has 2*FRACT_BITS fractional bits)
-  r_sq = x*x + y*y
+      # r_sq = x*x + y*y (has 2*FRACT_BITS fractional bits)
+      r_sq = x*x + y*y
 
-  # r has FRACT_BITS fractional bits
-  r = np.sqrt(r_sq.astype(np.float64)).astype(np.int64)
+      # r = sqrt(r_sq) (has FRACT_BITS fractional bits)
+      r = int(np.sqrt(r_sq))
 
-  # Radial distortion correction (inverse model)
-  # r_u = r * (1 + k1 * r**2)
-  r_sq_scaled = r_sq >> FRACT_BITS # scale to FRACT_BITS
-  term = (k1 * r_sq_scaled) >> FRACT_BITS
-  r_u = (r * (SCALE + term)) >> FRACT_BITS
+      # Radial distortion correction (inverse model)
+      # r_u = r * (1 + k1 * r**2)
+      r_sq_scaled = r_sq >> FRACT_BITS # scale to FRACT_BITS
+      term = (k1 * r_sq_scaled) >> FRACT_BITS
+      r_u = (r * (SCALE + term)) >> FRACT_BITS
 
-  # Avoid division by zero
-  non_zero_r = r != 0
+      if r != 0:
+        # x_u_norm = (x * r_u) / r
+        x_u_norm = (x * r_u) // r
+        y_u_norm = (y * r_u) // r
 
-  # Initialize source coordinates
-  x_u = np.full_like(x, x_c)
-  y_u = np.full_like(y, y_c)
+        # Calculate final source coordinates
+        x_u = x_c + ((x_u_norm * x_c) >> FRACT_BITS)
+        y_u = y_c + ((y_u_norm * y_c) >> FRACT_BITS)
+      else:
+        x_u, y_u = x_c, y_c
 
-  # Calculate normalized undistorted coordinates
-  x_u_norm = np.zeros_like(x)
-  y_u_norm = np.zeros_like(y)
+      # Unscale coordinates
+      x_u_unscaled = x_u >> FRACT_BITS
+      y_u_unscaled = y_u >> FRACT_BITS
 
-  # x_u_norm = (x * r_u) / r
-  x_u_norm[non_zero_r] = (x[non_zero_r] * r_u[non_zero_r]) // r[non_zero_r]
-  y_u_norm[non_zero_r] = (y[non_zero_r] * r_u[non_zero_r]) // r[non_zero_r]
+      # Nearest-neighbor sampling
+      x_nn = int(np.clip(x_u_unscaled, 0, width - 1))
+      y_nn = int(np.clip(y_u_unscaled, 0, height - 1))
 
-  # Calculate final source coordinates
-  x_u = x_c + ((x_u_norm * x_c) >> FRACT_BITS)
-  y_u = y_c + ((y_u_norm * y_c) >> FRACT_BITS)
-
-  # Unscale coordinates
-  x_u_unscaled = x_u >> FRACT_BITS
-  y_u_unscaled = y_u >> FRACT_BITS
-
-  # Nearest-neighbor sampling
-  x_nn = np.clip(x_u_unscaled, 0, width - 1).astype(int)
-  y_nn = np.clip(y_u_unscaled, 0, height - 1).astype(int)
-
-  # Create corrected image
-  corrected_image = image[y_nn, x_nn]
+      if 0 <= x_nn < width and 0 <= y_nn < height:
+        corrected_image[y_d_int, x_d_int] = image[y_nn, x_nn]
+      else:
+        corrected_image[y_d_int, x_d_int] = 0
 
   return corrected_image
 
