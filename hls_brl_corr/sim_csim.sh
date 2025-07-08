@@ -30,6 +30,12 @@ OUTPUT_IMAGE="src/img_out/${IMG_NAME}.png" # Desired output image file
 INPUT_RAW_FILE="src/img_in/${IMG_NAME}_in.txt"
 OUTPUT_RAW_FILE="src/img_out/${IMG_NAME}_out.txt"
 
+# Comment/uncomment variable to disable/enable corresponding step
+# RUN1_CONVERT_INPUT_IMG="1"
+# RUN2_HLS_SIM="1"
+RUN3_CONVERT_OUTPUT_IMG="1"
+RUN4_COMPARE_IMG="1"
+
 
 # --- Setup Simulation Directory ---
 #mkdir -p "${SIM_DIR}"
@@ -38,22 +44,30 @@ cd ${HLS_DIR}
 echo "HLS_DIR=${HLS_DIR}"
 
 # --- Step 1: Convert Input Image to Raw Pixel Data ---
-printf "\nStep 1: Converting input image '${INPUT_IMAGE}' to raw pixel data...\n"
-echo "python \"${PYTHON_SCRIPTS_DIR}/image_to_raw.py\" \"${INPUT_IMAGE}\" \"${INPUT_RAW_FILE}\""
-python "${PYTHON_SCRIPTS_DIR}/image_to_raw.py" "${INPUT_IMAGE}" "${INPUT_RAW_FILE}"
+if [ -n "$RUN1_CONVERT_INPUT_IMG" ]; then
+  printf "\nStep 1: Converting input image '${INPUT_IMAGE}' to raw pixel data...\n"
+  echo "python \"${PYTHON_SCRIPTS_DIR}/image_to_raw.py\" \"${INPUT_IMAGE}\" \"${INPUT_RAW_FILE}\""
+  python "${PYTHON_SCRIPTS_DIR}/image_to_raw.py" "${INPUT_IMAGE}" "${INPUT_RAW_FILE}"
+fi
 
 # --- Step 2: Run C Simulation ---
-cd ${PRJ_DIR}
-printf "\nStep 2: Running C Simulation...\n"
-/C/Xilinx/Vivado/2017.4/bin/vivado_hls.bat "${HLS_DIR}/run_csim.tcl"
+if [ -n "$RUN2_HLS_SIM" ]; then
+  cd ${PRJ_DIR}
+  printf "\nStep 2: Running C Simulation...\n"
+  /C/Xilinx/Vivado/2017.4/bin/vivado_hls.bat "${HLS_DIR}/run_csim.tcl"
+fi
 
 # --- Step 3: Convert Raw Output Pixel Data to Image ---
 cd ${HLS_DIR}
-printf "\nStep 5: Converting raw output pixel data to image '${OUTPUT_IMAGE}'...\n"
-echo "python \"${PYTHON_SCRIPTS_DIR}/raw_to_image.py\" \"${OUTPUT_RAW_FILE}\" \"${OUTPUT_IMAGE}\" ${IMG_WIDTH} ${IMG_HEIGHT}"
-python "${PYTHON_SCRIPTS_DIR}/raw_to_image.py" "${OUTPUT_RAW_FILE}" "${OUTPUT_IMAGE}" "${IMG_WIDTH}" "${IMG_HEIGHT}"
+if [ -n "$RUN3_CONVERT_OUTPUT_IMG" ]; then
+  printf "\nStep 3: Converting raw output pixel data to image '${OUTPUT_IMAGE}'...\n"
+  echo "python \"${PYTHON_SCRIPTS_DIR}/raw_to_image.py\" \"${OUTPUT_RAW_FILE}\" \"${OUTPUT_IMAGE}\" ${IMG_WIDTH} ${IMG_HEIGHT}"
+  python "${PYTHON_SCRIPTS_DIR}/raw_to_image.py" "${OUTPUT_RAW_FILE}" "${OUTPUT_IMAGE}" "${IMG_WIDTH}" "${IMG_HEIGHT}"
+fi
 
 # --- Step 4: Compare intput and output images ---
-printf "\nStep 6: Comparing input and output images...\n"
-echo "BCompare.exe "${INPUT_IMAGE}" "${OUTPUT_IMAGE}""
-start "" "/D/\!portable/Beyond_Compare/BCompare.exe" "${INPUT_IMAGE}" "${OUTPUT_IMAGE}"
+if [ -n "$RUN4_COMPARE_IMG" ]; then
+  printf "\nStep 4: Comparing input and output images...\n"
+  echo "BCompare.exe "${INPUT_IMAGE}" "${OUTPUT_IMAGE}""
+  start "" "/D/\!portable/Beyond_Compare/BCompare.exe" "${INPUT_IMAGE}" "${OUTPUT_IMAGE}"
+fi
