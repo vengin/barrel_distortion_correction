@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_barrel_distortion_correction_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_barrel_distortion_correction" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="413071666666fs"></ZoomStartTime>
+      <ZoomEndTime time="514971666667fs"></ZoomEndTime>
+      <Cursor1Time time="512155000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="122"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="76" />
+   <wvobject fp_name="/tb_barrel_distortion_correction/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/rst_n" type="logic">
+      <obj_property name="ElementShortName">rst_n</obj_property>
+      <obj_property name="ObjectShortName">rst_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/s_axis_tdata" type="array">
+      <obj_property name="ElementShortName">s_axis_tdata[23:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tdata[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/s_axis_tvalid" type="logic">
+      <obj_property name="ElementShortName">s_axis_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/s_axis_tlast" type="logic">
+      <obj_property name="ElementShortName">s_axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/s_axis_tuser" type="logic">
+      <obj_property name="ElementShortName">s_axis_tuser</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tuser</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/s_axis_tready" type="logic">
+      <obj_property name="ElementShortName">s_axis_tready</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/m_axis_tdata" type="array">
+      <obj_property name="ElementShortName">m_axis_tdata[23:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tdata[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/m_axis_tvalid" type="logic">
+      <obj_property name="ElementShortName">m_axis_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/m_axis_tlast" type="logic">
+      <obj_property name="ElementShortName">m_axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/m_axis_tuser" type="logic">
+      <obj_property name="ElementShortName">m_axis_tuser</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tuser</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/m_axis_tready" type="logic">
+      <obj_property name="ElementShortName">m_axis_tready</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/input_file_handle" type="array">
+      <obj_property name="ElementShortName">input_file_handle[31:0]</obj_property>
+      <obj_property name="ObjectShortName">input_file_handle[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/output_file_handle" type="array">
+      <obj_property name="ElementShortName">output_file_handle[31:0]</obj_property>
+      <obj_property name="ObjectShortName">output_file_handle[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/i" type="array">
+      <obj_property name="ElementShortName">i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">i[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/pixel_count" type="array">
+      <obj_property name="ElementShortName">pixel_count[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pixel_count[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/output_count" type="array">
+      <obj_property name="ElementShortName">output_count[31:0]</obj_property>
+      <obj_property name="ObjectShortName">output_count[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/WIDTH" type="array">
+      <obj_property name="ElementShortName">WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">WIDTH[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/HEIGHT" type="array">
+      <obj_property name="ElementShortName">HEIGHT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEIGHT[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/CLK_PERIOD" type="array">
+      <obj_property name="ElementShortName">CLK_PERIOD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLK_PERIOD[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/DISTORTION_K1" type="array">
+      <obj_property name="ElementShortName">DISTORTION_K1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">DISTORTION_K1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/DISTORTION_K1" type="array">
+      <obj_property name="ElementShortName">DISTORTION_K1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">DISTORTION_K1[7:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider975">
+      <obj_property name="label">DUT</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/rst_n" type="logic">
+      <obj_property name="ElementShortName">rst_n</obj_property>
+      <obj_property name="ObjectShortName">rst_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/s_axis_tdata" type="array">
+      <obj_property name="ElementShortName">s_axis_tdata[23:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tdata[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/s_axis_tvalid" type="logic">
+      <obj_property name="ElementShortName">s_axis_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/s_axis_tlast" type="logic">
+      <obj_property name="ElementShortName">s_axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/s_axis_tuser" type="logic">
+      <obj_property name="ElementShortName">s_axis_tuser</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tuser</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/s_axis_tready" type="logic">
+      <obj_property name="ElementShortName">s_axis_tready</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/m_axis_tdata" type="array">
+      <obj_property name="ElementShortName">m_axis_tdata[23:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tdata[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/m_axis_tvalid" type="logic">
+      <obj_property name="ElementShortName">m_axis_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/m_axis_tlast" type="logic">
+      <obj_property name="ElementShortName">m_axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/m_axis_tuser" type="logic">
+      <obj_property name="ElementShortName">m_axis_tuser</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tuser</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/m_axis_tready" type="logic">
+      <obj_property name="ElementShortName">m_axis_tready</obj_property>
+      <obj_property name="ObjectShortName">m_axis_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/state" type="array">
+      <obj_property name="ElementShortName">state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">state[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/next_state" type="array">
+      <obj_property name="ElementShortName">next_state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">next_state[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/input_x" type="array">
+      <obj_property name="ElementShortName">input_x[15:0]</obj_property>
+      <obj_property name="ObjectShortName">input_x[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/input_y" type="array">
+      <obj_property name="ElementShortName">input_y[15:0]</obj_property>
+      <obj_property name="ObjectShortName">input_y[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/read_line_idx" type="array">
+      <obj_property name="ElementShortName">read_line_idx[1:0]</obj_property>
+      <obj_property name="ObjectShortName">read_line_idx[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/frame_active" type="logic">
+      <obj_property name="ElementShortName">frame_active</obj_property>
+      <obj_property name="ObjectShortName">frame_active</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/buffer_ready" type="logic">
+      <obj_property name="ElementShortName">buffer_ready</obj_property>
+      <obj_property name="ObjectShortName">buffer_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/line_buffer" type="array">
+      <obj_property name="ElementShortName">line_buffer[0:3][0:127][23:0]</obj_property>
+      <obj_property name="ObjectShortName">line_buffer[0:3][0:127][23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/write_line_idx" type="array">
+      <obj_property name="ElementShortName">write_line_idx[1:0]</obj_property>
+      <obj_property name="ObjectShortName">write_line_idx[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/lines_stored" type="array">
+      <obj_property name="ElementShortName">lines_stored[15:0]</obj_property>
+      <obj_property name="ObjectShortName">lines_stored[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/output_x" type="array">
+      <obj_property name="ElementShortName">output_x[15:0]</obj_property>
+      <obj_property name="ObjectShortName">output_x[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/output_y" type="array">
+      <obj_property name="ElementShortName">output_y[15:0]</obj_property>
+      <obj_property name="ObjectShortName">output_y[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/dx" type="array">
+      <obj_property name="ElementShortName">dx[16:0]</obj_property>
+      <obj_property name="ObjectShortName">dx[16:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/dy" type="array">
+      <obj_property name="ElementShortName">dy[16:0]</obj_property>
+      <obj_property name="ObjectShortName">dy[16:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/r_squared" type="array">
+      <obj_property name="ElementShortName">r_squared[31:0]</obj_property>
+      <obj_property name="ObjectShortName">r_squared[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/r_squared" type="array">
+      <obj_property name="ElementShortName">r_squared[31:0]</obj_property>
+      <obj_property name="ObjectShortName">r_squared[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/k1_term" type="array">
+      <obj_property name="ElementShortName">k1_term[31:0]</obj_property>
+      <obj_property name="ObjectShortName">k1_term[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/src_x" type="array">
+      <obj_property name="ElementShortName">src_x[16:0]</obj_property>
+      <obj_property name="ObjectShortName">src_x[16:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/src_y" type="array">
+      <obj_property name="ElementShortName">src_y[16:0]</obj_property>
+      <obj_property name="ObjectShortName">src_y[16:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/corrected_pixel" type="array">
+      <obj_property name="ElementShortName">corrected_pixel[23:0]</obj_property>
+      <obj_property name="ObjectShortName">corrected_pixel[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/pixel_valid" type="logic">
+      <obj_property name="ElementShortName">pixel_valid</obj_property>
+      <obj_property name="ObjectShortName">pixel_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/distortion_factor" type="array">
+      <obj_property name="ElementShortName">distortion_factor[31:0]</obj_property>
+      <obj_property name="ObjectShortName">distortion_factor[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/k1_term" type="array">
+      <obj_property name="ElementShortName">k1_term[31:0]</obj_property>
+      <obj_property name="ObjectShortName">k1_term[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/input_frame_start" type="logic">
+      <obj_property name="ElementShortName">input_frame_start</obj_property>
+      <obj_property name="ObjectShortName">input_frame_start</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/output_frame_start" type="logic">
+      <obj_property name="ElementShortName">output_frame_start</obj_property>
+      <obj_property name="ObjectShortName">output_frame_start</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/input_frame_end" type="logic">
+      <obj_property name="ElementShortName">input_frame_end</obj_property>
+      <obj_property name="ObjectShortName">input_frame_end</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/output_frame_end" type="logic">
+      <obj_property name="ElementShortName">output_frame_end</obj_property>
+      <obj_property name="ObjectShortName">output_frame_end</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/WIDTH" type="array">
+      <obj_property name="ElementShortName">WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">WIDTH[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/HEIGHT" type="array">
+      <obj_property name="ElementShortName">HEIGHT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HEIGHT[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/COORD_WIDTH" type="array">
+      <obj_property name="ElementShortName">COORD_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">COORD_WIDTH[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/DISTORTION_K1" type="array">
+      <obj_property name="ElementShortName">DISTORTION_K1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">DISTORTION_K1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/BUFFER_LINES" type="array">
+      <obj_property name="ElementShortName">BUFFER_LINES[31:0]</obj_property>
+      <obj_property name="ObjectShortName">BUFFER_LINES[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/CENTER_X" type="array">
+      <obj_property name="ElementShortName">CENTER_X[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CENTER_X[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/CENTER_Y" type="array">
+      <obj_property name="ElementShortName">CENTER_Y[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CENTER_Y[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/IDLE" type="array">
+      <obj_property name="ElementShortName">IDLE[2:0]</obj_property>
+      <obj_property name="ObjectShortName">IDLE[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/FILL_BUFFER" type="array">
+      <obj_property name="ElementShortName">FILL_BUFFER[2:0]</obj_property>
+      <obj_property name="ObjectShortName">FILL_BUFFER[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/PROCESS" type="array">
+      <obj_property name="ElementShortName">PROCESS[2:0]</obj_property>
+      <obj_property name="ObjectShortName">PROCESS[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/OUTPUT_PIXEL" type="array">
+      <obj_property name="ElementShortName">OUTPUT_PIXEL[2:0]</obj_property>
+      <obj_property name="ObjectShortName">OUTPUT_PIXEL[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_barrel_distortion_correction/dut/WAIT_READY" type="array">
+      <obj_property name="ElementShortName">WAIT_READY[2:0]</obj_property>
+      <obj_property name="ObjectShortName">WAIT_READY[2:0]</obj_property>
+   </wvobject>
+</wave_config>

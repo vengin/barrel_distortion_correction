@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="brl_corr_hls.cpp" path="D:\work\vivado\pynq\barrel_distortion_correction\hls_brl_corr2023\src\brl_corr_hls.cpp"/>
+  </source>
+  <testbench>
+    <originFiles name="brl_corr_hls.cpp" path="D:\work\vivado\pynq\barrel_distortion_correction\hls_brl_corr2023\src\brl_corr_hls.cpp"/>
+  </testbench>
+</autopilotfilemapping:AutoPilotFileMapping>

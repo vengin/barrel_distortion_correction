@@ -35,10 +35,6 @@ pixel_t bilinear_interpolate(LineBuffer &line_buf, coord_t x_scaled, coord_t y_s
   int x = x_scaled >> 8;  // Divide by 256
   int y = y_scaled >> 8;
 
-  // Get fractional parts (0-255 range)
-  int fx = x_scaled & 0xFF;  // x_scaled % 256
-  int fy = y_scaled & 0xFF;  // y_scaled % 256
-
   // Clamp x and y to valid range for pixel access
   // This ensures that even if x_scaled or y_scaled map outside, we take the edge pixel
   int x0 = (x < 0) ? 0 : (x >= IMG_WIDTH - 1 ? IMG_WIDTH - 1 : x);
@@ -63,6 +59,10 @@ pixel_t bilinear_interpolate(LineBuffer &line_buf, coord_t x_scaled, coord_t y_s
 
 #define ENABLE_INTERPOLATION
 #ifdef ENABLE_INTERPOLATION
+  // Get fractional parts (0-255 range)
+  int fx = x_scaled & 0xFF;  // x_scaled % 256
+  int fy = y_scaled & 0xFF;  // y_scaled % 256
+
   // Integer bilinear interpolation
   int interp_x0 = (p00 * (256 - fx) + p01 * fx) >> 8;
   int interp_x1 = (p10 * (256 - fx) + p11 * fx) >> 8;

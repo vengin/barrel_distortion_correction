@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2017.4 (64-bit)
+# SW Build 2086221 on Fri Dec 15 20:55:39 MST 2017
+# IP Build 2085800 on Fri Dec 15 22:25:07 MST 2017
+# Start of session at: Thu May 29 15:10:38 2025
+# Process ID: 48424
+# Current directory: D:/work/vivado/pynq/hdmi_io/hdmi_io.runs/bd_rgb2dvi_0_0_synth_1
+# Command line: vivado.exe -log bd_rgb2dvi_0_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source bd_rgb2dvi_0_0.tcl
+# Log file: D:/work/vivado/pynq/hdmi_io/hdmi_io.runs/bd_rgb2dvi_0_0_synth_1/bd_rgb2dvi_0_0.vds
+# Journal file: D:/work/vivado/pynq/hdmi_io/hdmi_io.runs/bd_rgb2dvi_0_0_synth_1\vivado.jou
+#-----------------------------------------------------------
+source bd_rgb2dvi_0_0.tcl -notrace

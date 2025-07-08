@@ -1,0 +1,22 @@
+INFO: [SIM 2] *************** CSIM start ***************
+INFO: [SIM 4] CSIM will launch GCC as the compiler.
+make: `csim.exe' is up to date.
+=== Barrel Distortion Correction Test ===
+Image dimensions: 128x100
+Expected input file: ../../../src/img_in/img_128x100_in.txt
+Output file: ../../../src/img_out/img_128x100_out.txt
+Reading image from: ../../../src/img_in/img_128x100_in.txt
+Successfully read 12800 pixels
+Starting barrel correction...
+Barrel correction completed!
+Writing image to: ../../../src/img_out/img_128x100_out.txt
+Successfully wrote 12800 pixels
+Output saved successfully!
+
+=== Statistics ===
+Input center pixel: 255
+Output center pixel: 255
+Input average: 156
+Output average: 149
+INFO: [SIM 1] CSim done with 0 errors.
+INFO: [SIM 3] *************** CSIM finish ***************

@@ -1,0 +1,71 @@
+INFO: [SIM 2] *************** CSIM start ***************
+INFO: [SIM 4] CSIM will launch GCC as the compiler.
+   Compiling ../../../src/brl_corr_hls_tb.cpp in debug mode
+   Compiling ../../../src/brl_corr_hls.cpp in debug mode
+   Generating csim.exe
+=== Barrel Distortion Correction Test ===
+Image dimensions: 128x100
+Input file: ../../../src/img_in/img_128x100_in.txt
+Output file: ../../../src/img_out/img_128x100_out.txt
+Reading image from: ../../../src/img_in/img_128x100_in.txt
+Successfully read 12800 pixels
+Starting barrel correction...
+
+--- DEBUG: INPUT PIXEL READ ---
+  Input pixel at (64, 50): 255
+
+--- DEBUG: LINE BUFFER STATE BEFORE SHIFT (y=50) ---
+  Line 0 (before shift, x=64): 0
+  Line 1 (before shift, x=64): 0
+  Line 2 (before shift, x=64): 0
+
+--- DEBUG: LINE BUFFER STATE AFTER SHIFT (y=50) ---
+  Line 0 (after shift, x=64): 0
+  Line 1 (after shift, x=64): 0
+  Line 2 (after shift, x=64): 0
+
+--- DEBUG: LINE BUFFER INSERTION CHECK ---
+  Value inserted into line buffer at (64, 50): 255
+  Value retrieved from line buffer (newest line): 0
+  Value retrieved from line buffer (prev[-1] line): 0
+  Value retrieved from line buffer (prev[-2] line): 0
+
+--- DEBUG: COORDINATE CALCULATION ---
+  (x_n, y_n): (0.000000, 0.000000)
+  r2: 0.000000
+  scale: 1.000000
+  (x_in, y_in): (64.000000, 50.000000)
+
+--- DEBUG: IN_BOUNDS CHECK ---
+  in_bounds: TRUE
+
+--- DEBUG: FLOOR COORDINATES ---
+  (x_floor, y_floor): (64, 50)
+
+--- DEBUG: BUFFER VALIDITY ---
+  idx_y_floor: 16, idx_y_floor_plus1: 15, buf_valid: TRUE
+
+--- DEBUG: INTERPOLATION WEIGHTS ---
+  (dx, dy): (0.000000, 0.000000)
+
+--- DEBUG: CENTER PIXEL (LOGIC) ---
+  in_bounds check: PASSED
+  buf_y check: PASSED (idx_y_floor = 16, idx_y_floor_plus1 = 15)
+  Original pixel values: p00=0, p10=0, p01=0, p11=0
+  Interpolated value: 0.000000
+  Final output_pixel value: 0
+
+--- DEBUG: OUTPUT PIXEL ---
+  Output pixel at (64, 50): 0
+Barrel correction completed!
+Writing image to: ../../../src/img_out/img_128x100_out.txt
+Successfully wrote 12800 pixels
+Output saved successfully!
+
+=== Statistics ===
+Input center pixel: 255
+Output center pixel: 0
+Input average: 156
+Output average: 0
+INFO: [SIM 1] CSim done with 0 errors.
+INFO: [SIM 3] *************** CSIM finish ***************

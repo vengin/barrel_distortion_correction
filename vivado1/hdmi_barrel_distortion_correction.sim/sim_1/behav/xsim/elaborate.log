@@ -1,0 +1,14 @@
+Vivado Simulator 2017.4
+Copyright 1986-1999, 2001-2016 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2017.4/bin/unwrapped/win64.o/xelab.exe -wto 307315d4b3a64804a0c802b235bdb127 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot tb_barrel_distortion_correction_behav xil_defaultlib.tb_barrel_distortion_correction xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+WARNING: [XSIM 43-4100] "D:/work/vivado/pynq/barrel_distortion_correction/vivado1/hdmi_barrel_distortion_correction.sim/sim_1/behav/xsim/glbl.v" Line 6. Module glbl has a timescale but at least one module in design doesn't have timescale.
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.barrel_distortion_correction(WID...
+Compiling module xil_defaultlib.tb_barrel_distortion_correction
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot tb_barrel_distortion_correction_behav

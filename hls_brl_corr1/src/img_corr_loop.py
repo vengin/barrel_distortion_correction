@@ -1,17 +1,14 @@
 import numpy as np
 import os
 import cv2
-from fixedpoint import FixedPoint
+import time
 
 
 #################################################################################
 def barrel_distortion_correction(image, k1_float):
   """
-  Barrel distortion using a reverse mapping approach with fixed-point arithmetic.
-
-  This function iterates over each pixel of the output (corrected) image
-  and computes the corresponding source pixel in the input (distorted) image.
-  This ensures that every pixel in the output image is filled.
+  Barrel distortion using a reverse mapping approach with simulated fixed-point arithmetic using NumPy.
+  This version is optimized for performance by using vectorized operations.
 
   Args:
     image: Input image (numpy array)
@@ -23,78 +20,66 @@ def barrel_distortion_correction(image, k1_float):
   height, width = image.shape[:2]
 
   # Fixed-point configuration
-  # Q format: Q<integer_bits>.<fractional_bits>
-  # Total bits = 1 (sign) + integer_bits + fractional_bits
-  # Using 32 bits total, 16 for integer, 15 for fraction, 1 for sign
-  FX_TOTAL_BITS = 32
-  FX_FRACT_BITS = 16
-  FX_INT_BITS = FX_TOTAL_BITS - FX_FRACT_BITS - 1
+  FRACT_BITS = 16
+  SCALE = 1 << FRACT_BITS
 
-  k1 = FixedPoint(k1_float, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
+  # Convert parameters to scaled integers
+  k1 = int(k1_float * SCALE)
+  x_c = int(width / 2 * SCALE)
+  y_c = int(height / 2 * SCALE)
 
-  x_c = FixedPoint(width / 2, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
-  y_c = FixedPoint(height / 2, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
+  # Create coordinate grids
+  x_d, y_d = np.meshgrid(np.arange(width), np.arange(height))
 
-  # Create an empty output image
-  corrected_image = np.zeros_like(image)
+  # Scale destination coordinates
+  x_d_scaled = x_d * SCALE
+  y_d_scaled = y_d * SCALE
 
-  for y_d_int in range(height):
-    for x_d_int in range(width):
-      x_d = FixedPoint(x_d_int, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
-      y_d = FixedPoint(y_d_int, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
+  # Normalize coordinates relative to center
+  x = ((x_d_scaled - x_c) * SCALE) // x_c
+  y = ((y_d_scaled - y_c) * SCALE) // y_c
 
-      # Normalize coordinates relative to center
-      # x = (x_d - x_c) / x_c
-      # y = (y_d - y_c) / y_c
+  # r_sq (has 2*FRACT_BITS fractional bits)
+  r_sq = x*x + y*y
 
-      x_minus_xc = x_d - x_c
-      y_minus_yc = y_d - y_c
+  # r has FRACT_BITS fractional bits
+  r = np.sqrt(r_sq.astype(np.float64)).astype(np.int64)
 
-      # Manual division
-      x_float = float(x_minus_xc) / float(x_c)
-      y_float = float(y_minus_yc) / float(y_c)
-      x = FixedPoint(x_float, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
-      y = FixedPoint(y_float, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
+  # Radial distortion correction (inverse model)
+  # r_u = r * (1 + k1 * r**2)
+  r_sq_scaled = r_sq >> FRACT_BITS # scale to FRACT_BITS
+  term = (k1 * r_sq_scaled) >> FRACT_BITS
+  r_u = (r * (SCALE + term)) >> FRACT_BITS
 
-      # r_sq = x*x + y*y
-      # For sqrt, we need to handle potential overflow if numbers are large
-      # A dedicated fixed-point sqrt function would be ideal.
-      # Emulating with floating point for now, but in HDL this would be a cordic or similar integer-based sqrt
-      r_float = np.sqrt(float(x*x + y*y))
-      r = FixedPoint(r_float, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
+  # Avoid division by zero
+  non_zero_r = r != 0
 
+  # Initialize source coordinates
+  x_u = np.full_like(x, x_c)
+  y_u = np.full_like(y, y_c)
 
-      # Radial distortion correction (inverse model)
-      # r_u = r * (1 + k1 * r**2)
-      one = FixedPoint(1, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
-      r_u = r * (one + k1 * r * r)
+  # Calculate normalized undistorted coordinates
+  x_u_norm = np.zeros_like(x)
+  y_u_norm = np.zeros_like(y)
 
-      if float(r) != 0:
-        # To avoid division by a fixed-point number, which can be tricky,
-        # we can reformulate. x_u = x_c + x * r_u * x_c / r
-        # Let's stick to the division for now, assuming the library handles it.
-        # x_u = x_c + (x / r) * r_u * x_c
-        # y_u = y_c + (y / r) * r_u * y_c
+  # x_u_norm = (x * r_u) / r
+  x_u_norm[non_zero_r] = (x[non_zero_r] * r_u[non_zero_r]) // r[non_zero_r]
+  y_u_norm[non_zero_r] = (y[non_zero_r] * r_u[non_zero_r]) // r[non_zero_r]
 
-        # Manual division
-        x_div_r_float = float(x) / float(r)
-        y_div_r_float = float(y) / float(r)
-        x_div_r = FixedPoint(x_div_r_float, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
-        y_div_r = FixedPoint(y_div_r_float, signed=1, m=FX_INT_BITS, n=FX_FRACT_BITS)
+  # Calculate final source coordinates
+  x_u = x_c + ((x_u_norm * x_c) >> FRACT_BITS)
+  y_u = y_c + ((y_u_norm * y_c) >> FRACT_BITS)
 
-        x_u = x_c + x_div_r * r_u * x_c
-        y_u = y_c + y_div_r * r_u * y_c
-      else:
-        x_u, y_u = x_c, y_c
+  # Unscale coordinates
+  x_u_unscaled = x_u >> FRACT_BITS
+  y_u_unscaled = y_u >> FRACT_BITS
 
-      # Nearest-neighbor sampling (no interpolation)
-      x_nn = int(round(float(x_u)))
-      y_nn = int(round(float(y_u)))
+  # Nearest-neighbor sampling
+  x_nn = np.clip(x_u_unscaled, 0, width - 1).astype(int)
+  y_nn = np.clip(y_u_unscaled, 0, height - 1).astype(int)
 
-      if 0 <= x_nn < width and 0 <= y_nn < height:
-        corrected_image[y_d_int, x_d_int] = image[y_nn, x_nn]
-      else:
-        corrected_image[y_d_int, x_d_int] = 0  # or another background value
+  # Create corrected image
+  corrected_image = image[y_nn, x_nn]
 
   return corrected_image
 
@@ -109,7 +94,7 @@ def main():
 
 
   # Distortion parameters
-  k1 =+0.00  # Adjust this value based on your needs
+  k1 =-0.06  # Adjust this value based on your needs
 
   try:
     # Create output directory if it doesn't exist
@@ -132,8 +117,13 @@ def main():
     print(f"Image dimensions: {image.shape[1]}x{image.shape[0]}")
     print(f"K1 coefficient: {k1}")
 
+    start_time = time.time()
     # Apply barrel distortion correction
     corrected_image = barrel_distortion_correction(image, k1)
+    end_time = time.time()
+
+    print(f"Processing time: {end_time - start_time:.4f} seconds")
+
 
     # Save the corrected image
     success = cv2.imwrite(output_file, corrected_image)
