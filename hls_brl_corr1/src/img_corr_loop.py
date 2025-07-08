@@ -6,7 +6,11 @@ import cv2
 #################################################################################
 def barrel_distortion_correction(image, k1):
   """
-  Barrel distortion correction function.
+  Barrel distortion using a reverse mapping approach.
+
+  This function iterates over each pixel of the output (corrected) image
+  and computes the corresponding source pixel in the input (distorted) image.
+  This ensures that every pixel in the output image is filled.
 
   Args:
     image: Input image (numpy array)
@@ -19,28 +23,40 @@ def barrel_distortion_correction(image, k1):
   """
   height, width = image.shape[:2]
 
-  x_center = width / 2
-  y_center = height / 2
+  x_c = width / 2
+  y_c = height / 2
 
-  # Create output image
+  # Create an empty output image
   corrected_image = np.zeros_like(image)
 
   for y_d in range(height):
     for x_d in range(width):
-      r_d = np.sqrt((x_d - x_center)**2 + (y_d - y_center)**2)
-      #r_u = r_d * (1 + k1 * r_d**2 + k2 * r_d**4 + k3 * r_d**6)
-      r_u = r_d * (1 + k1 * r_d**2)
+      # Normalize coordinates relative to center
+      x = (x_d - x_c) / x_c
+      y = (y_d - y_c) / y_c
 
-      if r_d != 0:
-        x_u = x_center + (x_d - x_center) * (r_u / r_d)
-        y_u = y_center + (y_d - y_center) * (r_u / r_d)
+      r = np.sqrt(x*x + y*y)
+
+      # Radial distortion correction (inverse model)
+      r_u = r * (1 + k1 * r**2)
+#      r_u = r * (1 + k1 * r**2 + k2 * r**4)
+
+      if r != 0:
+        x_u = x_c + (x / r) * r_u * x_c
+        y_u = y_c + (y / r) * r_u * y_c
       else:
-        x_u, y_u = x_center, y_center
+        x_u, y_u = x_c, y_c
 
-      x_u = int(np.clip(x_u, 0, width - 1))
-      y_u = int(np.clip(y_u, 0, height - 1))
+      # Nearest-neighbor sampling (no interpolation)
+      x_nn = int(round(x_u))
+      y_nn = int(round(y_u))
 
-      corrected_image[y_u, x_u] = image[y_d, x_d]
+      if 0 <= x_nn < width and 0 <= y_nn < height:
+        corrected_image[y_d, x_d] = image[y_nn, x_nn]
+      else:
+        corrected_image[y_d, x_d] = 0  # or another background value
+
+      # corrected_image[y_u, x_u] = image[y_d, x_d]
 
   return corrected_image
 
@@ -49,14 +65,13 @@ def barrel_distortion_correction(image, k1):
 def main():
   # Input and output file paths
   dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr1/src/'
-  # input_file  = dir + 'img_in/img_128x100.png'
-  # output_file = dir + 'img_out/img_128x100.png'
-  input_file  = dir + 'img_in/img_2x3.png'
-  output_file = dir +'img_out/img_2x3.png'
+  img = ('img_128x100.png', 'img4_250x167.png', 'img_2x3.png')
+  input_file  = dir +  'img_in/' + img[1]
+  output_file = dir + 'img_out/' + img[1]
 
 
   # Distortion parameters
-  k1 =+0.01  # Adjust this value based on your needs
+  k1 =-0.05  # Adjust this value based on your needs
 
   try:
     # Create output directory if it doesn't exist
@@ -84,7 +99,6 @@ def main():
 
     # Save the corrected image
     success = cv2.imwrite(output_file, corrected_image)
-
     if success:
       print(f"Corrected image saved to: {output_file}")
     else:
