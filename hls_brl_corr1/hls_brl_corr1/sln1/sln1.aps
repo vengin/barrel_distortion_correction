@@ -1,9 +1,0 @@
-<AutoPilot:solution xmlns:AutoPilot="com.autoesl.autopilot.solution">
-    <name>
-        <value string="sln1"/>
-    </name>
-    <project>
-        <value string="hls_brl_corr1"/>
-    </project>
-</AutoPilot:solution>
-
