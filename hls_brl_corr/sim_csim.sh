@@ -1,7 +1,11 @@
 #!/bin/bash
 set -e
 # Script to simulate hls_brl_corrVivado CSim in Git Bash
-# The starting directory for this script should be /barrel_distortion_correction (e.g./d/work/vivado/pynq/barrel_distortion_correction)
+# The starting directory for this script should be /barrel_distortion_correction/hls_brl_corr
+# Use the following command to run in Git Bash:
+#   ./sim_csim.sh
+# Use the following command to run in VSCode bash (MSYS2), which is the only working one with AI feedback:
+#   c:/PF/Git/bin/bash.exe -c "source sim_csim.sh"
 
 PYTHON_PATH="/c/PF/Python"
 

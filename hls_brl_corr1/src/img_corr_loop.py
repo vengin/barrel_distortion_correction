@@ -2,22 +2,47 @@ import numpy as np
 import os
 import cv2
 import time
+from collections import deque
 
 
 #################################################################################
-def barrel_distortion_correction(image, k1_float):
+def barrel_distortion_correction_streaming(image_stream, height, width, k1_float, num_line_buffers):
   """
-  Barrel distortion using a reverse mapping approach with simulated fixed-point arithmetic.
-  This version uses loops to better match HDL/C++ implementation.
+  Simulates barrel distortion correction with a true streaming line buffer architecture.
+  The function processes the image line by line, and can only access pixels
+  from the lines currently held in the buffer.
 
   Args:
-    image: Input image (numpy array)
-    k1_float: Primary distortion coefficient (floating-point)
-
-  Returns:
-    Corrected image (numpy array)
+    image_stream: An iterator that yields one line of the image at a time.
+    height: The total height of the source image.
+    width: The total width of the source image.
+    k1_float: Primary distortion coefficient (floating-point).
+    num_line_buffers: The number of physical line buffers available.
   """
-  height, width = image.shape[:2]
+  # --- True Streaming Line Buffer ---
+  # This buffer holds the most recent lines from the stream.
+  line_buffer = deque(maxlen=num_line_buffers)
+  # Tracks the starting line number of the buffer window.
+  buffer_start_line = 0
+
+  def get_pixel_from_streaming_buffer(y_coord, x_coord):
+    """
+    Fetches a pixel from the streaming line buffer.
+    Returns the pixel value if the line is within the current buffer window,
+    otherwise returns 0 (black) to indicate inaccessible data.
+    """
+    y_nn = int(np.clip(y_coord, 0, height - 1))
+    x_nn = int(np.clip(x_coord, 0, width - 1))
+
+    # Check if the required line is within the current buffer's range.
+    if buffer_start_line <= y_nn < buffer_start_line + len(line_buffer):
+      # The line is in the buffer. Calculate its index within the deque.
+      buffer_index = y_nn - buffer_start_line
+      return line_buffer[buffer_index][x_nn]
+    else:
+      # The line is not accessible (either too old or not yet received).
+      return 0
+  # --- End of Streaming Line Buffer ---
 
   # Fixed-point configuration
   FRACT_BITS = 16
@@ -29,9 +54,18 @@ def barrel_distortion_correction(image, k1_float):
   y_c = int(height / 2 * SCALE)
 
   # Create an empty output image
-  corrected_image = np.zeros_like(image)
+  corrected_image = np.zeros((height, width, 3), dtype=np.uint8)
 
-  for y_d_int in range(height):
+  # Process the image stream line by line
+  for y_d_int, current_line in enumerate(image_stream):
+    # Add the new line to the buffer. The deque will handle eviction if full.
+    line_buffer.append(current_line)
+
+    # Update the starting line number of our buffer window.
+    if len(line_buffer) == num_line_buffers:
+      if y_d_int >= num_line_buffers -1:
+        buffer_start_line = y_d_int - num_line_buffers + 1
+
     for x_d_int in range(width):
       # Scale destination coordinates
       x_d = x_d_int * SCALE
@@ -41,20 +75,18 @@ def barrel_distortion_correction(image, k1_float):
       x = ((x_d - x_c) * SCALE) // x_c
       y = ((y_d - y_c) * SCALE) // y_c
 
-      # r_sq = x*x + y*y (has 2*FRACT_BITS fractional bits)
+      # r_sq has 2*FRACT_BITS fractional bits
       r_sq = x*x + y*y
 
-      # r = sqrt(r_sq) (has FRACT_BITS fractional bits)
+      # r has FRACT_BITS fractional bits
       r = int(np.sqrt(r_sq))
 
       # Radial distortion correction (inverse model)
-      # r_u = r * (1 + k1 * r**2)
       r_sq_scaled = r_sq >> FRACT_BITS # scale to FRACT_BITS
       term = (k1 * r_sq_scaled) >> FRACT_BITS
       r_u = (r * (SCALE + term)) >> FRACT_BITS
 
       if r != 0:
-        # x_u_norm = (x * r_u) / r
         x_u_norm = (x * r_u) // r
         y_u_norm = (y * r_u) // r
 
@@ -68,14 +100,8 @@ def barrel_distortion_correction(image, k1_float):
       x_u_unscaled = x_u >> FRACT_BITS
       y_u_unscaled = y_u >> FRACT_BITS
 
-      # Nearest-neighbor sampling
-      x_nn = int(np.clip(x_u_unscaled, 0, width - 1))
-      y_nn = int(np.clip(y_u_unscaled, 0, height - 1))
-
-      if 0 <= x_nn < width and 0 <= y_nn < height:
-        corrected_image[y_d_int, x_d_int] = image[y_nn, x_nn]
-      else:
-        corrected_image[y_d_int, x_d_int] = 0
+      # Get pixel from the streaming buffer.
+      corrected_image[y_d_int, x_d_int] = get_pixel_from_streaming_buffer(y_u_unscaled, x_u_unscaled)
 
   return corrected_image
 
@@ -85,23 +111,21 @@ def main():
   # Input and output file paths
   dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr1/src/'
   img = ('img_128x100.png', 'img4_250x167.png', 'img_2x3.png')
-  input_file  = dir +  'img_in/' + img[1]
-  output_file = dir + 'img_out/' + img[1]
-
+  input_file  = dir +  'img_in/' + img[0]
+  output_file = dir + 'img_out/' + img[0]
 
   # Distortion parameters
-  k1 =-0.06  # Adjust this value based on your needs
+  k1 = +0.00
+  # Set a more realistic number of line buffers for a hardware implementation
+  num_line_buffers = 10 # Try with 1, 10, 64, etc. to see the effect
 
   try:
-    # Create output directory if it doesn't exist
     output_dir = os.path.dirname(output_file)
     if output_dir and not os.path.exists(output_dir):
       os.makedirs(output_dir)
 
-    # Read input image
     if not os.path.exists(input_file):
       print(f"Error: Input file '{input_file}' not found.")
-      print("Please ensure the input image exists.")
       return
 
     image = cv2.imread(input_file)
@@ -109,13 +133,19 @@ def main():
       print(f"Error: Could not read image from '{input_file}'")
       return
 
+    height, width = image.shape[:2]
+
+    # Create a generator to act as the image stream
+    image_stream = (image[y] for y in range(height))
+
     print(f"Processing image: {input_file}")
-    print(f"Image dimensions: {image.shape[1]}x{image.shape[0]}")
+    print(f"Image dimensions: {width}x{height}")
     print(f"K1 coefficient: {k1}")
+    print(f"Simulating with {num_line_buffers} streaming line buffer(s).")
 
     start_time = time.time()
-    # Apply barrel distortion correction
-    corrected_image = barrel_distortion_correction(image, k1)
+    # Apply barrel distortion correction using the streaming model
+    corrected_image = barrel_distortion_correction_streaming(image_stream, height, width, k1, num_line_buffers)
     end_time = time.time()
 
     print(f"Processing time: {end_time - start_time:.4f} seconds")
