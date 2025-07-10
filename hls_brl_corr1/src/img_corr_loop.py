@@ -117,7 +117,7 @@ def main():
   # Distortion parameters
   k1 = +0.00
   # Set a more realistic number of line buffers for a hardware implementation
-  num_line_buffers = 10 # Try with 1, 10, 64, etc. to see the effect
+  num_line_buffers = 1 # Try with 1, 10, 64, etc. to see the effect
 
   try:
     output_dir = os.path.dirname(output_file)
