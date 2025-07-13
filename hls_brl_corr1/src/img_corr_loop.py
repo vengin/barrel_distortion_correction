@@ -38,10 +38,15 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
     if buffer_start_line <= y_nn < buffer_start_line + len(line_buffer):
       # The line is in the buffer. Calculate its index within the deque.
       buffer_index = y_nn - buffer_start_line
-      return line_buffer[buffer_index][x_nn]
+      pixel_val = line_buffer[buffer_index][x_nn]
+      is_in_buffer = True
     else:
       # The line is not accessible (either too old or not yet received).
-      return 0
+      pixel_val = 0
+      is_in_buffer = False
+      buffer_index = -1 # Indicates not in buffer
+
+    return pixel_val, y_nn, x_nn, is_in_buffer, buffer_index
   # --- End of Streaming Line Buffer ---
 
   # Fixed-point configuration
@@ -101,7 +106,18 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
       y_u_unscaled = y_u >> FRACT_BITS
 
       # Get pixel from the streaming buffer.
-      corrected_image[y_d_int, x_d_int] = get_pixel_from_streaming_buffer(y_u_unscaled, x_u_unscaled)
+      pixel_val, y_nn, x_nn, is_in_buffer, buffer_index = get_pixel_from_streaming_buffer(y_u_unscaled, x_u_unscaled)
+      corrected_image[y_d_int, x_d_int] = pixel_val
+
+      # Debug
+      if y_d_int % 50 == 49 and x_d_int % 50 == 49:
+        if is_in_buffer:
+#            print(f"p[{y_d_int}][{x_d_int}] maps to p_corr[{y_nn}][{x_nn}] from buffer @ offset {buffer_index} = {pixel_val}")
+          print(f"p[{y_d_int:3d}][{x_d_int:3d}] -> p_corr[{y_nn:3d}][{x_nn:3d}] = {pixel_val}, @ offset {buffer_index:3d}")
+        else:
+#            print(f"p[{y_d_int}][{x_d_int}] maps to p_corr[{y_nn}][{x_nn}] - NOT IN BUFFER (start: {buffer_start_line}, len: {len(line_buffer)})")
+          print(f"NOT IN BUFFERp[{y_d_int:3d}][{x_d_int:3d}] -> p_corr[{y_nn:3d}][{x_nn:3d}] = {pixel_val}, @ offset {buffer_index:3d}")
+
 
   return corrected_image
 
@@ -117,7 +133,7 @@ def main():
   # Distortion parameters
   k1 = +0.00
   # Set a more realistic number of line buffers for a hardware implementation
-  num_line_buffers = 1 # Try with 1, 10, 64, etc. to see the effect
+  num_line_buffers = 100 # Try with 1, 10, 64, etc. to see the effect
 
   try:
     output_dir = os.path.dirname(output_file)
