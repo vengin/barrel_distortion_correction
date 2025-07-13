@@ -133,12 +133,13 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
       # XY Coordinates outside of image boundaries?
       x_nn = x_u_unscaled
       y_nn = y_u_unscaled
+      len_ln_buf = len(line_buffer)
 
       if 0 <= x_u_unscaled < width and 0 <= y_u_unscaled < height: # insdie
         cnt_in += 1
         is_in_img = True
         # Check if the required line is within the current buffer's range.
-        if buffer_start_line <= y_nn < buffer_start_line + len(line_buffer):
+        if buffer_start_line <= y_nn < buffer_start_line + len_ln_buf:
           # The line is in the buffer. Calculate its index within the deque.
           buffer_index = y_nn - buffer_start_line
           pixel_val = line_buffer[buffer_index][x_nn]
@@ -148,8 +149,8 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
           pixel_val = 0
           is_in_buffer = False
           buffer_index = -1 # Indicates not in buffer
-          # if y_nn % Y_DBG == (Y_DBG-1)  and  x_nn % X_DBG == (X_DBG-1):
-          #   print ("breakpoint")
+          # if y_d_int % Y_DBG == (Y_DBG-1)  and  x_d_int % X_DBG == (X_DBG-1):
+          #   buffer_index = -1
       else:
         cnt_out += 1
         is_in_img = False
@@ -170,8 +171,8 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
           if is_in_buffer:
             print(f"o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
           else:
-  #           print(f"p[{y_d_int}][{x_d_int}] maps to p_corr[{y_nn}][{x_nn}] - NOT IN BUFFER (start: {buffer_start_line}, len: {len(line_buffer)})")
             print(f"OUT o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
+            buffer_index = -1
         else:
           print(f"o[{y_d_int:3d}][{x_d_int:3d}] = 0")
 
