@@ -66,14 +66,20 @@ def barrel_distortion_correction(image, k1_float):
       x_u_unscaled = x_u >> FRACT_BITS
       y_u_unscaled = y_u >> FRACT_BITS
 
-      # Nearest-neighbor sampling
-      x_nn = int(np.clip(x_u_unscaled, 0, width - 1))
-      y_nn = int(np.clip(y_u_unscaled, 0, height - 1))
+      # No nearest-neighbor sampling
+      x_nn = x_u_unscaled
+      y_nn = y_u_unscaled
 
-      if 0 <= x_nn < width and 0 <= y_nn < height:
+      # XY Coordinates outside of image boundaries?
+      if 0 <= x_nn < width and 0 <= y_nn < height: # insdie
         corrected_image[y_d_int, x_d_int] = image[y_nn, x_nn]
-      else:
+      else: # outsdie
         corrected_image[y_d_int, x_d_int] = 0
+
+      # Debug
+      if y_d_int % 50 == 49 and x_d_int % 50 == 49:
+        pixel_val = image[y_nn, x_nn] if 0 <= x_nn < width and 0 <= y_nn < height else (0,0,0)
+        print(f"p[{y_d_int:3d}][{x_d_int:3d}] -> p_corr[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
 
   return corrected_image
 
@@ -81,14 +87,14 @@ def barrel_distortion_correction(image, k1_float):
 ################################################################################
 def main():
   # Input and output file paths
-  dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr1/src/'
+  dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr/src/'
   img = ('img_128x100.png', 'img4_250x167.png', 'img_2x3.png')
-  input_file  = dir +  'img_in/' + img[1]
-  output_file = dir + 'img_out/' + img[1]
+  input_file  = dir +  'img_in/' + img[0]
+  output_file = dir + 'img_out/' + img[0]
 
 
   # Distortion parameters
-  k1 =-0.06  # Adjust this value based on your needs
+  k1 =+0.20  # Adjust this value based on your needs
 
   try:
     # Create output directory if it doesn't exist
