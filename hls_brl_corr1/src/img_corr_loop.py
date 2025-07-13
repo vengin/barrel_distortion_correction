@@ -3,6 +3,8 @@ import os
 import cv2
 import time
 from collections import deque
+X_DBG=30
+Y_DBG=30
 
 
 #################################################################################
@@ -25,29 +27,43 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
   # Tracks the starting line number of the buffer window.
   buffer_start_line = 0
 
-  def get_pixel_from_streaming_buffer(y_coord, x_coord):
-    """
-    Fetches a pixel from the streaming line buffer.
-    Returns the pixel value if the line is within the current buffer window,
-    otherwise returns 0 (black) to indicate inaccessible data.
-    """
-    y_nn = int(np.clip(y_coord, 0, height - 1))
-    x_nn = int(np.clip(x_coord, 0, width - 1))
 
-    # Check if the required line is within the current buffer's range.
-    if buffer_start_line <= y_nn < buffer_start_line + len(line_buffer):
-      # The line is in the buffer. Calculate its index within the deque.
-      buffer_index = y_nn - buffer_start_line
-      pixel_val = line_buffer[buffer_index][x_nn]
-      is_in_buffer = True
-    else:
-      # The line is not accessible (either too old or not yet received).
-      pixel_val = 0
-      is_in_buffer = False
-      buffer_index = -1 # Indicates not in buffer
+  # def get_pixel_from_streaming_buffer(y_coord, x_coord):
+  #   """
+  #   Fetches a pixel from the streaming line buffer.
+  #   Returns the pixel value if the line is within the current buffer window,
+  #   otherwise returns 0 (black) to indicate inaccessible data.
+  #   """
+  #   # y_nn = int(np.clip(y_coord, 0, height - 1))
+  #   # x_nn = int(np.clip(x_coord, 0, width - 1))
+  #   # XY Coordinates outside of image boundaries?
+  #   if 0 <= x_coord < width and 0 <= y_coord < height: # insdie
+  #     y_nn = y_coord
+  #     x_nn = x_coord
+  #   else:
+  #     # The line is not accessible (either too old or not yet received).
+  #     pixel_val = 0
+  #     is_in_buffer = False
+  #     buffer_index = -1 # Indicates not in buffer
+  #     return pixel_val, y_coord, x_coord, is_in_buffer, buffer_index
 
-    return pixel_val, y_nn, x_nn, is_in_buffer, buffer_index
-  # --- End of Streaming Line Buffer ---
+  #   # Check if the required line is within the current buffer's range.
+  #   if buffer_start_line <= y_nn < buffer_start_line + len(line_buffer):
+  #     # The line is in the buffer. Calculate its index within the deque.
+  #     buffer_index = y_nn - buffer_start_line
+  #     pixel_val = line_buffer[buffer_index][x_nn]
+  #     is_in_buffer = True
+  #   else:
+  #     # The line is not accessible (either too old or not yet received).
+  #     pixel_val = 0
+  #     is_in_buffer = False
+  #     buffer_index = -1 # Indicates not in buffer
+  #     if y_nn % Y_DBG == (Y_DBG-1)  and  x_nn % X_DBG == (X_DBG-1):
+  #       print ("breakpoint")
+
+  #   return pixel_val, y_nn, x_nn, is_in_buffer, buffer_index
+  # # --- End of Streaming Line Buffer ---
+
 
   # Fixed-point configuration
   FRACT_BITS = 16
@@ -60,6 +76,9 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
 
   # Create an empty output image
   corrected_image = np.zeros((height, width, 3), dtype=np.uint8)
+  cnt_in = 0
+  cnt_out = 0
+  is_in_img = False
 
   # Process the image stream line by line
   for y_d_int, current_line in enumerate(image_stream):
@@ -106,18 +125,58 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
       y_u_unscaled = y_u >> FRACT_BITS
 
       # Get pixel from the streaming buffer.
-      pixel_val, y_nn, x_nn, is_in_buffer, buffer_index = get_pixel_from_streaming_buffer(y_u_unscaled, x_u_unscaled)
+##################################
+      # pixel_val, y_nn, x_nn, is_in_buffer, buffer_index = get_pixel_from_streaming_buffer(y_u_unscaled, x_u_unscaled)
+##################################
+      # y_nn = int(np.clip(y_u_unscaled, 0, height - 1))
+      # x_nn = int(np.clip(x_u_unscaled, 0, width - 1))
+      # XY Coordinates outside of image boundaries?
+      x_nn = x_u_unscaled
+      y_nn = y_u_unscaled
+
+      if 0 <= x_u_unscaled < width and 0 <= y_u_unscaled < height: # insdie
+        cnt_in += 1
+        is_in_img = True
+        # Check if the required line is within the current buffer's range.
+        if buffer_start_line <= y_nn < buffer_start_line + len(line_buffer):
+          # The line is in the buffer. Calculate its index within the deque.
+          buffer_index = y_nn - buffer_start_line
+          pixel_val = line_buffer[buffer_index][x_nn]
+          is_in_buffer = True
+        else:
+          # The line is not accessible (either too old or not yet received).
+          pixel_val = 0
+          is_in_buffer = False
+          buffer_index = -1 # Indicates not in buffer
+          # if y_nn % Y_DBG == (Y_DBG-1)  and  x_nn % X_DBG == (X_DBG-1):
+          #   print ("breakpoint")
+      else:
+        cnt_out += 1
+        is_in_img = False
+        # The line is not accessible (either too old or not yet received).
+        pixel_val = 0
+        is_in_buffer = False
+        buffer_index = -1 # Indicates not in buffer
+        # return pixel_val, y_u_unscaled, x_u_unscaled, is_in_buffer, buffer_index
+
+      # return pixel_val, y_nn, x_nn, is_in_buffer, buffer_index
+    # --- End of Streaming Line Buffer ---
+##################################
       corrected_image[y_d_int, x_d_int] = pixel_val
 
       # Debug
-      if y_d_int % 50 == 49 and x_d_int % 50 == 49:
-        if is_in_buffer:
-#            print(f"p[{y_d_int}][{x_d_int}] maps to p_corr[{y_nn}][{x_nn}] from buffer @ offset {buffer_index} = {pixel_val}")
-          print(f"p[{y_d_int:3d}][{x_d_int:3d}] -> p_corr[{y_nn:3d}][{x_nn:3d}] = {pixel_val}, @ offset {buffer_index:3d}")
+      if y_d_int % Y_DBG == (Y_DBG-1)  and  x_d_int % X_DBG == (X_DBG-1):
+        if is_in_img:
+          if is_in_buffer:
+            print(f"o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
+          else:
+  #           print(f"p[{y_d_int}][{x_d_int}] maps to p_corr[{y_nn}][{x_nn}] - NOT IN BUFFER (start: {buffer_start_line}, len: {len(line_buffer)})")
+            print(f"OUT o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
         else:
-#            print(f"p[{y_d_int}][{x_d_int}] maps to p_corr[{y_nn}][{x_nn}] - NOT IN BUFFER (start: {buffer_start_line}, len: {len(line_buffer)})")
-          print(f"NOT IN BUFFERp[{y_d_int:3d}][{x_d_int:3d}] -> p_corr[{y_nn:3d}][{x_nn:3d}] = {pixel_val}, @ offset {buffer_index:3d}")
+          print(f"o[{y_d_int:3d}][{x_d_int:3d}] = 0")
 
+  cnt = cnt_in + cnt_out
+  print(f"cnt_in={cnt_in}  {float(cnt_in*100/cnt):.1f}%, cnt_out={cnt_out}  {float(cnt_out*100/cnt):.1f}%")
 
   return corrected_image
 
@@ -131,7 +190,7 @@ def main():
   output_file = dir + 'img_out/' + img[0]
 
   # Distortion parameters
-  k1 = +0.00
+  k1 = +0.20
   # Set a more realistic number of line buffers for a hardware implementation
   num_line_buffers = 100 # Try with 1, 10, 64, etc. to see the effect
 

@@ -2,6 +2,8 @@ import numpy as np
 import os
 import cv2
 import time
+X_DBG=30
+Y_DBG=30
 
 
 #################################################################################
@@ -30,6 +32,8 @@ def barrel_distortion_correction(image, k1_float):
 
   # Create an empty output image
   corrected_image = np.zeros_like(image)
+  cnt_in = 0
+  cnt_out = 0
 
   for y_d_int in range(height):
     for x_d_int in range(width):
@@ -69,25 +73,38 @@ def barrel_distortion_correction(image, k1_float):
       # No nearest-neighbor sampling
       x_nn = x_u_unscaled
       y_nn = y_u_unscaled
+      y_nn1 = int(np.clip(y_u_unscaled, 0, height - 1))
+      x_nn1 = int(np.clip(x_u_unscaled, 0, width - 1))
 
       # XY Coordinates outside of image boundaries?
       if 0 <= x_nn < width and 0 <= y_nn < height: # insdie
         corrected_image[y_d_int, x_d_int] = image[y_nn, x_nn]
+        cnt_in += 1
+        # Debug
+        if y_d_int % Y_DBG == (Y_DBG-1)  and  x_d_int % X_DBG == (X_DBG-1):
+          print(f"o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {image[y_nn, x_nn]}")
       else: # outsdie
         corrected_image[y_d_int, x_d_int] = 0
+        cnt_out += 1
+        # Debug
+        if y_d_int % Y_DBG == (Y_DBG-1)  and  x_d_int % X_DBG == (X_DBG-1):
+          print(f"o[{y_d_int:3d}][{x_d_int:3d}] = 0")
 
-      # Debug
-      if y_d_int % 50 == 49 and x_d_int % 50 == 49:
-        pixel_val = image[y_nn, x_nn] if 0 <= x_nn < width and 0 <= y_nn < height else (0,0,0)
-        print(f"p[{y_d_int:3d}][{x_d_int:3d}] -> p_corr[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
+      # # Debug
+      # if y_d_int % Y_DBG == (Y_DBG-1)  and  x_d_int % X_DBG == (X_DBG-1):
+      #   # pixel_val = image[y_nn, x_nn] if 0 <= x_nn < width and 0 <= y_nn < height else (0,0,0)
+      #   print(f"o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] =")
+      #   print(f"p[{y_d_int:3d}][{x_d_int:3d}] -> p_corr[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
 
+  cnt = cnt_in + cnt_out
+  print(f"cnt_in={cnt_in}  {float(cnt_in*100/cnt):.1f}%, cnt_out={cnt_out}  {float(cnt_out*100/cnt):.1f}%")
   return corrected_image
 
 
 ################################################################################
 def main():
   # Input and output file paths
-  dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr/src/'
+  dir = 'D:/work/vivado/pynq/barrel_distortion_correction1/hls_brl_corr/src/'
   img = ('img_128x100.png', 'img4_250x167.png', 'img_2x3.png')
   input_file  = dir +  'img_in/' + img[0]
   output_file = dir + 'img_out/' + img[0]
