@@ -3,12 +3,25 @@ import os
 import cv2
 import time
 from collections import deque
+
+# Input and output file paths
+dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr1/src/'
+img = ('img_100x100.png', 'img4_250x167.png', 'img_2x3.png')
+input_file  = dir +  'img_in/' + img[0]
+output_file = dir + 'img_out/' + img[0]
+
+# Distortion parameters
+K1 = +0.50
+# Set a more realistic number of line buffers for a hardware implementation
+N_LINE_BUFS = 20 # Try with 1, 10, 64, etc. to see the effect
+
+# Debug coordinates for print
 X_DBG=30
 Y_DBG=30
 
 
 #################################################################################
-def barrel_distortion_correction_streaming(image_stream, height, width, k1_float, num_line_buffers):
+def barrel_distortion_correction_streaming(image, image_stream, height, width, K1_float, N_LINE_BUFS):
   """
   Simulates barrel distortion correction with a true streaming line buffer architecture.
   The function processes the image line by line, and can only access pixels
@@ -18,14 +31,16 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
     image_stream: An iterator that yields one line of the image at a time.
     height: The total height of the source image.
     width: The total width of the source image.
-    k1_float: Primary distortion coefficient (floating-point).
-    num_line_buffers: The number of physical line buffers available.
+    K1_float: Primary distortion coefficient (floating-point).
+    N_LINE_BUFS: The number of physical line buffers available.
   """
   # --- True Streaming Line Buffer ---
   # This buffer holds the most recent lines from the stream.
-  line_buffer = deque(maxlen=num_line_buffers)
+  line_buffer = deque(maxlen=N_LINE_BUFS)
   # Tracks the starting line number of the buffer window.
   buffer_start_line = 0
+  buf_idx_hi = 0
+  buf_idx_lo = 0
 
 
   # def get_pixel_from_streaming_buffer(y_coord, x_coord):
@@ -70,7 +85,7 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
   SCALE = 1 << FRACT_BITS
 
   # Convert parameters to scaled integers
-  k1 = int(k1_float * SCALE)
+  K1 = int(K1_float * SCALE)
   x_c = int(width / 2 * SCALE)
   y_c = int(height / 2 * SCALE)
 
@@ -79,16 +94,32 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
   cnt_in = 0
   cnt_out = 0
   is_in_img = False
+  y_d_int_offs = 0
+
+  # First fill the line buffer to the max
+  for buf_idx_hi in range (N_LINE_BUFS):
+    # Add the new line to the buffer. The deque will handle eviction if full.
+    line_buffer.append(image[buf_idx_hi])
 
   # Process the image stream line by line
-  for y_d_int, current_line in enumerate(image_stream):
+  for y_d_int in range(height):
     # Add the new line to the buffer. The deque will handle eviction if full.
-    line_buffer.append(current_line)
+    y_d_int_offs = y_d_int + int(N_LINE_BUFS/2)
 
-    # Update the starting line number of our buffer window.
-    if len(line_buffer) == num_line_buffers:
-      if y_d_int >= num_line_buffers -1:
-        buffer_start_line = y_d_int - num_line_buffers + 1
+    if y_d_int_offs > buf_idx_hi  and  y_d_int_offs < height:
+      buf_idx_hi += 1
+      buf_idx_lo += 1
+      #line_buffer.append(current_line)
+      # if y_d_int_offs == 32:
+      #   print('break')
+      line_buffer.append(image[buf_idx_hi])
+      # print(f"y_d_int_offs={y_d_int_offs}, y_d_int={y_d_int}")
+
+    # # Update the starting line number of our buffer window.
+    len_buf = len(line_buffer)
+    # if len_buf == N_LINE_BUFS:
+    #   if y_d_int >= N_LINE_BUFS -1:
+    #     buffer_start_line = y_d_int - N_LINE_BUFS + 1
 
     for x_d_int in range(width):
       # Scale destination coordinates
@@ -107,7 +138,7 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
 
       # Radial distortion correction (inverse model)
       r_sq_scaled = r_sq >> FRACT_BITS # scale to FRACT_BITS
-      term = (k1 * r_sq_scaled) >> FRACT_BITS
+      term = (K1 * r_sq_scaled) >> FRACT_BITS
       r_u = (r * (SCALE + term)) >> FRACT_BITS
 
       if r != 0:
@@ -133,34 +164,34 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
       # XY Coordinates outside of image boundaries?
       x_nn = x_u_unscaled
       y_nn = y_u_unscaled
-      len_ln_buf = len(line_buffer)
 
       if 0 <= x_u_unscaled < width and 0 <= y_u_unscaled < height: # insdie
         cnt_in += 1
         is_in_img = True
         # Check if the required line is within the current buffer's range.
-        if buffer_start_line <= y_nn < buffer_start_line + len_ln_buf:
+        #if buffer_start_line <= y_nn < buffer_start_line + len_buf:
+        if buf_idx_lo <= y_nn < buf_idx_hi:
           # The line is in the buffer. Calculate its index within the deque.
-          buffer_index = y_nn - buffer_start_line
-          pixel_val = line_buffer[buffer_index][x_nn]
+          buf_rd_idx = y_nn - buf_idx_lo
+          pixel_val = line_buffer[buf_rd_idx][x_nn]
           is_in_buffer = True
         else:
           # The line is not accessible (either too old or not yet received).
           pixel_val = 0
           is_in_buffer = False
-          buffer_index = -1 # Indicates not in buffer
+          buf_rd_idx = -1 # Indicates not in buffer
           # if y_d_int % Y_DBG == (Y_DBG-1)  and  x_d_int % X_DBG == (X_DBG-1):
-          #   buffer_index = -1
+          #   buf_rd_idx = -1
       else:
         cnt_out += 1
         is_in_img = False
         # The line is not accessible (either too old or not yet received).
         pixel_val = 0
         is_in_buffer = False
-        buffer_index = -1 # Indicates not in buffer
-        # return pixel_val, y_u_unscaled, x_u_unscaled, is_in_buffer, buffer_index
+        buf_rd_idx = -1 # Indicates not in buffer
+        # return pixel_val, y_u_unscaled, x_u_unscaled, is_in_buffer, buf_rd_idx
 
-      # return pixel_val, y_nn, x_nn, is_in_buffer, buffer_index
+      # return pixel_val, y_nn, x_nn, is_in_buffer, buf_rd_idx
     # --- End of Streaming Line Buffer ---
 ##################################
       corrected_image[y_d_int, x_d_int] = pixel_val
@@ -172,7 +203,7 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
             print(f"o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
           else:
             print(f"OUT o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
-            buffer_index = -1
+            buf_rd_idx = -1
         else:
           print(f"o[{y_d_int:3d}][{x_d_int:3d}] = 0")
 
@@ -184,17 +215,6 @@ def barrel_distortion_correction_streaming(image_stream, height, width, k1_float
 
 ################################################################################
 def main():
-  # Input and output file paths
-  dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr1/src/'
-  img = ('img_128x100.png', 'img4_250x167.png', 'img_2x3.png')
-  input_file  = dir +  'img_in/' + img[0]
-  output_file = dir + 'img_out/' + img[0]
-
-  # Distortion parameters
-  k1 = +0.20
-  # Set a more realistic number of line buffers for a hardware implementation
-  num_line_buffers = 100 # Try with 1, 10, 64, etc. to see the effect
-
   try:
     output_dir = os.path.dirname(output_file)
     if output_dir and not os.path.exists(output_dir):
@@ -216,12 +236,12 @@ def main():
 
     print(f"Processing image: {input_file}")
     print(f"Image dimensions: {width}x{height}")
-    print(f"K1 coefficient: {k1}")
-    print(f"Simulating with {num_line_buffers} streaming line buffer(s).")
+    print(f"K1 coefficient: {K1}")
+    print(f"Simulating with {N_LINE_BUFS} streaming line buffer(s).")
 
     start_time = time.time()
     # Apply barrel distortion correction using the streaming model
-    corrected_image = barrel_distortion_correction_streaming(image_stream, height, width, k1, num_line_buffers)
+    corrected_image = barrel_distortion_correction_streaming(image, image_stream, height, width, K1, N_LINE_BUFS)
     end_time = time.time()
 
     print(f"Processing time: {end_time - start_time:.4f} seconds")
