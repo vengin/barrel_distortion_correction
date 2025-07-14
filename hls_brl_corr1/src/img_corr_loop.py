@@ -6,18 +6,18 @@ from collections import deque
 
 # Input and output file paths
 dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr1/src/'
-img = ('img_100x100.png', 'img4_250x167.png', 'img_2x3.png')
-input_file  = dir +  'img_in/' + img[0]
-output_file = dir + 'img_out/' + img[0]
+img = ('img_100x100.png', 'img4_250x167.png', 'img_2x3.png', 'checkered_bg_1080x1080.jpg')
+input_file  = dir +  'img_in/' + img[3]
+output_file = dir + 'img_out/' + img[3]
 
 # Distortion parameters
-K1 = +0.50
+K1 = -0.005
 # Set a more realistic number of line buffers for a hardware implementation
-N_LINE_BUFS = 20 # Try with 1, 10, 64, etc. to see the effect
+N_LINE_BUFS = 220 # Try with 1, 10, 64, etc. to see the effect
 
 # Debug coordinates for print
-X_DBG=30
-Y_DBG=30
+X_DBG=500
+Y_DBG=500
 
 
 #################################################################################
@@ -95,6 +95,7 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
   cnt_out = 0
   is_in_img = False
   y_d_int_offs = 0
+  max_y_deviation = 0
 
   # First fill the line buffer to the max
   for buf_idx_hi in range (N_LINE_BUFS):
@@ -166,6 +167,10 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
       y_nn = y_u_unscaled
 
       if 0 <= x_u_unscaled < width and 0 <= y_u_unscaled < height: # insdie
+        # Detect maximum y-deviation to determine required line buffer depth
+        deviation = abs(y_nn - y_d_int)
+        if deviation > max_y_deviation:
+            max_y_deviation = deviation
         cnt_in += 1
         is_in_img = True
         # Check if the required line is within the current buffer's range.
@@ -209,6 +214,8 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
 
   cnt = cnt_in + cnt_out
   print(f"cnt_in={cnt_in}  {float(cnt_in*100/cnt):.1f}%, cnt_out={cnt_out}  {float(cnt_out*100/cnt):.1f}%")
+  print(f"Maximum Y deviation (y_nn - y_d_int): {max_y_deviation} pixels.")
+  print(f"Recommended N_LINE_BUFS: {2 * max_y_deviation}")
 
   return corrected_image
 

@@ -2,6 +2,18 @@ import numpy as np
 import os
 import cv2
 import time
+
+# Input and output file paths
+dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr/src/'
+
+img = ('img_100x100.png', 'img4_250x167.png', 'img_2x3.png', 'checkered_bg_1080x1080.jpg')
+input_file  = dir +  'img_in/' + img[3]
+output_file = dir + 'img_out/' + img[3]
+
+# Distortion parameters
+K1 = +0.50
+
+# Debug coordinates for print
 X_DBG=30
 Y_DBG=30
 
@@ -103,16 +115,6 @@ def barrel_distortion_correction(image, k1_float):
 
 ################################################################################
 def main():
-  # Input and output file paths
-  dir = 'D:/work/vivado/pynq/barrel_distortion_correction1/hls_brl_corr/src/'
-  img = ('img_128x100.png', 'img4_250x167.png', 'img_2x3.png')
-  input_file  = dir +  'img_in/' + img[0]
-  output_file = dir + 'img_out/' + img[0]
-
-
-  # Distortion parameters
-  k1 =+0.20  # Adjust this value based on your needs
-
   try:
     # Create output directory if it doesn't exist
     output_dir = os.path.dirname(output_file)
@@ -132,11 +134,11 @@ def main():
 
     print(f"Processing image: {input_file}")
     print(f"Image dimensions: {image.shape[1]}x{image.shape[0]}")
-    print(f"K1 coefficient: {k1}")
+    print(f"K1 coefficient: {K1}")
 
     start_time = time.time()
     # Apply barrel distortion correction
-    corrected_image = barrel_distortion_correction(image, k1)
+    corrected_image = barrel_distortion_correction(image, K1)
     end_time = time.time()
 
     print(f"Processing time: {end_time - start_time:.4f} seconds")
