@@ -6,14 +6,14 @@ from collections import deque
 
 # Input and output file paths
 dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr1/src/'
-img = ('img_100x100.png', 'img4_250x167.png', 'img_2x3.png', 'checkered_bg_1080x1080.jpg')
-input_file  = dir +  'img_in/' + img[3]
-output_file = dir + 'img_out/' + img[3]
+img = ('img_100x100.png', 'img_128x100.png', 'img4_250x167.png', 'checkered_bg_1280x720.jpg', 'checkered_bg_1920x1080.jpg', 'checkered_bg_1090x1080.jpg')
+input_file  = dir +  'img_in/' + img[1]
+output_file = dir + 'img_out/' + img[1]
 
 # Distortion parameters
-K1 = -0.005
+K1 = +0.00
 # Set a more realistic number of line buffers for a hardware implementation
-N_LINE_BUFS = 220 # Try with 1, 10, 64, etc. to see the effect
+N_LINE_BUFS = 180
 
 # Debug coordinates for print
 X_DBG=500
@@ -38,7 +38,6 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
   # This buffer holds the most recent lines from the stream.
   line_buffer = deque(maxlen=N_LINE_BUFS)
   # Tracks the starting line number of the buffer window.
-  buffer_start_line = 0
   buf_idx_hi = 0
   buf_idx_lo = 0
 
@@ -108,19 +107,11 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
     y_d_int_offs = y_d_int + int(N_LINE_BUFS/2)
 
     if y_d_int_offs > buf_idx_hi  and  y_d_int_offs < height:
-      buf_idx_hi += 1
-      buf_idx_lo += 1
-      #line_buffer.append(current_line)
-      # if y_d_int_offs == 32:
-      #   print('break')
-      line_buffer.append(image[buf_idx_hi])
-      # print(f"y_d_int_offs={y_d_int_offs}, y_d_int={y_d_int}")
-
-    # # Update the starting line number of our buffer window.
-    len_buf = len(line_buffer)
-    # if len_buf == N_LINE_BUFS:
-    #   if y_d_int >= N_LINE_BUFS -1:
-    #     buffer_start_line = y_d_int - N_LINE_BUFS + 1
+      if (buf_idx_hi < height-1):
+        buf_idx_hi += 1
+        buf_idx_lo += 1
+        #line_buffer.append(current_line)
+        line_buffer.append(image[buf_idx_hi])
 
     for x_d_int in range(width):
       # Scale destination coordinates
@@ -160,9 +151,7 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
 ##################################
       # pixel_val, y_nn, x_nn, is_in_buffer, buffer_index = get_pixel_from_streaming_buffer(y_u_unscaled, x_u_unscaled)
 ##################################
-      # y_nn = int(np.clip(y_u_unscaled, 0, height - 1))
-      # x_nn = int(np.clip(x_u_unscaled, 0, width - 1))
-      # XY Coordinates outside of image boundaries?
+      # XY Coordinates outside of image boundaries
       x_nn = x_u_unscaled
       y_nn = y_u_unscaled
 
@@ -170,7 +159,7 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
         # Detect maximum y-deviation to determine required line buffer depth
         deviation = abs(y_nn - y_d_int)
         if deviation > max_y_deviation:
-            max_y_deviation = deviation
+          max_y_deviation = deviation
         cnt_in += 1
         is_in_img = True
         # Check if the required line is within the current buffer's range.
@@ -201,21 +190,22 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
 ##################################
       corrected_image[y_d_int, x_d_int] = pixel_val
 
-      # Debug
-      if y_d_int % Y_DBG == (Y_DBG-1)  and  x_d_int % X_DBG == (X_DBG-1):
-        if is_in_img:
-          if is_in_buffer:
-            print(f"o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
-          else:
-            print(f"OUT o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
-            buf_rd_idx = -1
-        else:
-          print(f"o[{y_d_int:3d}][{x_d_int:3d}] = 0")
+      # # Debug
+      # if y_d_int % Y_DBG == (Y_DBG-1)  and  x_d_int % X_DBG == (X_DBG-1):
+      #   if is_in_img:
+      #     if is_in_buffer:
+      #       print(f"o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
+      #     else:
+      #       print(f"OUT o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
+      #       buf_rd_idx = -1
+      #   else:
+      #     print(f"o[{y_d_int:3d}][{x_d_int:3d}] = 0")
 
   cnt = cnt_in + cnt_out
   print(f"cnt_in={cnt_in}  {float(cnt_in*100/cnt):.1f}%, cnt_out={cnt_out}  {float(cnt_out*100/cnt):.1f}%")
-  print(f"Maximum Y deviation (y_nn - y_d_int): {max_y_deviation} pixels.")
-  print(f"Recommended N_LINE_BUFS: {2 * max_y_deviation}")
+  # print(f"Maximum Y deviation (y_nn - y_d_int): {max_y_deviation} pixels.")
+  # print(f"Recommended N_LINE_BUFS: {2 * max_y_deviation}")
+  print(f"Min N_LINE_BUFS (Y deviation): {max_y_deviation}")
 
   return corrected_image
 
@@ -252,7 +242,6 @@ def main():
     end_time = time.time()
 
     print(f"Processing time: {end_time - start_time:.4f} seconds")
-
 
     # Save the corrected image
     success = cv2.imwrite(output_file, corrected_image)
