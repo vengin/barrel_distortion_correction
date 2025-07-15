@@ -6,18 +6,29 @@ from collections import deque
 
 # Input and output file paths
 dir = 'D:/work/vivado/pynq/barrel_distortion_correction/hls_brl_corr1/src/'
-img = ('img_100x100.png', 'img_128x100.png', 'img4_250x167.png', 'checkered_bg_1280x720.jpg', 'checkered_bg_1920x1080.jpg', 'checkered_bg_1090x1080.jpg')
-input_file  = dir +  'img_in/' + img[1]
-output_file = dir + 'img_out/' + img[1]
+img = ('img_100x100.png', 'img_128x100.png', 'img4_250x167.png', 'checkered_bg_1280x720.jpg', 'checkered_bg_1920x1080.jpg', 'checkered_bg_1080x1080.jpg')
+input_file  = dir +  'img_in/' + img[5]
+output_file = dir + 'img_out/' + img[5]
 
 # Distortion parameters
-K1 = +0.00
+K1 = -0.08
 # Set a more realistic number of line buffers for a hardware implementation
-N_LINE_BUFS = 180
+N_LINE_BUFS = 86
 
 # Debug coordinates for print
-X_DBG=500
-Y_DBG=500
+X_DBG=250
+Y_DBG=250
+
+#################################################################################
+def div_round(a,b):
+   """
+   Integer division with rounding: [ c = ( (a + (b/2)) / b ]
+   E.g. div_round(5,3) = 2 (whereas int(5/3)=1), div_round(7,3) = 2
+   """
+   a_int = int(a)
+   b_int = int(b)
+   c_int = int( (a_int + int(b_int/2)) / b_int )
+   return  c_int
 
 
 #################################################################################
@@ -93,24 +104,26 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
   cnt_in = 0
   cnt_out = 0
   is_in_img = False
-  y_d_int_offs = 0
   max_y_deviation = 0
+  en_line_buf_shift = True
 
-  # First fill the line buffer to the max, but not more than image height
-  for buf_idx_hi in range (min(N_LINE_BUFS, height)):
+  # First fill the line buffer to the max (but not more than image height)
+  y_limit = min(N_LINE_BUFS, height)
+  for buf_idx_hi in range (y_limit):
     # Add the new line to the buffer. The deque will handle eviction if full.
     line_buffer.append(image[buf_idx_hi])
 
   # Process the image stream line by line
   for y_d_int in range(height):
-    # Add the new line to the buffer. The deque will handle eviction if full.
-    y_d_int_offs = y_d_int + int(N_LINE_BUFS/2)
 
-    if y_d_int_offs > buf_idx_hi  and  y_d_int_offs < height:
-      if buf_idx_hi < height - 1:
-        buf_idx_hi += 1
-        buf_idx_lo += 1
-        line_buffer.append(image[buf_idx_hi])
+    # This is optimized for "unwrapping" (negative K1)
+    # For the 1'st image half the y_u >= y_d, thus line buffer is moving "ahead"
+    # For the 2'nd image half the y_u <= y_d, thus line buffer is moving "above"
+    # Once we reach the middle of the image pause line_buffer shifting for "N_LINE_BUFS-1" ticks
+    if (int(height/2) <=  y_d_int  < int(height/2)+N_LINE_BUFS-2):
+      en_line_buf_shift = False
+    else:
+      en_line_buf_shift = True
 
     for x_d_int in range(width):
       # Scale destination coordinates
@@ -118,8 +131,10 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
       y_d = y_d_int * SCALE
 
       # Normalize coordinates relative to center
-      x = ((x_d - x_c) * SCALE) // x_c
-      y = ((y_d - y_c) * SCALE) // y_c
+      # x = ((x_d - x_c) * SCALE) // x_c
+      # y = ((y_d - y_c) * SCALE) // y_c
+      x = div_round( ((x_d - x_c) * SCALE), x_c )
+      y = div_round( ((y_d - y_c) * SCALE), y_c )
 
       # r_sq has 2*FRACT_BITS fractional bits
       r_sq = x*x + y*y
@@ -144,7 +159,8 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
 
       # Unscale coordinates
       x_u_unscaled = x_u >> FRACT_BITS
-      y_u_unscaled = y_u >> FRACT_BITS
+      # y_u_unscaled = y_u >> FRACT_BITS
+      y_u_unscaled = div_round(y_u, SCALE)  # loosing 1 pixel when using shift, i.e. 51.99 converts to 51
 
       # Get pixel from the streaming buffer.
 ##################################
@@ -193,18 +209,23 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
       # if y_d_int % Y_DBG == (Y_DBG-1)  and  x_d_int % X_DBG == (X_DBG-1):
       #   if is_in_img:
       #     if is_in_buffer:
-      #       print(f"o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
+      #       print(f"o[{x_d_int:3d}][{y_d_int:3d}] <- i[{x_nn:3d}][{y_nn:3d}] = {pixel_val}")
       #     else:
-      #       print(f"OUT o[{y_d_int:3d}][{x_d_int:3d}] <- i[{y_nn:3d}][{x_nn:3d}] = {pixel_val}")
+      #       print(f"OUT o[{x_d_int:3d}][{y_d_int:3d}] <- i[{x_nn:3d}][{y_nn:3d}] = {pixel_val}")
       #       buf_rd_idx = -1
       #   else:
-      #     print(f"o[{y_d_int:3d}][{x_d_int:3d}] = 0")
+      #     print(f"o[{x_d_int:3d}][{y_d_int:3d}] = 0")
+
+    if buf_idx_hi < height - 1 and en_line_buf_shift:
+      buf_idx_hi += 1
+      buf_idx_lo += 1
+      line_buffer.append(image[buf_idx_hi])
 
   cnt = cnt_in + cnt_out
   print(f"cnt_in={cnt_in}  {float(cnt_in*100/cnt):.1f}%, cnt_out={cnt_out}  {float(cnt_out*100/cnt):.1f}%")
-  # print(f"Maximum Y deviation (y_nn - y_d_int): {max_y_deviation} pixels.")
-  # print(f"Recommended N_LINE_BUFS: {2 * max_y_deviation}")
-  print(f"Min N_LINE_BUFS (Y deviation): {max_y_deviation}")
+  print(f"Maximum Y deviation (y_nn - y_d_int): {max_y_deviation} pixels.")
+  print(f"Recommended N_LINE_BUFS: {2 * max_y_deviation}")
+  # print(f"Min N_LINE_BUFS (Y deviation): {max_y_deviation}")
 
   return corrected_image
 
