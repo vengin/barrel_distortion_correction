@@ -96,8 +96,8 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
   y_d_int_offs = 0
   max_y_deviation = 0
 
-  # First fill the line buffer to the max
-  for buf_idx_hi in range (N_LINE_BUFS):
+  # First fill the line buffer to the max, but not more than image height
+  for buf_idx_hi in range (min(N_LINE_BUFS, height)):
     # Add the new line to the buffer. The deque will handle eviction if full.
     line_buffer.append(image[buf_idx_hi])
 
@@ -107,10 +107,9 @@ def barrel_distortion_correction_streaming(image, image_stream, height, width, K
     y_d_int_offs = y_d_int + int(N_LINE_BUFS/2)
 
     if y_d_int_offs > buf_idx_hi  and  y_d_int_offs < height:
-      if (buf_idx_hi < height-1):
+      if buf_idx_hi < height - 1:
         buf_idx_hi += 1
         buf_idx_lo += 1
-        #line_buffer.append(current_line)
         line_buffer.append(image[buf_idx_hi])
 
     for x_d_int in range(width):
